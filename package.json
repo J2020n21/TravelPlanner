@@ -1,0 +1,24 @@
+{
+  "name": "capstone_travelplanner",
+  "version": "1.0.0",
+  "description": "travel planner with open AI",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/J2020n21/TravelPlanner.git"
+  },
+  "author": "jiui son",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/J2020n21/TravelPlanner/issues"
+  },
+  "homepage": "https://github.com/J2020n21/TravelPlanner#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "request": "^2.88.2"
+  }
+}
