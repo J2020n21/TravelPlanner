@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel-Planner</title>
+    <script type="module" src="../app.js"></script>
+<!-- 구글맵 api적용하기-->
+</head>
+<body>
+    <h1>plan page</h1>
+
+
+    <div id="map" style="height:500px; width:500px;"></div>
+
+<script>
+    // Initialize and add the map
+function initMap() {
+  // The location of Uluru
+  const uluru = { lat: -25.344, lng: 131.031 };
+  // The map, centered at Uluru
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 4,
+    center: uluru,
+  });
+  // The marker, positioned at Uluru
+  const marker = new google.maps.Marker({
+    position: uluru,
+    map: map,
+  });
+}
+
+window.initMap = initMap;
+
+
+</script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI&callback=initMap&v=weekly"
+      defer
+    ></script>
+
+</body>
+</html>
