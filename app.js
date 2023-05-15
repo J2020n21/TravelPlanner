@@ -2,40 +2,63 @@ const express = require("express");
 const bodyparser = require("body-parser");
 const request = require("request");
 const https = require("https");
-const { dirname } = require("path");
 const app = express();
+const MongoClient = require('mongodb').MongoClient;
 
-app.use(bodyparser.urlencoded({extended:true}));
+app.set('view engine','ejs');
+app.use(express.urlencoded({extended:true}));
+app.use('/public', express.static('public'));
 
-app.get("/",function(req,res){
-    res.sendFile(__dirname+"/htmls/index.html");
-    
-    const pixaAPIKEY = "36162160-9ad290b2b95fe84e106ba7a08";
-    const query = "sky";
-    const video_type = "film";
-    const category = "backgrounds";
-    //const min_width const min_height
-    const url = "https://pixabay.com/api/videos/?key="+pixaAPIKEY+"&q="+encodeURIComponent(query);
-    
-    //get video url, apply it to background.
-    https.get(url, function(response){
-        //console.log(response);
+//DB
+var db;
+MongoClient.connect('mongodb+srv://jiui4691:5G6jmgAHJtsJshHV@cluster0.komdm2b.mongodb.net/?retryWrites=true&w=majority'
+,function(error, client){
 
-        // response.on("data",function(data){
-        //     const VideoData = JSON.parse(data);
-        //     const Background_video_url = VideoData;
-        //     console.log(Background_video_url);
-        // })
-});
+    if(error){return console.log(error);}
+    db = client.db('TravelPlan'); 
 
+    console.log("DB connected");
 });
 
 
-app.get("/plan",function(req,res){
-    res.sendFile(__dirname+"/htmls/plan.html");
+//index page
+app.get("/",(req,res)=>{
+    res.sendFile(__dirname+"/public/index.html");
+});
+
+//question page
+app.get("/question",(req,res)=>{
+    res.render("question.ejs"); 
+ });
+
+//plan page; db and CRUD
+app.get("/plan",(req,res)=>{
+    res.render("plan.ejs");
+});
+
+//setting page
+app.get("/setting",(req,res)=>{
+   res.render("setting.ejs"); 
+});
+
+//setting -get complain from the users
+ app.get("/setting-problem",(req,res)=>{
+    res.render("setting-problem.ejs");
+ });
+
+//save complain text
+app.post('/problemSend',(req,res)=>{
+    console.log("post request sended");
+    var text = req.body.complainText;
+    console.log(text); 
+    //db problem
+    // db.collection('complain').insertOne({complain:text},(err,result)=>{
+    //     if(err) return console.log(err);
+    //     res.write("complain saved");
+    // });
 });
 
 
-app.listen(3000,function(){
-    console.log("3000 server is running.");
+app.listen(3000, function(){
+    console.log("Server run");
 });
