@@ -16,8 +16,8 @@ MongoClient.connect('mongodb+srv://jiui4691:5G6jmgAHJtsJshHV@cluster0.komdm2b.mo
 
     if(error){return console.log(error);}
     db = client.db('TravelPlan'); 
-
     console.log("DB connected");
+    
 });
 
 
@@ -31,10 +31,25 @@ app.get("/question",(req,res)=>{
     res.render("question.ejs"); 
  });
 
-//plan page; db and CRUD
+//plan page; 
 app.get("/plan",(req,res)=>{
     res.render("plan.ejs");
 });
+
+//show google map
+
+
+//db and CRUD
+//plan page: add place
+app.post("/add",(req,res)=>{
+
+
+});
+//plan page: edit 
+
+
+//plan page:delete
+
 
 //setting page
 app.get("/setting",(req,res)=>{
@@ -51,11 +66,10 @@ app.post('/problemSend',(req,res)=>{
     console.log("post request sended");
     var text = req.body.complainText;
     console.log(text); 
-    //db problem
-    // db.collection('complain').insertOne({complain:text},(err,result)=>{
-    //     if(err) return console.log(err);
-    //     res.write("complain saved");
-    // });
+    db.collection('complain').insertOne({complain:text},(err,result)=>{
+        if(err) return console.log(err);
+        res.write("complain saved");
+    });
 });
 
 

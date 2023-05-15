@@ -17,53 +17,75 @@
 
 <!-- https://getbootstrap.com/docs/4.6/components/input-group/ -->
 
-
 <div class="container mt-3">
-
   <div class="card-group">
     <div class="card">
-      <img src="..." class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">Where?</h5>
-        <p class="card-text">aa</p>
-      </div>
-      <!-- input btn -->
-      <div class="input-group mb-3">
-        <select class="custom-select" id="inputGroupSelect02">
-          <option selected>Choose...</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-      </div>
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">Last updated 3 mins ago</small>
+        <p class="card-text">Which country?</p>
+        <p class="card-text"><small class="text-muted">It is necessary</small></p>
+
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Country, city
+          </button>
+          <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Seoul, Korea</a></li>
+          <li><a class="dropdown-item" href="#">New York, US</a></li>
+          <li><a class="dropdown-item" href="#">Tokyo, Japan</a></li>
+          <li><a class="dropdown-item" href="#">Beijing, China</a></li>
+          <li><a class="dropdown-item" href="#">London, UK </a></li>
+          </ul>
+        </div> 
       </div>
     </div>
+
+    <!-- second card -->
     <div class="card">
-      <img src="..." class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">When?</h5>
-        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">Last updated 3 mins ago</small>
+        <p class="card-text">Choose the date</p>
+        <p class="card-text"><small class="text-muted">No selection will be provided as a whole day</small></p>
+      
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Total days
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">1</a></li>
+            <li><a class="dropdown-item" href="#">2</a></li>
+            <li><a class="dropdown-item" href="#">3</a></li>
+            <li><a class="dropdown-item" href="#">4</a></li>
+            <li><a class="dropdown-item" href="#">5</a></li>
+            <li><a class="dropdown-item" href="#">6</a></li>
+            <li><a class="dropdown-item" href="#">7</a></li>
+          </ul>
+        </div>
       </div>
     </div>
+    <!-- third card -->
     <div class="card">
-      <img src="..." class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">Recommend?</h5>
-        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">Last updated 3 mins ago</small>
+        <p class="card-text">Auto-recommendation</p>
+        <p class="card-text"><small class="text-muted">The basic setting is "Yes"</small></p>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Yes
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">No</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 
-</div>  
+  <div>
+    <button type="submit" class="btn btn-primary mt-3"> Next</button>
+  </div>
+
+</div>
 
   
 
