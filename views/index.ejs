@@ -170,22 +170,26 @@
             <h1 class="display-5 fw-bold">TRAVELING</h1>
             <p class="col-md-8 fs-4">To where?</p>
             <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Country, city
-              </button>
-              <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Seoul, Korea</a></li>
-              <li><a class="dropdown-item" href="#">New York, US</a></li>
-              <li><a class="dropdown-item" href="#">Tokyo, Japan</a></li>
-              <li><a class="dropdown-item" href="#">Beijing, China</a></li>
-              <li><a class="dropdown-item" href="#">London, UK </a></li>
-              </ul>
+              <form action="/add_country">
+                <button name="index-country" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Country, city
+                </button>
+                <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Seoul, Korea</a></li>
+                <li><a class="dropdown-item" href="#">New York, US</a></li>
+                <li><a class="dropdown-item" href="#">Tokyo, Japan</a></li>
+                <li><a class="dropdown-item" href="#">Beijing, China</a></li>
+                <li><a class="dropdown-item" href="#">London, UK </a></li>
+                </ul>
+              </form>
             </div> 
             <button class="btn btn-outline-light mt-3" type="button">Next</button>
         </div>
       </div>
     </div>
   </div>
+
+
 
 
     <!-- <footer class="pt-3 mt-4 text-body-secondary border-top">

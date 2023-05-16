@@ -33,7 +33,7 @@ MongoClient.connect('mongodb+srv://jiui4691:5G6jmgAHJtsJshHV@cluster0.komdm2b.mo
 
 //index page
 app.get("/",(req,res)=>{
-    res.sendFile(__dirname+"/public/index.html");
+    res.render("index.ejs");
 });
 
 //question page
@@ -83,6 +83,14 @@ app.post('/problemSend',(req,res)=>{
 
 
 
+// https://maps.googleapis.com/maps/api/place/findplacefromtext/json
+//   ?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry
+//   &input=Museum%20of%20Contemporary%20Art%20Australia
+//   &inputtype=textquery
+//   &key=AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI
+
+
+//https://console.cloud.google.com/google/maps-apis/home;onboard=true?project=sharp-technique-321106&utm_source=Docs_GS_Button&;ref=https:%2F%2Fdevelopers.google.com%2Fmaps%2F&;hl=ko&hl=ko&_gl=1*1v3uh1g*_ga*MTczNzk0NzgwMy4xNjg0MjI4NzM3*_ga_NRWSTWS78N*MTY4NDIyODczNy4xLjEuMTY4NDIyODg5MC4wLjAuMA..
 //Don't use callback function with db...
 
 
