@@ -43,10 +43,11 @@ app.get("/question",(req,res)=>{
 
 //plan page; 
 app.get("/plan",(req,res)=>{
-    res.render("plan.ejs");
-});
-
-//show google map
+	db.collection('setting').findOne({_id:parseInt(200)},(err,result)=>{
+		res.render("plan.ejs",{settings:result});
+		console.log(result);
+	});
+ });
 
 
 //db and CRUD
