@@ -11,33 +11,23 @@ const https = require("https");
 
 app.use('/public', express.static('public'));
 
-//왜안되는지 모르겟음
-// var db;
-// MongoClient.connect('mongodb+srv://jiui4691:5G6jmgAHJtsJshHV@cluster0.komdm2b.mongodb.net/?retryWrites=true&w=majority'
-// ,function(error, client){
-
-//     db = client.db('travelplan');
-//     if(error){return console.log("??");}
-//     console.log("DB run"); //왜안뜸?
-
-// });
-
+var db;
 MongoClient.connect('mongodb+srv://jiui4691:5G6jmgAHJtsJshHV@cluster0.komdm2b.mongodb.net/?retryWrites=true&w=majority')
 	.then(database => {
-		console.log('문제없음');
+		console.log('OK');
 		app.listen(3000, () => {
 			console.log(`Example app listening on port 3000`);
 		});
-		const db = database.db('travelplan');
-		const collection = db.collection('complain');
-      	collection.insertOne({complan:'sth'});
+		db = database.db('travelplan');
+		//collection_claim = db.collection('complain');
+      	//collection_claim.insertOne({complan:'sth'});
 	})
 	.catch(err => {
-		console.log('에러에러');
+		console.log('ERROR');
 		console.log(err);
 	})
 	.finally(() => {
-		console.log('끝');
+		console.log('END');
 	});
 
 
@@ -83,20 +73,17 @@ app.get("/setting",(req,res)=>{
 
 //save complain text
 app.post('/problemSend',(req,res)=>{
-    // name="complainText"
     console.log("post request sended");
-
     var text = req.body.complainText;
     console.log(text); //ok
-//여기서부터 안됨; TypeError: Cannot read properties of undefined (reading 'collection')
-    db.collection('complain').insertOne({complain:text},()=>{
-        console.log("complain saved");
-    });
+
+    db.collection('complain').insertOne({complain:text});
+	//res.send("OKAY");
 });
 
-    // app.listen(3000, function(){
-    //     console.log("Server run");
-    // });
+
+
+//Don't use callback function with db...
 
 
 
