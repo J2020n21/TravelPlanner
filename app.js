@@ -78,7 +78,7 @@ app.post('/problemSend',(req,res)=>{
     console.log(text); //ok
 
     db.collection('complain').insertOne({complain:text});
-	//res.send("OKAY");
+	res.send("The complain accepted.");
 });
 
 
