@@ -82,7 +82,9 @@ app.post('/problemSend',(req,res)=>{
 	res.send("The complain accepted.");
 });
 
-
+app.get("/loading",(req,res)=>{
+	res.sendFile(__dirname+"/public/loading.html");
+});
 
 // https://maps.googleapis.com/maps/api/place/findplacefromtext/json
 //   ?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry
