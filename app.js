@@ -10,6 +10,7 @@ const https = require("https");
 
 
 app.use('/public', express.static('public'));
+app.use(express.static(path.join(__dirname, 'travel/build')))
 
 var db;
 MongoClient.connect('mongodb+srv://jiui4691:5G6jmgAHJtsJshHV@cluster0.komdm2b.mongodb.net/?retryWrites=true&w=majority')
