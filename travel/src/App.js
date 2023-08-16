@@ -21,7 +21,14 @@ function App() {
       </Nav>
     </Container>
     </Navbar>
-    
+
+
+    <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
+        <GMap/>
+    </Wrapper>    
+
+    <Card className="plan-vertical"></Card>
+
   {/* <Router>
     <Routes>
       <Route></Route>
