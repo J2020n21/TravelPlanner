@@ -5,8 +5,10 @@ import {Router, Routes, Route, Link, useNavigate, Outlet } from 'react-router-do
 // import {useParams} from 'react-router-dom'
 import './App.css';
 import GMap from './googlemap.js';
-import Landing from './pages/landing.js'
+import Landing from './pages/landing.js';
 import Setting from './pages/setting';
+import Complain from './pages/complain';
+import ToStart from './pages/toStart';
 import Map from './pages/map';
 import CountryDropDown from "./components/country";
 import {useState, useEffect} from 'react';
@@ -40,10 +42,9 @@ function App() {
       <Route path="/" element={<Landing/>}></Route>
       <Route path="/plan" element={<Card/>}></Route>
       <Route path="/map" element={<Map/>}></Route>
-      <Route path="/setting" element={<Setting/>}>
-        <Route path="complain" element={<h2>setting-complain page</h2>} />
-      </Route>
-      <Route path="/toStart" element={<h2>basic questions</h2>}></Route>
+      <Route path="/setting" element={<Setting/>}> </Route>
+      <Route path="/complain" element={<Complain/>}></Route>
+      <Route path="/toStart" element={<ToStart/>}></Route>
 {/* add outlet */}
       <Route path="*" element={<h1>Page Not Exist</h1>}></Route>
       <Route></Route>
