@@ -14,4 +14,6 @@ const Landing = () =>{
     )
 }
 
+// 나라 애니메이션
+
 export default Landing

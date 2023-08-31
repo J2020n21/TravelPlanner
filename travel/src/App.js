@@ -10,6 +10,7 @@ import Setting from './pages/setting';
 import Complain from './pages/complain';
 import ToStart from './pages/toStart';
 import Map from './pages/map';
+import Card from './pages/plan';
 import CountryDropDown from "./components/country";
 import {useState, useEffect} from 'react';
 import {Wrapper, Status} from "@googlemaps/react-wrapper"; //google map
@@ -31,16 +32,21 @@ function App() {
     </Container>
     </Navbar>
 
-{/* 
-    <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
+
+    {/* <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
         <GMap/>
     </Wrapper>     */}
 
-
+    
 
     <Routes>
       <Route path="/" element={<Landing/>}></Route>
-      <Route path="/plan" element={<Card/>}></Route>
+      <Route path="/plan" element={
+        <Container>
+          <Card/>
+        
+        </Container>
+        }></Route>
       <Route path="/map" element={<Map/>}></Route>
       <Route path="/setting" element={<Setting/>}> </Route>
       <Route path="/complain" element={<Complain/>}></Route>
@@ -53,21 +59,6 @@ function App() {
   </div>
   );
   
-function Card(prop){
-  return(
-    <>
-    <Container>
-      <h2>Day N</h2>
-      <div>
-        <h3>Place</h3>
-        <p>Specific location</p>
-        <img/>
-      </div>
-      <Button>BTN</Button>
-    </Container>
-    </>
-  )
-}
 
 
 }

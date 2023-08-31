@@ -1,8 +1,10 @@
 import React, { Component, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {CountryDropDown,Date,Recommendation} from "../components/country";
 
 const ToStart = ()=>{
     const navigate = useNavigate();
+    let qInput = [<CountryDropDown/>,<Date/>,<Recommendation/>]
     let q = ['Where','When','Recommend'];
     let qDes = [
         'which country?',
@@ -15,6 +17,7 @@ const ToStart = ()=>{
         'The basic setting is "Yes"'
     ]
     let [answer,setAnswer] = useState(['a','b','c']);
+    
 
     return(
         <>
@@ -26,7 +29,7 @@ const ToStart = ()=>{
                     <h2>{data}</h2>
                     <h4>{qDes[i]}</h4>
                     <p>{qExplain[i]}</p>
-                    <input type="text"></input>
+                    <div>{qInput[i]}</div>
                 </div>
                 </>
             )
