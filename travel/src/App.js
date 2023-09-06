@@ -14,7 +14,7 @@ import Card from './pages/plan';
 import CountryDropDown from "./components/country";
 import {useState, useEffect} from 'react';
 import {Wrapper, Status} from "@googlemaps/react-wrapper"; //google map
-
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 function App() {
   const navigate = useNavigate();
@@ -33,9 +33,9 @@ function App() {
     </Navbar>
 
 
-    {/* <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
+    <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
         <GMap/>
-    </Wrapper>     */}
+    </Wrapper>    
 
     
 
