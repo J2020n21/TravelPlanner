@@ -33,9 +33,9 @@ function App() {
     </Navbar>
 
 
-    <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
+    {/* <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
         <GMap/>
-    </Wrapper>    
+    </Wrapper>     */}
 
     
 
@@ -59,7 +59,8 @@ function App() {
   </div>
   );
   
-
+// https://hsly22xk.tistory.com/405
+// https://www.crocus.co.kr/1814
 
 }
 
