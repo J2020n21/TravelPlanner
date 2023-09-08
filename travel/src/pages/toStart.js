@@ -34,7 +34,7 @@ const ToStart = ()=>{
                 </>
             )
         })}
-        <button onClick={()=>{navigate('/plan')}}>Next</button>
+        <button onClick={()=>{navigate('/home/plan')}}>Next</button>
         </div>
         </>
     )

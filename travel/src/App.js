@@ -4,8 +4,10 @@ import {Button, Navbar, Container, Nav} from 'react-bootstrap'
 import {Router, Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 // import {useParams} from 'react-router-dom'
 import './App.css';
-import GMap from './googlemap.js';
+import NavBar from './components/navbar.js';
+import GMapSet from './googlemap.js';
 import Landing from './pages/landing.js';
+import Home from './pages/home.js';
 import Setting from './pages/setting';
 import Complain from './pages/complain';
 import ToStart from './pages/toStart';
@@ -18,42 +20,31 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 function App() {
   const navigate = useNavigate();
+  const googleMapKey = "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI";
 
   return (
-    <div className="App">
-    <Navbar bg="light" data-bs-theme="light">
-    <Container>
-      <Navbar.Brand onClick={()=>{navigate('/')}}>Start</Navbar.Brand>
-      <Nav className="me-auto">
-        <Nav.Link onClick={()=>{navigate('/plan')}}>Plan</Nav.Link>
-        <Nav.Link onClick={()=>{navigate('/map')}}>Maps</Nav.Link>
-        <Nav.Link onClick={()=>{navigate('/setting')}}>Setting</Nav.Link>
-      </Nav>
-    </Container>
-    </Navbar>
-
-
-    {/* <Wrapper apiKey={"AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI"}>
-        <GMap/>
-    </Wrapper>     */}
-
-    
+    <div className="App"> 
 
     <Routes>
-      <Route path="/" element={<Landing/>}></Route>
-      <Route path="/plan" element={
-        <Container>
-          <Card/>
+      <Route path="/" element={<Landing/>}/>  
+      <Route path="/toStart" element={<ToStart/>}/>
+
+      <Route path="/home" element={<Home/>}> {/* Home includes menu */}
+        <Route path="" element={
+          <div>
+            <Wrapper apiKey={googleMapKey}>
+              <GMapSet/>
+            </Wrapper>
+            <Outlet></Outlet>
+          </div>}>
+          <Route path="plan" element={<Card/>}/>
+          <Route path="map" element={<Map/>}/>
+        </Route>  
         
-        </Container>
-        }></Route>
-      <Route path="/map" element={<Map/>}></Route>
-      <Route path="/setting" element={<Setting/>}> </Route>
-      <Route path="/complain" element={<Complain/>}></Route>
-      <Route path="/toStart" element={<ToStart/>}></Route>
-{/* add outlet */}
-      <Route path="*" element={<h1>Page Not Exist</h1>}></Route>
-      <Route></Route>
+          <Route path="setting" element={<Setting/>}/>
+          <Route path="complain" element={<Complain/>}/>
+          <Route path="*" element={<h1>Page Not Exist</h1>}/>
+      </Route>
     </Routes>
   
   </div>

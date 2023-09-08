@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript, Marker, useJsApiLoader } from "@react-google-map
 import { useState, useEffect, useRef } from "react"
 
 
-const GMap = ()=>{
+const GMapSet = ()=>{
     const [map, setMap] = useState(null);
     const ref = useRef();
 
@@ -37,4 +37,4 @@ const GMap = ()=>{
 }
 // https://velog.io/@sanggyo/React-react-google-mapapi-GoogleMapMarkerFInfoWindowF-%EC%82%AC%EC%9A%A9
 
-export default GMap
+export default GMapSet
