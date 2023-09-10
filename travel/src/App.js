@@ -5,7 +5,7 @@ import {Router, Routes, Route, Link, useNavigate, Outlet } from 'react-router-do
 // import {useParams} from 'react-router-dom'
 import './App.css';
 import NavBar from './components/navbar.js';
-import GMapSet from './googlemap.js';
+import GMap from './googlemap.js';
 import Landing from './pages/landing.js';
 import Home from './pages/home.js';
 import Setting from './pages/setting';
@@ -20,7 +20,6 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 function App() {
   const navigate = useNavigate();
-  const googleMapKey = "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI";
 
   return (
     <div className="App"> 
@@ -29,13 +28,15 @@ function App() {
       <Route path="/" element={<Landing/>}/>  
       <Route path="/toStart" element={<ToStart/>}/>
 
+      <Route path="/testMap" element={<GMap/>}/>
+
       <Route path="/home" element={<Home/>}> {/* Home includes menu */}
         <Route path="" element={
-          <div>
-            <Wrapper apiKey={googleMapKey}>
+          <div> map.
+            {/* <Wrapper apiKey={googleMapKey}>
               <GMapSet/>
             </Wrapper>
-            <Outlet></Outlet>
+            <Outlet></Outlet> */}
           </div>}>
           <Route path="plan" element={<Card/>}/>
           <Route path="map" element={<Map/>}/>

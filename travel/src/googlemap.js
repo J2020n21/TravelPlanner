@@ -1,40 +1,32 @@
+import { useMemo } from "react";
 import {Wrapper, Status} from "@googlemaps/react-wrapper"
-import { GoogleMap, LoadScript, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { withGoogleMap, GoogleMap, LoadScript, MarkerF, useJsApiLoader, useLoadScript } from "@react-google-maps/api";
 import { useState, useEffect, useRef } from "react"
 
+export default function GMap() {
+    const {isLoaded} = useLoadScript({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    });
 
-const GMapSet = ()=>{
-    const [map, setMap] = useState(null);
-    const ref = useRef();
-
-    const myStyles = [
-        {
-          featureType: "poi",
-          elementType: "labels",
-          stylers: [{ visibility: "off" }],
-        },
-      ];
-
-    useEffect(()=>{
-        const newMap = new window.google.maps.Map(ref.current, {
-            center : { lat: 37.569227, lng: 126.9777256},
-            zoom : 16,
-            scrollwheel: true,
-            disableDefaultUI: true,
-            // styles: myStyles
-        });     
-       
-        // const marker = new window.google.maps.marker(ref.current,{
-            
-        // });
-        
-        setMap(newMap);
-    },[])
-
-    return (
-        <div ref={ref} id="map" style={{width:"400px", height: "400px"}}></div>
-    )
+    if (!isLoaded) return <div>Liading!</div>;
+    return <Map/>;
 }
-// https://velog.io/@sanggyo/React-react-google-mapapi-GoogleMapMarkerFInfoWindowF-%EC%82%AC%EC%9A%A9
 
-export default GMapSet
+const center={lat: 44, lng: -80};
+function Map(){
+    
+    return <GoogleMap
+      zoom={10}
+      center={center}
+      mapContainerStyle={{width: "70%", height: "70vh"}}
+      >
+
+    <MarkerF position={{lat: 44, lng: -80}}/>
+
+      </GoogleMap>
+}
+
+
+// https://velog.io/@sanggyo/React-react-google-mapapi-GoogleMapMarkerFInfoWindowF-%EC%82%AC%EC%9A%A9
+// https://tomchentw.github.io/react-google-maps/#withgooglemap
+//https://www.youtube.com/watch?v=s4n_x5B58Dw

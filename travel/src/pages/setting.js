@@ -23,7 +23,7 @@ const Setting = () =>{
         }
 
         <h5>Any problem?</h5>
-        <p onClick={()=>{navigate('/complain')}}>click</p>
+        <p onClick={()=>{navigate('/home/complain')}}>click</p>
         </>
     )
 
