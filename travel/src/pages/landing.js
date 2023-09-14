@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from '@material-ui/core/Button';
+import {Box, Button, Container} from '@material-ui/core';
 import Search from '../components/search/search.js';
 
 

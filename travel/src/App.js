@@ -1,9 +1,11 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+// import {Button, Card, Box} from '@material-ui/core';
 import {Button, Navbar, Container, Nav} from 'react-bootstrap'
 import {Router, Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 // import {useParams} from 'react-router-dom'
 import './App.css';
+import PlanCard from "./components/planCard";
 import NavBar from './components/navbar.js';
 import GMap from './googlemap.js';
 import Landing from './pages/landing.js';
@@ -12,7 +14,7 @@ import Setting from './pages/setting';
 import Complain from './pages/complain';
 import ToStart from './pages/toStart';
 import Map from './pages/map';
-import Card from './pages/plan';
+import Plan from './pages/plan';
 import CountryDropDown from "./components/country";
 import {useState, useEffect} from 'react';
 import {Wrapper, Status} from "@googlemaps/react-wrapper"; //google map
@@ -31,14 +33,18 @@ function App() {
       <Route path="/testMap" element={<GMap/>}/>
 
       <Route path="/home" element={<Home/>}> {/* Home includes menu */}
-        <Route path="" element={
-          <div> map.
+        <Route path="" element={<>
+          <div> googlemap.</div>
             {/* <Wrapper apiKey={googleMapKey}>
               <GMapSet/>
             </Wrapper>
             <Outlet></Outlet> */}
-          </div>}>
-          <Route path="plan" element={<Card/>}/>
+          <Outlet></Outlet>
+          </>}>
+          <Route path="plan" element={<>
+            <Plan/>
+            </>
+            }/>
           <Route path="map" element={<Map/>}/>
         </Route>  
         

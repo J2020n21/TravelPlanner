@@ -9,9 +9,11 @@ import {
   Combobox, ComboboxInput, ComboboxPopover, 
   ComboboxList, ComboboxOption
 } from "@reach/combobox";
-import Button from '@material-ui/core';
-
+import {Box, Container, Button} from '@material-ui/core';
+//버튼을 누르면 검색창으로 받아온:주소> 장소 정보를 저장하여 옆에 보여주기
+//{position}->"장소명" 저장 어떻게?, 마커 클러스터링
 const useLibraries = ["places"];
+
 export default function GMap() {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -25,8 +27,9 @@ export default function GMap() {
 
 function Map(){
   const center = useMemo(() => ({lat: 44, lng: -80}), []);
-  const [selected, setSelected] = useState(null);
-    
+  const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question
+  const [userPlaces, setUserPlaces] = useState([]);
+
     return (
   <>
     <div className="places-container">
@@ -34,9 +37,13 @@ function Map(){
       {/* render the component out. pass the location and render the location as a marker*/}
     </div>
 
-    <div>
-      <Button variant="outlined">ADD</Button>
-    </div>
+    <Container>
+      <Button variant="outlined" color="primary"
+        onClick={console.log({selected})}
+      >Add</Button>
+      <Box>{selected.lat}</Box>
+      <Box>{selected.lng}</Box>
+    </Container>
 
     <GoogleMap
       zoom={10}
@@ -44,7 +51,6 @@ function Map(){
       mapContainerClassName="map-container"
       >
       { <MarkerF position={selected} />}
-    {/* <MarkerF position={{lat: 44, lng: -80}}/> */}
 
     </GoogleMap>
   </>
@@ -97,6 +103,10 @@ const PlacesAutocomplete = ({setSelected}) => {
     </Combobox>
   );
 };
+
+// const AddPlace = () =>{
+
+// }
 
 
 // https://velog.io/@sanggyo/React-react-google-mapapi-GoogleMapMarkerFInfoWindowF-%EC%82%AC%EC%9A%A9

@@ -1,5 +1,6 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Box, NavBar } from "@material-ui/core";
 import {Navbar, Container, Nav} from 'react-bootstrap'
 import {Router, Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 
@@ -20,3 +21,5 @@ const NavBar = () => {
 }
 
 export default NavBar
+
+//https://goo-gy.github.io/2021-02-28-material-ui

@@ -1,21 +1,15 @@
 import React, { Component, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {Button, Navbar, Container, Nav} from 'react-bootstrap'
+import PlanCard from '../components/planCard.js';
 
-function Card(prop){
+export default function Plan(prop){
     return(
       <>
-      <Container>
-        <h2>Day N</h2>
-        <div>
-          <h3>Place</h3>
-          <p>Specific location</p>
-          <img/>
-        </div>
-        <Button>BTN</Button>
-      </Container>
+        <div>plan page</div>
+        <PlanCard/>
+        
       </>
     )
   }
 
-export default Card
