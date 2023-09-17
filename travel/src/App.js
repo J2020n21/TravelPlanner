@@ -6,7 +6,7 @@ import {Router, Routes, Route, Link, useNavigate, Outlet } from 'react-router-do
 // import {useParams} from 'react-router-dom'
 import './App.css';
 import PlanCard from "./components/planCard";
-import NavBar from './components/navbar.js';
+import MyNavBar from './components/navbar.js';
 import GMap from './googlemap.js';
 import Landing from './pages/landing.js';
 import Home from './pages/home.js';
@@ -19,13 +19,15 @@ import CountryDropDown from "./components/country";
 import {useState, useEffect} from 'react';
 import {Wrapper, Status} from "@googlemaps/react-wrapper"; //google map
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { CssBaseline, Grid } from "@material-ui/core";
 
 function App() {
   const navigate = useNavigate();
 
   return (
+    <>
     <div className="App"> 
-
+    <CssBaseline/>
     <Routes>
       <Route path="/" element={<Landing/>}/>  
       <Route path="/toStart" element={<ToStart/>}/>
@@ -33,20 +35,22 @@ function App() {
       <Route path="/testMap" element={<GMap/>}/>
 
       <Route path="/home" element={<Home/>}> {/* Home includes menu */}
-        <Route path="" element={<>
-          <div> googlemap.</div>
-            {/* <Wrapper apiKey={googleMapKey}>
-              <GMapSet/>
-            </Wrapper>
-            <Outlet></Outlet> */}
-          <Outlet></Outlet>
-          </>}>
-          <Route path="plan" element={<>
-            <Plan/>
-            </>
-            }/>
-          <Route path="map" element={<Map/>}/>
-        </Route>  
+          
+          <Route path="" element={<>
+            <div> under home</div>
+              {/* <Wrapper apiKey={googleMapKey}>
+                <GMapSet/>
+              </Wrapper>
+              <Outlet></Outlet> */}
+            <Outlet></Outlet>
+            </>}>
+              
+            <Route path="plan" element={<>
+              <Plan/>
+              </>
+              }/>
+            <Route path="map" element={<Map/>}/>
+          </Route>  
         
           <Route path="setting" element={<Setting/>}/>
           <Route path="complain" element={<Complain/>}/>
@@ -55,6 +59,7 @@ function App() {
     </Routes>
   
   </div>
+  </>
   );
   
 // https://hsly22xk.tistory.com/405

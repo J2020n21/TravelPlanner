@@ -1,23 +1,34 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {Box, Button, Container} from '@material-ui/core';
+import {Box, Button, Container,Grid,Typography, makeStyles} from '@material-ui/core';
 import Search from '../components/search/search.js';
 
+const useStyles = makeStyles({
+    landing: {
+        display: 'block',
+        margin:'auto',
+        textAlign: 'center',
+        backgroundColor:'lightGrey',
+    },
+
+})
 
 const Landing = () =>{
     const navigate = useNavigate();
+    const classes = useStyles();
+
     return(
-        <div>
-            <p>Design your travel</p>
-            <h1>Traveling</h1>
-            <p>To where?</p>
-            <input></input>
-            <button onClick={()=>{navigate('/toStart')}}>Next</button>
-            <Button variant="contained" color="primary"> // 사용한다. 
-            Hello World
-            </Button>
-            <Search/>
-        </div>
+        <Box className={classes.landing}>
+                    <Typography variant="h3">Design your travel</Typography>
+                    <Typography variant="h1">Traveling</Typography>
+                    <Typography variant="h6">To where?</Typography>
+                    {/* <input></input> */}
+                    <Button variant="contained" color="primary"
+                    onClick={()=>{navigate('/toStart')}}>
+                        NEXT
+                    </Button>
+                    {/* <Search/> */}
+        </Box>
     )
 }
 
