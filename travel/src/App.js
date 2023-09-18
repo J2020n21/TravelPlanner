@@ -5,9 +5,9 @@ import {Button, Navbar, Container, Nav} from 'react-bootstrap'
 import {Router, Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 // import {useParams} from 'react-router-dom'
 import './App.css';
-import PlanCard from "./components/planCard";
-import MyNavBar from './components/navbar.js';
-import GMap from './googlemap.js';
+// import PlanCard from "./components/planCard";
+// import MyNavBar from './components/navbar.js';
+import GMap from './components/googlemap.js';
 import Landing from './pages/landing.js';
 import Home from './pages/home.js';
 import Setting from './pages/setting';

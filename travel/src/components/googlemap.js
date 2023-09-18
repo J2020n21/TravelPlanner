@@ -1,10 +1,10 @@
 import "./googlemap.css";
 import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import { useMemo, useState, useEffect, useRef } from "react";
-import { Autocomplete ,withGoogleMap, GoogleMap, 
+import { Autocomplete ,withGoogleMap, GoogleMap,
   LoadScript, Marker, MarkerF, useJsApiLoader,
-  useLoadScript, MarkerClustererF } from "@react-google-maps/api";
-import usePlacesAutocomplete,{
+  useLoadScript, InfoWindowF } from "@react-google-maps/api";
+  import usePlacesAutocomplete,{
  getGeocode, getLatLng
 } from "use-places-autocomplete";
 import {
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 
 const useLibraries = ["places"];
 
-export default function GMap() {
+export default function GMap({setCoordinates, setBounds, coordinates}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -33,11 +33,15 @@ export default function GMap() {
     });
 
     if (!isLoaded) return <div>Loading!</div>;
-    return <Map/>;
+    return <Map 
+      setCoordinates={setCoordinates}
+      setBounds={setBounds}
+      coordinates={coordinates}
+    />;
 };
 
 
-function Map(){
+function Map({setCoordinates, setBounds, coordinates}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   
@@ -68,8 +72,16 @@ function Map(){
       center={selected}
       options={{disableDefaultUI: true}}
       mapContainerClassName="map-container"
+        onchange={(e)=>{
+          console.log("e"+e);
+        }}
       >
-      { <MarkerF position={selected} />}
+      {<>
+       <MarkerF position={selected} />
+       
+        </>
+      }
+      {/* <InfoWindowF position={selected}/> */}
 
     </GoogleMap>
   </>

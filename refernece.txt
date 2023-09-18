@@ -7,3 +7,11 @@ https://velog.io/@jjunyjjuny/Material-UI-%EC%82%AC%EC%9A%A9%EB%B2%95-%EA%B0%84%E
 material ui 세부사항
 https://maggie-a.tistory.com/226?category=879042
 
+구글맵 api
+https://tomchentw.github.io/react-google-maps/#marker
+
+
+https://developers.google.com/maps/documentation/javascript/reference?hl=ko#Marker
+https://developers.google.com/maps/documentation/javascript/reference/marker?hl=ko#Marker.getPosition
+https://chat.openai.com/
+
