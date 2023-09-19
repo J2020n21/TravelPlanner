@@ -10,6 +10,22 @@ const useStyles = makeStyles({
         textAlign: 'center',
         backgroundColor:'lightGrey',
     },
+    textWrap: {
+        position: 'absolute', 
+        left: '0', right: '0', margin: 'auto',
+        color:'white',
+        width: '500px',
+        height: '500px',
+        border:'3px solid white',
+        marginTop:'10%', 
+        paddingTop:'5vw'
+    },
+    border: {
+        width: '500px',
+        height: '500px',
+        border:'3px solid white',
+        paddingTop: '50px'
+    },
 
 })
 
@@ -18,21 +34,26 @@ const Landing = () =>{
     const classes = useStyles();
 
     return(
+        <>
+        
         <Box className={classes.landing}>
-                    <Typography variant="h3">Design your travel</Typography>
-                    <Typography variant="h1">Traveling</Typography>
-                    <Typography variant="h6">To where?</Typography>
-                    {/* <input></input> */}
-                    <Button variant="contained" color="primary"
-                    onClick={()=>{navigate('/toStart')}}>
-                        NEXT
-                    </Button>
-                    {/* <Search/> */}
+            
+            <Box className={classes.textWrap}>
+
+                <Typography variant="h3">Design your travel</Typography>
+                <Typography variant="h1">Traveling</Typography>
+                <Typography variant="h6">To where?</Typography>
+                {/* <input></input> */}
+                <Button variant="contained" color="primary"
+                onClick={()=>{navigate('/toStart')}}>
+                    NEXT
+                </Button>
+              
+            </Box>
+            <Search/>
         </Box>
+        </>
     )
 }
-
-// hook;픽사베이 api로 매번 다른 이미지 주소를 받아온다 > 해당 이미지를 내 페이지에 적용한다
-// https://www.youtube.com/watch?v=dzOrUmK4Qyw&list=PLillGF-RfqbY3c2r0htQyVbDJJoBFE6Rb&index=4
 
 export default Landing
