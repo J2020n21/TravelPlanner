@@ -37,7 +37,6 @@ function App() {
       <Route path="/home" element={<Home/>}> {/* Home includes menu */}
           
           <Route path="" element={<>
-            <div> under home</div>
               {/* <Wrapper apiKey={googleMapKey}>
                 <GMapSet/>
               </Wrapper>

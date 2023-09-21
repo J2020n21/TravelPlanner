@@ -13,11 +13,8 @@ export default function Plan(prop){
     const [coordinates, setCoordinates] = useState({lat: 0, lng: 0});
     const [bounds, setBounds] = useState(null);
 
-    // useEffect(()=>{
-    //   navigator.get
-    // },[]);
-
     useEffect(()=>{
+      console.log("coordinates and bound:");
       console.log(coordinates, bounds);
 
       getPlacesData() //it returns data

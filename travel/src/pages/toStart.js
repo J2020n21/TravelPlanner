@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {CountryDropDown,Date,Recommendation} from "../components/country";
-import {Box, Button, Container,Grid,Typography, makeStyles, Input} from '@material-ui/core';
+import {Box, Button,CssBaseline, Container,Grid,Typography, makeStyles, Input} from '@material-ui/core';
 
 const ToStart = ()=>{
     const navigate = useNavigate();
@@ -26,12 +26,16 @@ const ToStart = ()=>{
         {q.map((data, i)=>{
             return(
                 <>
-                <Box>
-                    <Typography variant="h2">{data}</Typography>
-                    <Typography variant="h4">{qDes[i]}</Typography>
-                    <Typography subtitle="h1">{qExplain[i]}</Typography>
-                    <Input>{qInput[i]}</Input>
-                </Box>
+                <Grid container spacing={3}>
+                    <Grid item xs={4}>
+                        <Box>
+                            <Typography variant="h3">{data}</Typography>
+                            <Typography variant="h4">{qDes[i]}</Typography>
+                            <Typography subtitle="h1">{qExplain[i]}</Typography>
+                            <Input>{qInput[i]}</Input>
+                        </Box>
+                    </Grid>
+                </Grid>
                 </>
             )
         })}

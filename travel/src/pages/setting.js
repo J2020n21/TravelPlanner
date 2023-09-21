@@ -30,12 +30,12 @@ export default function Setting (){
 
         <h5>Any problem?</h5>
         <p onClick={()=>{navigate('/home/complain')}}>click</p>
-        <FormControlLabel
+        {/* <FormControlLabel
           value="start"
           control={<Switch color="primary" />}
           label="Start"
           labelPlacement="start"
-        />
+        /> */}
         </>
     )
 

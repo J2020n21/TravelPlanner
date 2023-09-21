@@ -1,7 +1,7 @@
 import "./googlemap.css";
 import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import { useMemo, useState, useEffect, useRef } from "react";
-import { Autocomplete ,withGoogleMap, GoogleMap,
+import { Autocomplete ,withGoogleMap, GoogleMap, 
   LoadScript, Marker, MarkerF, useJsApiLoader,
   useLoadScript, InfoWindowF } from "@react-google-maps/api";
   import usePlacesAutocomplete,{
@@ -23,15 +23,15 @@ const useStyles = makeStyles({
 
 })
 
-const useLibraries = ["places"];
+
 
 export default function GMap({setCoordinates, setBounds, coordinates}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-        libraries: useLibraries,
+        libraries:["places"]
     });
-
+ 
     if (!isLoaded) return <div>Loading!</div>;
     return <Map 
       setCoordinates={setCoordinates}
@@ -44,10 +44,25 @@ export default function GMap({setCoordinates, setBounds, coordinates}) {
 function Map({setCoordinates, setBounds, coordinates}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
-  
   const center = useMemo(() => ({lat: 44, lng: -80}), []);
   const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question
   const [userPlaces, setUserPlaces] = useState([]);
+
+  const markerList = [
+    { lat: 59.2967322, lng: 18.0009393},
+    { lat: 59.2980245, lng: 17.9971503},
+    { lat: 59.2981078, lng: 17.9980875},
+    { lat: 59.2987638, lng: 17.9917639}
+  ];
+
+  //1.make marker with click
+
+  //2.btn click: add the place info with add 
+  //a. save data in the 'userPlace'
+
+
+
+
 
     return (
   <>
@@ -57,31 +72,33 @@ function Map({setCoordinates, setBounds, coordinates}){
     </div>
 
 {/* for check */}
-    <Container>
+    {/* <Container>
       <Button variant="outlined" color="primary"
-        onClick={
-          console.log({selected})
-        }>Add</Button>
+        onClick={(e)=>{
+          console.log("selected:"+{selected});
+          // AddPlace();
+        }}>Add</Button>
       <Box>{selected.lat}</Box>
       <Box>{selected.lng}</Box>
-      <Box>{userPlaces[0]}</Box>
-    </Container>
+      <Box>{userPlaces}</Box>
+    </Container> */}
+
 
     <GoogleMap
-      zoom={10}
+      zoom={13}
       center={selected}
       options={{disableDefaultUI: true}}
       mapContainerClassName="map-container"
-        onchange={(e)=>{
-          console.log("e"+e);
-        }}
+      onDragEnd={(e)=>{
+        // (e)=>{console.log(e);}
+        
+      }}
+
       >
       {<>
-       <MarkerF position={selected} />
-       
-        </>
-      }
-      {/* <InfoWindowF position={selected}/> */}
+       <MarkerF position={selected}/>
+        
+       </>}
 
     </GoogleMap>
   </>
@@ -138,9 +155,7 @@ const PlacesAutocomplete = ({setSelected}) => {
   );
 };
 
-// const AddPlace = () =>{
 
-// }
 
 
 // https://velog.io/@sanggyo/React-react-google-mapapi-GoogleMapMarkerFInfoWindowF-%EC%82%AC%EC%9A%A9
