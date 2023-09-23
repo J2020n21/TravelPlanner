@@ -2,7 +2,7 @@ import "./googlemap.css";
 import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { Autocomplete ,withGoogleMap, GoogleMap, 
-  LoadScript, Marker, MarkerF, useJsApiLoader,
+  LoadScript, MarkerF, useJsApiLoader,
   useLoadScript, InfoWindowF } from "@react-google-maps/api";
   import usePlacesAutocomplete,{
  getGeocode, getLatLng
@@ -13,8 +13,6 @@ import {
 } from "@reach/combobox";
 import {makeStyles, Box, Container, Button, Paper, Typography, useMediaQuery} from '@material-ui/core';
 // import LocationOutlinedIcon from '@material-ui/icons/LocationOutlined';
-import Rating from '@material-ui/lab';
-import PushPinIcon from '@mui/icons-material/PushPin';
 
 const useStyles = makeStyles({
     title: {
@@ -25,7 +23,7 @@ const useStyles = makeStyles({
 
 
 
-export default function GMap({setCoordinates, setBounds, coordinates}) {
+export default function GMap({setCoordinates,setBounds,coordinates}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -41,27 +39,39 @@ export default function GMap({setCoordinates, setBounds, coordinates}) {
 };
 
 
-function Map({setCoordinates, setBounds, coordinates}){
+function Map({setCoordinates,setBounds,coordinates}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
-  const center = useMemo(() => ({lat: 44, lng: -80}), []);
-  const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question
-  const [userPlaces, setUserPlaces] = useState([]);
+  const center = useState(() => ({lat: 44, lng: -80}), []);
+  const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question. default
+  const [userPlaces, setUserPlaces] = useState([]); //for travel plan
 
-  const markerList = [
-    { lat: 59.2967322, lng: 18.0009393},
-    { lat: 59.2980245, lng: 17.9971503},
-    { lat: 59.2981078, lng: 17.9980875},
-    { lat: 59.2987638, lng: 17.9917639}
-  ];
+  const [markerList,setMarkerList] = useState([
+     {lat: 59.2967322, lng: 18.0009393},
+    //  { lat: 59.2980245, lng: 17.9971503},
+    //  { lat: 59.2981078, lng: 17.9980875},
+    //  { lat: 59.2987638, lng: 17.9917639}
+  ]);
 
-  //1.make marker with click
-
-  //2.btn click: add the place info with add 
-  //a. save data in the 'userPlace'
-
-
-
+  //get center lat, lng 
+  const [mapref, setMapRef] = useState(null);
+  const handleOnLoad = map => setMapRef(map);
+  const handleCenterChanged = (props) =>{
+    if(mapref){
+      const newCenter = mapref.getCenter();
+      // console.log("new Center:" + newCenter);
+      setCoordinates(coordinates = newCenter);
+    }
+  };
+  
+  const handleBoundChanged = (props) =>{
+    if(mapref){
+      const newBoundNE = mapref.getBounds().getNorthEast();
+      const newBoundSW = mapref.getBounds().getSouthWest();
+      // console.log("newBound"+newBoundNE); //ne,sw
+      setBounds({ne:newBoundNE, sw:newBoundSW});
+    }
+  };
 
 
     return (
@@ -89,16 +99,18 @@ function Map({setCoordinates, setBounds, coordinates}){
       center={selected}
       options={{disableDefaultUI: true}}
       mapContainerClassName="map-container"
-      onDragEnd={(e)=>{
-        // (e)=>{console.log(e);}
-        
-      }}
-
+      onLoad={handleOnLoad}
+      onCenterChanged={handleCenterChanged}
+      onBoundsChanged={handleBoundChanged}
       >
-      {<>
-       <MarkerF position={selected}/>
-        
-       </>}
+
+
+
+{
+  markerList.map((marker)=>{
+    return( <MarkerF position={marker}/>)
+  })
+}
 
     </GoogleMap>
   </>
@@ -156,7 +168,7 @@ const PlacesAutocomplete = ({setSelected}) => {
 };
 
 
-
+// {/* <MarkerF position={selected}/> */}
 
 // https://velog.io/@sanggyo/React-react-google-mapapi-GoogleMapMarkerFInfoWindowF-%EC%82%AC%EC%9A%A9
 // https://tomchentw.github.io/react-google-maps/#withgooglemap

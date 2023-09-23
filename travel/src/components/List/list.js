@@ -53,8 +53,8 @@ export default function List() {
       </FormControl>
 
       <Grid container spacing={3}>
-        {places?.map((place,i)=>(
-          <Grid item key={i} xs={12}>
+        {places?.map((place, index)=>(
+          <Grid item key={index} xs={12}>
             <PlaceDetails place={place}/>
           </Grid>
         ))}

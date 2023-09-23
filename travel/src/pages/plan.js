@@ -9,20 +9,24 @@ import {getPlacesData} from '../api/index.js'
 
 export default function Plan(prop){
     const [apiPlaces, setApiPlaces] = useState([]);
-
     const [coordinates, setCoordinates] = useState({lat: 0, lng: 0});
-    const [bounds, setBounds] = useState(null);
+    const [bounds, setBounds] = useState({lat: 0, lng: 0});
+
+    // useEffect(()=>{
+
+    // },[]);
 
     useEffect(()=>{
       console.log("coordinates and bound:");
       console.log(coordinates, bounds);
 
-      getPlacesData() //it returns data
-      .then((data) => {
-        console.log(data);
-        setApiPlaces(data);
-      })
-    },[coordinates, bounds]);
+    //   getPlacesData(bounds.sw, bounds.ne)
+    //   .then((data) => {
+    //     console.log(data);
+    //     setApiPlaces(data);
+    //   })
+    // },[coordinates, bounds]);
+    });
 
     return(
       <>
