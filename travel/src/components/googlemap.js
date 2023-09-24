@@ -43,8 +43,8 @@ function Map({setCoordinates,setBounds,coordinates}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   const center = useState(() => ({lat: 44, lng: -80}), []);
-  const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question. default
-  const [userPlaces, setUserPlaces] = useState([]); //for travel plan
+  const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question. 
+  const [userPlaces, setUserPlaces] = useState([]);
 
   const [markerList,setMarkerList] = useState([
      {lat: 59.2967322, lng: 18.0009393},
@@ -53,7 +53,7 @@ function Map({setCoordinates,setBounds,coordinates}){
     //  { lat: 59.2987638, lng: 17.9917639}
   ]);
 
-  //get center lat, lng 
+  //Coordinates work
   const [mapref, setMapRef] = useState(null);
   const handleOnLoad = map => setMapRef(map);
   const handleCenterChanged = (props) =>{
@@ -80,6 +80,11 @@ function Map({setCoordinates,setBounds,coordinates}){
     }
   };
 
+  //Make marker with a click
+  const handleOnClick = (e)=>{
+    const clickPosition = {lat: e.latLng.lat(), lng:e.latLng.lng()};
+    setSelected(clickPosition);
+  }
 
     return (
   <>
@@ -109,9 +114,12 @@ function Map({setCoordinates,setBounds,coordinates}){
       onLoad={handleOnLoad}
       onCenterChanged={handleCenterChanged}
       onBoundsChanged={handleBoundChanged}
+      onClick={handleOnClick}
       >
-
-
+{/* click/ get coordinates/ display */}
+{
+  <MarkerF position={selected}/>
+}
 
 {/* {
   markerList.map((marker)=>{
