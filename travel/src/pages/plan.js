@@ -6,8 +6,12 @@ import PlanCard from '../components/List/planCard.js';
 import GMap from "../components/googlemap.js";
 import List from "../components/List/list.js";
 import {getPlacesData} from '../api/index.js'
+import planning from "../components/planning.js";
+import { Button } from "react-bootstrap";
 
 export default function Plan(prop){
+    const [status, setStatus] = useState('plan');
+    const [clickCount, setClickCount] = useState(0);
     const [apiPlaces, setApiPlaces] = useState([]);
     const [coordinates, setCoordinates] = useState({lat: 0, lng: 0});
     const [bounds, setBounds] = useState({lat: 0, lng: 0});
@@ -21,9 +25,14 @@ export default function Plan(prop){
       })
     },[coordinates, bounds]);
 
-    // console.log(apiPlaces[0].name); //ok
+
     return(
       <>
+      <Button onClick={()=>{
+          setClickCount(clickCount + 1);
+          clickCount % 2 === 0? setStatus('rec'): setStatus('plan');
+        }}>change</Button>
+        
         <CssBaseline/>
         <Grid container spacing={3} style={{width: '100%'}}>
           <Grid item xs={8}>
@@ -34,7 +43,9 @@ export default function Plan(prop){
             />
           </Grid>
           <Grid item xs={4}>
-            <List apiPlaces={apiPlaces}/>
+            {
+              status === 'plan'? <p>plan</p> :<List apiPlaces={apiPlaces}/>
+            }
           </Grid>
         </Grid>
       </>

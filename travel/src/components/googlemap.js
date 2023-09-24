@@ -83,6 +83,7 @@ function Map({setCoordinates,setBounds,coordinates}){
   //Make marker with a click
   const handleOnClick = (e)=>{
     const clickPosition = {lat: e.latLng.lat(), lng:e.latLng.lng()};
+    //need to make moving smooth
     setSelected(clickPosition);
   }
 
