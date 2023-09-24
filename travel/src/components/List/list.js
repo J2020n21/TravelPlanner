@@ -13,22 +13,17 @@ const useStyles = makeStyles({
 
 })
 
-export default function List() {
+export default function List({apiPlaces}) {
   const classes = useStyles();
   const [type, setType] = useState('restaurants');
   const [rating, setRating] = useState('');
 
-  const places = [
-    {name: 'Place A'},
-    {name: 'Place B'},
-    {name: 'Place C'},
-    {name: 'Place A'},
-    {name: 'Place B'},
-    {name: 'Place C'},
-    {name: 'Place A'},
-    {name: 'Place B'},
-    {name: 'Place C'},
-  ]
+  // const apiPlaces = [
+  //   {name:'a'},
+  //   {name:'b'},
+  //   {name:'a'},
+  //   {name:'bdd'},
+  // ];
 
   return (
     <Container>
@@ -53,9 +48,9 @@ export default function List() {
       </FormControl>
 
       <Grid container spacing={3}>
-        {places?.map((place, index)=>(
+        {apiPlaces&& apiPlaces.map((place, index)=>(
           <Grid item key={index} xs={12}>
-            <PlaceDetails place={place}/>
+            <PlaceDetails place={place} index={index}/>
           </Grid>
         ))}
       </Grid>

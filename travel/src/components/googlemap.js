@@ -58,18 +58,25 @@ function Map({setCoordinates,setBounds,coordinates}){
   const handleOnLoad = map => setMapRef(map);
   const handleCenterChanged = (props) =>{
     if(mapref){
-      const newCenter = mapref.getCenter();
-      // console.log("new Center:" + newCenter);
-      setCoordinates(coordinates = newCenter);
+      const newCenterLat = mapref.getCenter().lat();
+      const newCenterLng = mapref.getCenter().lng();
+      setCoordinates(coordinates = {lat:newCenterLat, lng:newCenterLng});
+      // console.log(coordinates);
     }
   };
   
   const handleBoundChanged = (props) =>{
     if(mapref){
-      const newBoundNE = mapref.getBounds().getNorthEast();
-      const newBoundSW = mapref.getBounds().getSouthWest();
-      // console.log("newBound"+newBoundNE); //ne,sw
-      setBounds({ne:newBoundNE, sw:newBoundSW});
+      const newBounds = mapref.getBounds();
+      const newBoundNELat = newBounds.getNorthEast().lat();
+      const newBoundNELng = newBounds.getNorthEast().lng();
+      const newBoundSWLat = newBounds.getSouthWest().lat();
+      const newBoundSWLng = newBounds.getSouthWest().lng();
+
+      const ne = {lat:newBoundNELat, lng:newBoundNELng};
+      const sw = {lat:newBoundSWLat, lng:newBoundSWLng};
+      setBounds({ne, sw});
+      // console.log({ne, sw}); //ne,sw
     }
   };
 
@@ -106,11 +113,11 @@ function Map({setCoordinates,setBounds,coordinates}){
 
 
 
-{
+{/* {
   markerList.map((marker)=>{
     return( <MarkerF position={marker}/>)
   })
-}
+} */}
 
     </GoogleMap>
   </>

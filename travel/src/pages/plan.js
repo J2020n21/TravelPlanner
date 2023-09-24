@@ -12,22 +12,16 @@ export default function Plan(prop){
     const [coordinates, setCoordinates] = useState({lat: 0, lng: 0});
     const [bounds, setBounds] = useState({lat: 0, lng: 0});
 
-    // useEffect(()=>{
-
-    // },[]);
-
     useEffect(()=>{
-      console.log("coordinates and bound:");
-      console.log(coordinates, bounds);
+      // console.log("bounds sw"+bounds.sw.lat);
+      getPlacesData(bounds.sw, bounds.ne)
+      .then((data) => {
+        // console.log(data);
+        setApiPlaces(data);
+      })
+    },[coordinates, bounds]);
 
-    //   getPlacesData(bounds.sw, bounds.ne)
-    //   .then((data) => {
-    //     console.log(data);
-    //     setApiPlaces(data);
-    //   })
-    // },[coordinates, bounds]);
-    });
-
+    // console.log(apiPlaces[0].name); //ok
     return(
       <>
         <CssBaseline/>
@@ -38,11 +32,9 @@ export default function Plan(prop){
               setBounds={setBounds}
               coordinates={coordinates}
             />
-            {/* <div>Map</div> */}
           </Grid>
           <Grid item xs={4}>
-            <List/>
-            {/* <div>List</div> */}
+            <List apiPlaces={apiPlaces}/>
           </Grid>
         </Grid>
       </>
