@@ -6,8 +6,9 @@ import PlanCard from '../components/List/planCard.js';
 import GMap from "../components/googlemap.js";
 import List from "../components/List/list.js";
 import {getPlacesData} from '../api/index.js'
-import planning from "../components/planning.js";
+import Planning from "../components/planning.js";
 import { Button } from "react-bootstrap";
+import '../App.css';
 
 export default function Plan(prop){
     const [status, setStatus] = useState('plan');
@@ -15,6 +16,11 @@ export default function Plan(prop){
     const [apiPlaces, setApiPlaces] = useState([]);
     const [coordinates, setCoordinates] = useState({lat: 0, lng: 0});
     const [bounds, setBounds] = useState({lat: 0, lng: 0});
+
+    const changeStatus = () =>{
+      setClickCount(clickCount + 1);
+      clickCount % 2 === 0? setStatus('rec'): setStatus('plan');
+    }
 
     useEffect(()=>{
       // console.log("bounds sw"+bounds.sw.lat);
@@ -27,24 +33,24 @@ export default function Plan(prop){
 
 
     return(
-      <>
-      <Button onClick={()=>{
-          setClickCount(clickCount + 1);
-          clickCount % 2 === 0? setStatus('rec'): setStatus('plan');
-        }}>change</Button>
-        
+      <>  
         <CssBaseline/>
         <Grid container spacing={3} style={{width: '100%'}}>
           <Grid item xs={8}>
+            <Button className="btn" onClick={()=>{changeStatus();}}>{status}</Button> 
+            
             <GMap
               setCoordinates={setCoordinates}
               setBounds={setBounds}
               coordinates={coordinates}
+
+             
+
             />
           </Grid>
           <Grid item xs={4}>
             {
-              status === 'plan'? <p>plan</p> :<List apiPlaces={apiPlaces}/>
+              status === 'plan'? <Planning/> :<List apiPlaces={apiPlaces}/>
             }
           </Grid>
         </Grid>

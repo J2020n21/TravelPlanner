@@ -3,7 +3,9 @@ import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { Autocomplete ,withGoogleMap, GoogleMap, 
   LoadScript, MarkerF, useJsApiLoader,
-  useLoadScript, InfoWindowF } from "@react-google-maps/api";
+  useLoadScript, InfoWindowF,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
   import usePlacesAutocomplete,{
  getGeocode, getLatLng
 } from "use-places-autocomplete";
@@ -11,7 +13,9 @@ import {
   Combobox, ComboboxInput, ComboboxPopover, 
   ComboboxList, ComboboxOption
 } from "@reach/combobox";
-import {makeStyles, Box, Container, Button, Paper, Typography, useMediaQuery} from '@material-ui/core';
+import {makeStyles, Box, Container, Button, Paper, Typography,
+   useMediaQuery,ButtonGroup} from '@material-ui/core';
+import {Skeleton} from '@mui/material';
 // import LocationOutlinedIcon from '@material-ui/icons/LocationOutlined';
 
 const useStyles = makeStyles({
@@ -30,7 +34,7 @@ export default function GMap({setCoordinates,setBounds,coordinates}) {
         libraries:["places"]
     });
  
-    if (!isLoaded) return <div>Loading!</div>;
+    if (!isLoaded) return <Skeleton variant="rounded" animation="wave" style={{height:'100vh'}}></Skeleton>;
     return <Map 
       setCoordinates={setCoordinates}
       setBounds={setBounds}
@@ -44,13 +48,16 @@ function Map({setCoordinates,setBounds,coordinates}){
   const isMobile = useMediaQuery('(min-width:600px)');
   const center = useState(() => ({lat: 44, lng: -80}), []);
   const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question. 
-  const [userPlaces, setUserPlaces] = useState([]);
+  const [userPlaces, setUserPlaces] = useState([]); //planning
+  const [routeOn, setRouteOn] = useState('on');
+  const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
 
   const [markerList,setMarkerList] = useState([
      {lat: 59.2967322, lng: 18.0009393},
-    //  { lat: 59.2980245, lng: 17.9971503},
-    //  { lat: 59.2981078, lng: 17.9980875},
-    //  { lat: 59.2987638, lng: 17.9917639}
+     { lat: 59.2980245, lng: 17.9971503},
+     { lat: 59.2981078, lng: 17.9980875},
   ]);
 
   //Coordinates work
@@ -80,12 +87,31 @@ function Map({setCoordinates,setBounds,coordinates}){
     }
   };
 
-  //Make marker with a click
+  //Make marker to the clicked position
   const handleOnClick = (e)=>{
     const clickPosition = {lat: e.latLng.lat(), lng:e.latLng.lng()};
     //need to make moving smooth
     setSelected(clickPosition);
-  }
+  };
+
+
+  async function calculateRoute(){
+  // eslint-disable-next-line no-undef
+    const directionSevice = new google.maps.DirectionsService();
+    const results = await directionSevice.route({
+      // eslint-disable-next-line no-undef
+      origin: new google.maps.LatLng(44,-80),
+      // eslint-disable-next-line no-undef
+      destination: new google.maps.LatLng(59.2967322, 18.0009393),
+       // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+    setDirectionsResponse(results)
+    setDistance(results.routes[0].legs[0].distance.text)
+    setDuration(results.routes[0].legs[0].duration.text)
+    
+  };
+
 
     return (
   <>
@@ -93,19 +119,6 @@ function Map({setCoordinates,setBounds,coordinates}){
       <PlacesAutocomplete setSelected={setSelected}/> 
       {/* render the component out. pass the location and render the location as a marker*/}
     </div>
-
-{/* for check */}
-    {/* <Container>
-      <Button variant="outlined" color="primary"
-        onClick={(e)=>{
-          console.log("selected:"+{selected});
-          // AddPlace();
-        }}>Add</Button>
-      <Box>{selected.lat}</Box>
-      <Box>{selected.lng}</Box>
-      <Box>{userPlaces}</Box>
-    </Container> */}
-
 
     <GoogleMap
       zoom={13}
@@ -122,6 +135,10 @@ function Map({setCoordinates,setBounds,coordinates}){
   <MarkerF position={selected}/>
 }
 
+<ButtonGroup>
+<Button onClick={calculateRoute}>calculate</Button>
+<Button onClick={calculateRoute}>add</Button>
+</ButtonGroup>
 {/* {
   markerList.map((marker)=>{
     return( <MarkerF position={marker}/>)
@@ -182,13 +199,3 @@ const PlacesAutocomplete = ({setSelected}) => {
     </Combobox>
   );
 };
-
-
-// {/* <MarkerF position={selected}/> */}
-
-// https://velog.io/@sanggyo/React-react-google-mapapi-GoogleMapMarkerFInfoWindowF-%EC%82%AC%EC%9A%A9
-// https://tomchentw.github.io/react-google-maps/#withgooglemap
-//https://www.youtube.com/watch?v=s4n_x5B58Dw
-//https://velog.io/@park0eun/Google-Map-Platform-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
-//참고: https://nittaku.tistory.com/67
-//주소변환: https://nicgoon.tistory.com/241
