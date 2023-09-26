@@ -102,7 +102,7 @@ function Map({setCoordinates,setBounds,coordinates}){
       // eslint-disable-next-line no-undef
       origin: new google.maps.LatLng(44,-80),
       // eslint-disable-next-line no-undef
-      destination: new google.maps.LatLng(59.2967322, 18.0009393),
+      destination: new google.maps.LatLng(44.1, -80.1),
        // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     })
@@ -130,7 +130,7 @@ function Map({setCoordinates,setBounds,coordinates}){
       onBoundsChanged={handleBoundChanged}
       onClick={handleOnClick}
       >
-{/* click/ get coordinates/ display */}
+
 {
   <MarkerF position={selected}/>
 }
@@ -144,6 +144,12 @@ function Map({setCoordinates,setBounds,coordinates}){
     return( <MarkerF position={marker}/>)
   })
 } */}
+  {directionsResponse && (
+    <DirectionsRenderer directions={directionsResponse} />
+  )}
+
+
+
 
     </GoogleMap>
   </>
