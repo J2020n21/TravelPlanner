@@ -37,18 +37,14 @@ export default function Plan(prop){
         <CssBaseline/>
         <Grid container spacing={3} style={{width: '100%'}}>
           <Grid item xs={8}>
-            <Button className="btn" onClick={()=>{changeStatus();}}>{status}</Button> 
-            
             <GMap
               setCoordinates={setCoordinates}
               setBounds={setBounds}
               coordinates={coordinates}
-
-             
-
             />
           </Grid>
           <Grid item xs={4}>
+          <Button className="btn-plan" onClick={()=>{changeStatus();}}>{status}</Button> 
             {
               status === 'plan'? <Planning/> :<List apiPlaces={apiPlaces}/>
             }
