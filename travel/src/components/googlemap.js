@@ -19,7 +19,12 @@ import {makeStyles, Box, Container, Button, Paper, Typography,
 useMediaQuery,ButtonGroup,
   } from '@material-ui/core';
 import {Skeleton, FormControl} from '@mui/material';
-// import LocationOutlinedIcon from '@material-ui/icons/LocationOutlined';
+//icons from material ui
+import AddLocationIcon from '@material-ui/icons/AddLocation';
+import DirectionsIcon from '@mui/icons-material/Directions';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import TrainIcon from '@mui/icons-material/Train';
 
 const useStyles = makeStyles({
     title: {
@@ -153,12 +158,9 @@ function Map({setCoordinates,setBounds,coordinates}){
 }
 
 <ButtonGroup>
-<Button variant="outlined"
-onClick={calculateRoute}>Route cal</Button>
-<Button onClick={()=>{
-   setClick(click+1)
-}}>show route modal</Button>
-<Button>add to plan</Button>
+<Button onClick={()=>{setClick(click+1)}}>
+  <DirectionsIcon/>ROUTE</Button>
+<Button><AddLocationIcon/>ADD</Button>
 </ButtonGroup>
 
 {
@@ -173,9 +175,9 @@ onClick={calculateRoute}>Route cal</Button>
         <Button onClick={()=>{calculateRoute(origin,destination)}}>calaulate</Button>
         <Button onClick={()=>{clearRoute(setOrigin,setDestination)}}>clear</Button>
 {/* drivind, walking, bicycling, trasit(출발/도착시간) */}
-        <Button>add to plan</Button>
-        <Button>add to plan</Button>
-        <Button>add to plan</Button>
+        <Button><DirectionsCarIcon/></Button>
+        <Button><DirectionsWalkIcon/></Button>
+        <Button><TrainIcon/></Button>
       </ButtonGroup>
       </Container>:null
 }
