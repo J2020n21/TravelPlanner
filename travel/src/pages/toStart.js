@@ -1,11 +1,9 @@
 import React, { Component, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {CountryDropDown,Date,Recommendation} from "../components/country";
 import {Box, Button,CssBaseline, Container,Grid,Typography, makeStyles, Input} from '@material-ui/core';
 
 const ToStart = ()=>{
     const navigate = useNavigate();
-    let qInput = [<CountryDropDown/>,<Date/>,<Recommendation/>]
     let q = ['Where','When','Recommend'];
     let qDes = [
         'which country?',
@@ -32,7 +30,7 @@ const ToStart = ()=>{
                             <Typography variant="h3">{data}</Typography>
                             <Typography variant="h4">{qDes[i]}</Typography>
                             <Typography subtitle="h1">{qExplain[i]}</Typography>
-                            <Input>{qInput[i]}</Input>
+                            <Input></Input>
                         </Box>
                     </Grid>
                 </Grid>

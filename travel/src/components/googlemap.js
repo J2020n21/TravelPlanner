@@ -112,12 +112,20 @@ function Map({setCoordinates,setBounds,coordinates}){
       destination: destination,
       //new google.maps.LatLng(44.1, -80.1),
        // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode.DRIVING,
+      travelMode: google.maps.TravelMode.TRANSIT,
     })
     setDirectionsResponse(results)
     setDistance(results.routes[0].legs[0].distance.text)
     setDuration(results.routes[0].legs[0].duration.text)
-    
+    console.log(duration)
+  };
+
+  function clearRoute(){
+    setDirectionsResponse(null);
+    setDistance('');
+    setDuration('');
+    setOrigin('');
+    setDestination('');
   };
 
 
@@ -163,6 +171,11 @@ onClick={calculateRoute}>Route cal</Button>
   </FormControl>
       <ButtonGroup>
         <Button onClick={()=>{calculateRoute(origin,destination)}}>calaulate</Button>
+        <Button onClick={()=>{clearRoute(setOrigin,setDestination)}}>clear</Button>
+{/* drivind, walking, bicycling, trasit(출발/도착시간) */}
+        <Button>add to plan</Button>
+        <Button>add to plan</Button>
+        <Button>add to plan</Button>
       </ButtonGroup>
       </Container>:null
 }
@@ -175,9 +188,8 @@ onClick={calculateRoute}>Route cal</Button>
     return( <MarkerF position={marker}/>)
   })
 } */}
-  {directionsResponse && (
-    <DirectionsRenderer directions={directionsResponse} />
-  )}
+  {directionsResponse && (<DirectionsRenderer directions={directionsResponse}/>)}
+
 
     </GoogleMap>
   </>
