@@ -25,6 +25,7 @@ import DirectionsIcon from '@mui/icons-material/Directions';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import TrainIcon from '@mui/icons-material/Train';
+import Planning from "./planning";
 
 const useStyles = makeStyles({
     title: {
@@ -160,7 +161,7 @@ function Map({setCoordinates,setBounds,coordinates}){
 <ButtonGroup>
 <Button onClick={()=>{setClick(click+1)}}>
   <DirectionsIcon/>ROUTE</Button>
-<Button><AddLocationIcon/>ADD</Button>
+<Button onClick={()=>{}}><AddLocationIcon/>ADD</Button>
 </ButtonGroup>
 
 {
@@ -173,7 +174,7 @@ function Map({setCoordinates,setBounds,coordinates}){
   </FormControl>
       <ButtonGroup>
         <Button onClick={()=>{calculateRoute(origin,destination)}}>calaulate</Button>
-        <Button onClick={()=>{clearRoute(setOrigin,setDestination)}}>clear</Button>
+        <Button onClick={()=>{clearRoute()}}>clear</Button>
 {/* drivind, walking, bicycling, trasit(출발/도착시간) */}
         <Button><DirectionsCarIcon/></Button>
         <Button><DirectionsWalkIcon/></Button>
