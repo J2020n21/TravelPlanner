@@ -42,6 +42,7 @@ export default function Plan(prop){
               setCoordinates={setCoordinates}
               setBounds={setBounds}
               coordinates={coordinates}
+              apiPlaces={apiPlaces}
             />
           </Grid>
           <Grid item xs={4}>

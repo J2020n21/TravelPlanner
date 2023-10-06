@@ -18,13 +18,6 @@ export default function List({apiPlaces}) {
   const [type, setType] = useState('restaurants');
   const [rating, setRating] = useState('');
 
-  // const apiPlaces = [
-  //   {name:'a'},
-  //   {name:'b'},
-  //   {name:'a'},
-  //   {name:'bdd'},
-  // ];
-
   return (
     <Container>
       <Typography variant='h5'>Restaurants, Hotels and Attractions around</Typography>

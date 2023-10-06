@@ -7,6 +7,7 @@ import { Autocomplete ,withGoogleMap, GoogleMap,
   LoadScript, MarkerF, useJsApiLoader,
   useLoadScript, InfoWindowF,
   DirectionsRenderer,
+  DirectionsService,
 } from "@react-google-maps/api";
   import usePlacesAutocomplete,{
  getGeocode, getLatLng
@@ -36,7 +37,7 @@ const useStyles = makeStyles({
 
 
 
-export default function GMap({setCoordinates,setBounds,coordinates}) {
+export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -48,11 +49,12 @@ export default function GMap({setCoordinates,setBounds,coordinates}) {
       setCoordinates={setCoordinates}
       setBounds={setBounds}
       coordinates={coordinates}
+      apiPlaces={apiPlaces}
     />;
 };
 
 
-function Map({setCoordinates,setBounds,coordinates}){
+function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
@@ -65,6 +67,7 @@ function Map({setCoordinates,setBounds,coordinates}){
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
+  const [placeMarker,setPlaceMarker] = useState('');
 
   const [markerList,setMarkerList] = useState([
      {lat: 59.2967322, lng: 18.0009393},
@@ -123,15 +126,19 @@ function Map({setCoordinates,setBounds,coordinates}){
     setDirectionsResponse(results)
     setDistance(results.routes[0].legs[0].distance.text)
     setDuration(results.routes[0].legs[0].duration.text)
-    console.log(duration)
   };
 
   function clearRoute(){
-    setDirectionsResponse(null);
-    setDistance('');
-    setDuration('');
-    setOrigin('');
-    setDestination('');
+
+    if(mapref){
+      console.log("mapref!");
+      setDirectionsResponse(null);
+      setDistance('');
+      setDuration('');
+      setOrigin('');
+      setDestination('');
+      console.log(directionsResponse, distance, duration, origin, destination);
+    }
   };
 
 
@@ -151,12 +158,42 @@ function Map({setCoordinates,setBounds,coordinates}){
       onCenterChanged={handleCenterChanged}
       onBoundsChanged={handleBoundChanged}
       onClick={handleOnClick}
+      
       >
-
 
 {
   <MarkerF position={selected}/>
 }
+
+{
+  apiPlaces&& apiPlaces.map((place)=>{
+
+    const lat= Number(place['latitude'])
+    const lng= Number(place['longitude'])
+    const position = {lat,lng};
+    const name = (place['name']);
+    return(
+<>
+      <MarkerF position={position} 
+        title={name}
+        onMouseOver={(e)=>{
+          setPlaceMarker(position);
+        }}/>
+
+      <InfoWindowF position={position}>
+        <>
+          <Typography variant="subtitle2">{name}</Typography>
+          <img
+            style={{width:'100%',height:'10vh',cursor:'pointer'}}
+            src={place.photo? place.photo.images.large.url:null}
+          />
+        </>
+      </InfoWindowF>
+</>
+      )
+  })
+}
+
 
 <ButtonGroup>
 <Button onClick={()=>{setClick(click+1)}}>
@@ -175,23 +212,18 @@ function Map({setCoordinates,setBounds,coordinates}){
       <ButtonGroup>
         <Button onClick={()=>{calculateRoute(origin,destination)}}>calaulate</Button>
         <Button onClick={()=>{clearRoute()}}>clear</Button>
-{/* drivind, walking, bicycling, trasit(출발/도착시간) */}
-        <Button><DirectionsCarIcon/></Button>
-        <Button><DirectionsWalkIcon/></Button>
-        <Button><TrainIcon/></Button>
+        <ButtonGroup>
+          <Button value="DRIVING" onClick={(e)=>{}}><DirectionsCarIcon/></Button>
+          <Button value="WALKING"><DirectionsWalkIcon/></Button>
+          <Button value="TRANSIT"><TrainIcon/></Button>
+        </ButtonGroup>
       </ButtonGroup>
       </Container>:null
 }
 
 
 
-
-{/* {
-  markerList.map((marker)=>{
-    return( <MarkerF position={marker}/>)
-  })
-} */}
-  {directionsResponse && (<DirectionsRenderer directions={directionsResponse}/>)}
+  {directionsResponse && (<DirectionsRenderer directions={directionsResponse} />)}
 
 
     </GoogleMap>
@@ -248,10 +280,3 @@ const PlacesAutocomplete = ({setSelected}) => {
   );
 };
 
-// const ShowRouteCalInputs = (click, setClick) =>{
-//   if(click % 2 === 1){
-//     <RouteForm/>
-//     setClick(click += 1);
-//   };
-  
-// };
