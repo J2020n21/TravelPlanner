@@ -4,7 +4,7 @@ import { Typography,Container,Box,Button } from '@material-ui/core';
 
 export default function Planning() {
   const [click,setClick] = useState(0);
-  const [showPlaces,setShowPlaces] = useState('FOLD');
+  const [showPlaces,setShowPlaces] = useState('펴기');
   //장소추가 버튼=>해당 장소 form에 맞게 저장 => display
   //장소별 : 장소 이름,주소,사진 + 순서부여, (개인 메모)
   //버튼 -> api 전달 -> 저장 -> display
@@ -45,31 +45,27 @@ export default function Planning() {
 
   const showPlan = () =>{
     setClick(click+1)
-    click%2 === 0? setShowPlaces('UNFOLD'): setShowPlaces('FOLD')
+    click%2 === 1? setShowPlaces('펴기'): setShowPlaces('접기')
     console.log(showPlaces);
   }
 
   return (
     <>
     {
-      travelDay&& travelDay.map((item,indexDay)=>{
+      travelDay&& travelDay.map((item,index)=>{
         return(
-          <Box key={indexDay}>
+          <Box key={index}>
             <Typography variant='h5'>Day {item}</Typography>
             <Button onClick={showPlan}>{showPlaces}</Button>
-            {/* {setShowPlaces === 1? <PlanDetails place={travelPlaces}/>:null} */}
-            {/* {setShowPlaces === 'FOLD'? 
-                <div>Noooo</div>
-                :<div>{showPlaces}</div>
-                } */}
+            {
+              showPlaces === '펴기'? <div>폈다</div>:null
+            }
           </Box>
           
         )
       })
     }
 
-  <div>click</div>
-      
       {/* <p>{travelPlaces[1]['day'][0]['name']}</p>
       <p>{travelPlaces[1]['day'][0]['address']}</p>
       <p>{travelPlaces[1]['day'][0]['picture']}</p> */}
