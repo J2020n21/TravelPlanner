@@ -13,10 +13,11 @@ const useStyles = makeStyles({
 
 })
 
-export default function List({apiPlaces}) {
+export default function List({apiPlaces, childClicked, type, setType, rating, setRating}) {
   const classes = useStyles();
-  const [type, setType] = useState('restaurants');
-  const [rating, setRating] = useState('');
+
+  // console.log({childClicked});
+  // console.log(childClicked);
 
   return (
     <Container>

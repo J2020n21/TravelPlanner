@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 
 
 
-export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces}) {
+export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -50,17 +50,19 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces}) {
       setBounds={setBounds}
       coordinates={coordinates}
       apiPlaces={apiPlaces}
+      setChildClicked={setChildClicked}
     />;
 };
 
 
-function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
+function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
   const center = useMemo(() => ({lat: 44, lng: -80}), []);
   const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question. 
   const [userPlaces, setUserPlaces] = useState([]); //planning
+
   const [routeOn, setRouteOn] = useState('off');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -68,12 +70,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [placeMarker,setPlaceMarker] = useState('');
-
-  const [markerList,setMarkerList] = useState([
-     {lat: 59.2967322, lng: 18.0009393},
-     { lat: 59.2980245, lng: 17.9971503},
-     { lat: 59.2981078, lng: 17.9980875},
-  ]);
+  
 
   //Coordinates work
   const [mapref, setMapRef] = useState(null);
@@ -141,6 +138,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
     }
   };
 
+  const alert = () => {
+    alert('!!');
+    console.log('!');
+  }
 
     return (
   <>
@@ -159,6 +160,9 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
       onBoundsChanged={handleBoundChanged}
       onClick={handleOnClick}
       
+      // 누른 자식이 list의 어디에 있는지 파악
+      //자식을 누르면... 몇번째 자식인지 알아내서 list에서
+      //스크롤 계산-> 해당 위치로 이동
       >
 
 {
@@ -166,7 +170,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
 }
 
 {
-  apiPlaces&& apiPlaces.map((place)=>{
+  apiPlaces&& apiPlaces.map((place,i)=>{
 
     const lat= Number(place['latitude'])
     const lng= Number(place['longitude'])
@@ -175,18 +179,19 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
     return(
 <>
       <MarkerF position={position} 
-        title={name}
-        onMouseOver={(e)=>{
-          setPlaceMarker(position);
-        }}/>
+        title={name}/>
 
-      <InfoWindowF position={position}>
+      <InfoWindowF key={i} position={position}>
         <>
+
           <Typography variant="subtitle2">{name}</Typography>
-          <img
+          <Button style={{float:'left'}}>detail</Button>
+          <Button style={{float:'left'}}>Add</Button>
+          <img 
             style={{width:'100%',height:'10vh',cursor:'pointer'}}
             src={place.photo? place.photo.images.large.url:null}
           />
+
         </>
       </InfoWindowF>
 </>
@@ -221,8 +226,8 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces}){
       </Container>:null
 }
 
-
-
+{/* https://www.youtube.com/watch?v=VtsbYIMj9Xk */}
+{/* 마커위치 -infoWindow = 소요시간 */}
   {directionsResponse && (<DirectionsRenderer directions={directionsResponse} />)}
 
 

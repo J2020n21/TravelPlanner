@@ -16,6 +16,11 @@ export default function Plan(prop){
     const [apiPlaces, setApiPlaces] = useState([]);
     const [coordinates, setCoordinates] = useState({lat: 0, lng: 0});
     const [bounds, setBounds] = useState({lat: 0, lng: 0});
+    const [chlidCliked, setChildClicked]= useState(null);
+
+    const [type, setType] = useState('restaurants');
+    const [rating, setRating] = useState('');
+  
 
     const changeStatus = () =>{
       setClickCount(clickCount + 1);
@@ -23,14 +28,11 @@ export default function Plan(prop){
     }
 
     const requestRec = ()=>{
-    // useEffect(()=>{
-      // console.log("bounds sw"+bounds.sw.lat);
-      getPlacesData(bounds.sw, bounds.ne)
-      .then((data) => {
-        console.log(data);
-        setApiPlaces(data);
-      })
-    // },[coordinates, bounds]);
+      getPlacesData(type, bounds.sw, bounds.ne)
+        .then((data) => {
+          console.log(data);
+          setApiPlaces(data);
+        })
   }
 
     return(
@@ -43,6 +45,7 @@ export default function Plan(prop){
               setBounds={setBounds}
               coordinates={coordinates}
               apiPlaces={apiPlaces}
+              setChildClicked={setChildClicked}
             />
           </Grid>
           <Grid item xs={4}>
@@ -51,7 +54,13 @@ export default function Plan(prop){
               status === 'plan'? <Planning/> :
               <>
                <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>
-                <List apiPlaces={apiPlaces}/>
+                <List apiPlaces={apiPlaces}
+                      chlidCliked={chlidCliked}
+                      type={type}
+                      setType={setType}
+                      rating={rating}
+                      setRating={setRating}
+                />
                
               </>
             }

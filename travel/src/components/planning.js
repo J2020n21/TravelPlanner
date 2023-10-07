@@ -46,7 +46,6 @@ export default function Planning() {
   const showPlan = () =>{
     setClick(click+1)
     click%2 === 1? setShowPlaces('펴기'): setShowPlaces('접기')
-    console.log(showPlaces);
   }
 
   return (
@@ -57,8 +56,11 @@ export default function Planning() {
           <Box key={index}>
             <Typography variant='h5'>Day {item}</Typography>
             <Button onClick={showPlan}>{showPlaces}</Button>
+            {/* 버튼 개별접기 */}
             {
-              showPlaces === '펴기'? <div>폈다</div>:null
+              showPlaces === '펴기'? travelPlaces.map((item,i)=>{return(
+                <PlanDetails/>
+              )}) :null
             }
           </Box>
           
