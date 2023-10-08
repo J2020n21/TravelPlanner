@@ -34,6 +34,9 @@ export default function Plan(prop){
           setApiPlaces(data);
         })
   }
+    const clearRec = () =>{
+      setApiPlaces(null);
+    }
 
     return(
       <>  
@@ -54,6 +57,7 @@ export default function Plan(prop){
               status === 'plan'? <Planning/> :
               <>
                <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>
+                <Button variant="contained" color="default" onClick={clearRec}>Clear</Button>
                 <List apiPlaces={apiPlaces}
                       chlidCliked={chlidCliked}
                       type={type}

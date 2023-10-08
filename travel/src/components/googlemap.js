@@ -70,6 +70,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [placeMarker,setPlaceMarker] = useState('');
+  const [transport,setTransport] = useState('TRANSIT');
   
 
   //Coordinates work
@@ -107,41 +108,39 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
   };
 
 
-  async function calculateRoute(origin, destination){
+  async function calculateRoute(origin, destination, transport){
+    console.log(transport);
   // eslint-disable-next-line no-undef
     const directionSevice = new google.maps.DirectionsService();
     const results = await directionSevice.route({
       // eslint-disable-next-line no-undef
       origin: origin,
-      //new google.maps.LatLng(44,-80),
       // eslint-disable-next-line no-undef
       destination: destination,
-      //new google.maps.LatLng(44.1, -80.1),
        // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode.TRANSIT,
+      travelMode: google.maps.TravelMode[transport],
+    },(res,status)=>{
+      if(status !== 'OK'){
+        window.alert("Directions request failed due to " + status);
+      }
     })
     setDirectionsResponse(results)
     setDistance(results.routes[0].legs[0].distance.text)
     setDuration(results.routes[0].legs[0].duration.text)
   };
 
-  function clearRoute(){
-
-    if(mapref){
-      console.log("mapref!");
+  function clearRoute(origin, destination, directionsResponse){
       setDirectionsResponse(null);
       setDistance('');
       setDuration('');
       setOrigin('');
       setDestination('');
-      console.log(directionsResponse, distance, duration, origin, destination);
-    }
   };
 
-  const alert = () => {
-    alert('!!');
-    console.log('!');
-  }
+  // const tranportRoute = (e) =>{
+  //   setTransport(e.target.value);
+  //   console.log(tranport);
+  // }
 
     return (
   <>
@@ -215,12 +214,12 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
     
   </FormControl>
       <ButtonGroup>
-        <Button onClick={()=>{calculateRoute(origin,destination)}}>calaulate</Button>
-        <Button onClick={()=>{clearRoute()}}>clear</Button>
+        <Button onClick={()=>{calculateRoute(origin,destination,transport)}}>calaulate</Button>
+        <Button onClick={()=>{clearRoute(origin, destination, directionsResponse)}}>clear</Button>
         <ButtonGroup>
-          <Button value="DRIVING" onClick={(e)=>{}}><DirectionsCarIcon/></Button>
-          <Button value="WALKING"><DirectionsWalkIcon/></Button>
-          <Button value="TRANSIT"><TrainIcon/></Button>
+          <Button value="DRIVING" onClick={()=>{setTransport("DRIVING")}}><DirectionsCarIcon/></Button>
+          <Button value="WALKING" onClick={()=>{setTransport("WALKING")}}><DirectionsWalkIcon/></Button>
+          <Button value="TRANSIT" onClick={()=>{setTransport("TRANSIT")}}><TrainIcon/></Button>
         </ButtonGroup>
       </ButtonGroup>
       </Container>:null
