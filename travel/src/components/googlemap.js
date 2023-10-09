@@ -20,6 +20,7 @@ import {makeStyles, Box, Container, Button, Paper, Typography,
 useMediaQuery,ButtonGroup,
   } from '@material-ui/core';
 import {Skeleton, FormControl} from '@mui/material';
+import Rating from '@material-ui/lab/Rating';
 //icons from material ui
 import AddLocationIcon from '@material-ui/icons/AddLocation';
 import DirectionsIcon from '@mui/icons-material/Directions';
@@ -137,11 +138,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
       setDestination('');
   };
 
-  // const tranportRoute = (e) =>{
-  //   setTransport(e.target.value);
-  //   console.log(tranport);
-  // }
-
     return (
   <>
   
@@ -184,13 +180,14 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
         <>
 
           <Typography variant="subtitle2">{name}</Typography>
-          <Button style={{float:'left'}}>detail</Button>
-          <Button style={{float:'left'}}>Add</Button>
+          {/* <Button style={{float:'left'}}>detail</Button>
+          <Button style={{float:'left'}}>Add</Button> */}
           <img 
-            style={{width:'100%',height:'10vh',cursor:'pointer'}}
-            src={place.photo? place.photo.images.large.url:null}
+            style={{clear:'both',width:'10vw',height:'10vh',cursor:'pointer'}}
+            src={place.photo? place.photo.images.large.url:'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
           />
-
+          <div></div>
+          <Rating name="read-only" value={Number(place.rating)} readOnly />
         </>
       </InfoWindowF>
 </>

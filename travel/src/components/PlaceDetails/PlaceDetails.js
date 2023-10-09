@@ -13,15 +13,16 @@ const PlaceDetails = ({place}) => {
   return (
     <Card elevation={7}>
       <CardMedia
-        style={{height:350}}
+        style={{height:300}}
         image={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
         title={place.name}
       />
       <CardContent>
         <Typography gutterBottom variant='h5'>{place.name}</Typography>
         <Box display="flex" justifyContent="space-between">
+        <Rating name="read-only" value={Number(place.rating)} readOnly />
           <Typography variant='subtitle1'>Price</Typography>
-          <Typography gutterBottom variant='subtitle1'>{place.price_level}</Typography>
+          <Typography gutterBottom variant='subtitle1'>{place.price_level? place.price_level:"No info"}</Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Typography variant='subtitle1'>Ranking</Typography>

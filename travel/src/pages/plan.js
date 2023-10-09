@@ -20,7 +20,12 @@ export default function Plan(prop){
 
     const [type, setType] = useState('restaurants');
     const [rating, setRating] = useState('');
+    const [filteredPlaces, setFilteredPlaces] = useState([]);
   
+    useEffect(()=>{
+      const filteredPlaces = apiPlaces.filter((place)=>Number(place.rating) > rating);
+      setFilteredPlaces(filteredPlaces);
+    },[rating]);
 
     const changeStatus = () =>{
       setClickCount(clickCount + 1);
@@ -32,10 +37,16 @@ export default function Plan(prop){
         .then((data) => {
           console.log(data);
           setApiPlaces(data);
+          setFilteredPlaces([]);
         })
   }
     const clearRec = () =>{
       setApiPlaces(null);
+    }
+
+    const handleApiPlaces = ()=>{
+      if(filteredPlaces.length>0) return(filteredPlaces);
+      else return(apiPlaces);
     }
 
     return(
@@ -47,7 +58,7 @@ export default function Plan(prop){
               setCoordinates={setCoordinates}
               setBounds={setBounds}
               coordinates={coordinates}
-              apiPlaces={apiPlaces}
+              apiPlaces={filteredPlaces.length? filteredPlaces:apiPlaces}
               setChildClicked={setChildClicked}
             />
           </Grid>
@@ -58,7 +69,7 @@ export default function Plan(prop){
               <>
                <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>
                 <Button variant="contained" color="default" onClick={clearRec}>Clear</Button>
-                <List apiPlaces={apiPlaces}
+                <List apiPlaces={filteredPlaces.length? filteredPlaces:apiPlaces}
                       chlidCliked={chlidCliked}
                       type={type}
                       setType={setType}
