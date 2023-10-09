@@ -3,8 +3,8 @@ import PlanDetails from './PlaceDetails/planDetails';
 import { Typography,Container,Box,Button } from '@material-ui/core';
 
 export default function Planning() {
-  const [click,setClick] = useState(0);
-  const [showPlaces,setShowPlaces] = useState('펴기');
+  const [click,setClick] = useState([0,0]);
+  const [showPlaces,setShowPlaces] = useState([true,true]);
   //장소추가 버튼=>해당 장소 form에 맞게 저장 => display
   //장소별 : 장소 이름,주소,사진 + 순서부여, (개인 메모)
   //버튼 -> api 전달 -> 저장 -> display
@@ -43,10 +43,24 @@ export default function Planning() {
   // console.log(travelPlaces[0]['day'][0]['name']); //= [n]th [day], [n]th [place's name]
 // = restaurant A
 
-  const showPlan = () =>{
-    setClick(click+1)
-    click%2 === 1? setShowPlaces('펴기'): setShowPlaces('접기')
-  }
+  const showPlan = (index) =>{
+    let copy =[...click];
+    copy[index] = copy[index] + 1;
+    setClick(copy)
+    console.log({click});
+
+    if(click[index]%2 === 1){
+      let copyplace =[...showPlaces];
+      copyplace[index] = true;
+      setShowPlaces(copyplace);
+    }
+    else{      
+      let copyplace =[...showPlaces];
+      copyplace[index] = false;
+      setShowPlaces(copyplace);
+    }
+    // click[index]%2 === 1? setShowPlaces(false): setShowPlaces(true);
+  };
 
   return (
     <>
@@ -55,10 +69,10 @@ export default function Planning() {
         return(
           <Box key={index}>
             <Typography variant='h5'>Day {item}</Typography>
-            <Button onClick={showPlan}>{showPlaces}</Button>
-            {/* 버튼 개별접기 */}
+            <Button onClick={(e)=>{showPlan(index)}}>open</Button>
+
             {
-              showPlaces === '펴기'? travelPlaces.map((item,i)=>{return(
+              showPlaces[index] === true? travelPlaces.map((item,i)=>{return(
                 <PlanDetails/>
               )}) :null
             }
