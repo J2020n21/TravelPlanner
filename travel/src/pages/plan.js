@@ -74,7 +74,7 @@ export default function Plan(prop){
                       type={type}
                       setType={setType}
                       rating={rating}
-                      setRating={setRating}
+                      setRating={setRating}            
                 />
                
               </>

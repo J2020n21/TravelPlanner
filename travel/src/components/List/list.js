@@ -21,7 +21,7 @@ export default function List({apiPlaces, childClicked, type, setType, rating, se
 
   return (
     <Container>
-      <Typography variant='h5'>Restaurants, Hotels and Attractions around</Typography>
+      <Typography variant='h5'>Recommendation around</Typography>
       <FormControl >
         <InputLabel>Type</InputLabel>
         <Select value={type} onChange={(e)=>setType(e.target.value)}>
@@ -41,7 +41,7 @@ export default function List({apiPlaces, childClicked, type, setType, rating, se
         </Select>
       </FormControl>
 
-      <Grid container spacing={3}>
+      <Grid style={{overflowY:'scroll'}} container spacing={3}>
         {apiPlaces&& apiPlaces.map((place, index)=>(
           <Grid item key={index} xs={12}>
             <PlaceDetails place={place} index={index}/>

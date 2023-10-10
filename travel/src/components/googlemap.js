@@ -72,6 +72,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
   const [duration, setDuration] = useState('');
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
+  const [focused, setFocused] = useState([false,false,true]);
   
 
   //Coordinates work
@@ -154,10 +155,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
       onCenterChanged={handleCenterChanged}
       onBoundsChanged={handleBoundChanged}
       onClick={handleOnClick}
-      
-      // 누른 자식이 list의 어디에 있는지 파악
-      //자식을 누르면... 몇번째 자식인지 알아내서 list에서
-      //스크롤 계산-> 해당 위치로 이동
       >
 
 {
@@ -196,7 +193,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
 }
 
 
-<ButtonGroup>
+<ButtonGroup color="primary" variant="contained">
 <Button onClick={()=>{setClick(click+1)}}>
   <DirectionsIcon/>ROUTE</Button>
 <Button onClick={()=>{}}><AddLocationIcon/>ADD</Button>
@@ -210,10 +207,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
     <PlacesAutocomplete setSelected={setDestination}/>
     
   </FormControl>
-      <ButtonGroup>
+      <ButtonGroup color="primary" variant="outlined">
         <Button onClick={()=>{calculateRoute(origin,destination,transport)}}>calaulate</Button>
         <Button onClick={()=>{clearRoute(origin, destination, directionsResponse)}}>clear</Button>
-        <ButtonGroup>
+        <ButtonGroup >
           <Button value="DRIVING" onClick={()=>{setTransport("DRIVING")}}><DirectionsCarIcon/></Button>
           <Button value="WALKING" onClick={()=>{setTransport("WALKING")}}><DirectionsWalkIcon/></Button>
           <Button value="TRANSIT" onClick={()=>{setTransport("TRANSIT")}}><TrainIcon/></Button>
