@@ -140,6 +140,12 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
       setDestination('');
   };
 
+  // const addPlace = () =>{
+  //   return(
+    
+  //   )
+  // }
+
     return (
   <>
   

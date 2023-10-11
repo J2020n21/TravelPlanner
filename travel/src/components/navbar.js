@@ -123,6 +123,27 @@ export default function MyNavBar() {
               </Button>
             ))}
           </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+
+            </Menu>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

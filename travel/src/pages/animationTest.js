@@ -1,8 +1,36 @@
 import React,{useState} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
+import{DragDropContext, Droppable} from 'react-beautiful-dnd';
+
+const Column = ({title,tasks,id})=>{
+    return(
+        <div style={{
+            backgroundColor:'blue',
+            width:'300px',
+            height:'470px',
+            overflowY:'scroll', 
+            msOverflowY:'none',
+            border: '1px solid black',
+        }}><h2>{title}
+        </h2>
+
+        <Droppable droppableId={id}>
+            {
+                (provide, snapshot)=>{
+                    
+                }
+            }
+
+        </Droppable>
+        </div>
+    )
+}
 
 export default function AnimationTest() {
     const [show,setShow] = useState(true);
+
+    const [completed, setCompleted] = useState([]);
+    const [incompleted, setIncompleted] = useState([]);
   return (
     <>
     <motion.h1
@@ -16,7 +44,6 @@ export default function AnimationTest() {
     >
         H1 element for animation.
     </motion.h1>
-    
     
     <div style={{
             display:'flex', flexDirection:'column',
@@ -83,8 +110,20 @@ export default function AnimationTest() {
         </div>
     </div>
 
+{/* kanban board */}
+    <DragDropContext>
+        <h3>Progress board</h3>
 
+        <div style={{
+            display:"flex",
+            justifyContent: "space-between",
+            alignItems:"center",
+            flexDirection:"row",
+        }}>
 
+        </div>
+
+    </DragDropContext>
 
     </>
   )

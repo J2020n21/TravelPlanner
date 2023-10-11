@@ -17,6 +17,10 @@ export default function Setting (){
         
         <>     
         <CssBaseline/>
+        <div style={{
+            // display:'flex', flexDirection:'row',
+            // gap:'10px',alignItems:'center',
+        }}>
         {
             sets.map(function(data,i){
                 return(
@@ -27,7 +31,7 @@ export default function Setting (){
                 )
             })
         }
-
+    </div>
         <h5>Any problem?</h5>
         <p onClick={()=>{navigate('/home/complain')}}>click</p>
         {/* <FormControlLabel
@@ -36,6 +40,7 @@ export default function Setting (){
           label="Start"
           labelPlacement="start"
         /> */}
+        
         </>
     )
 

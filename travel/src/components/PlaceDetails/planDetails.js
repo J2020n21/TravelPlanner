@@ -4,20 +4,20 @@ Box,Button,
 }
 from '@material-ui/core';
 
-export default function PlanDetails(place) {
+export default function PlanDetails({places, day, index}) {
 
   return (
-    <Card elevation={2}>
+    <Card elevation={2} style={{ marginTop:'10px'}}>
     <CardMedia
-      style={{height:0}}
-      image={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
-      title={place.name}
+      style={{height:0,}}
+      // image={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
+      //title={place.name}
     />
     <CardContent>
       <Box >
         <div style={{width:'10vw', height:'8vw', background:'yellow', float:'right'}}>image</div>
       </Box>
-      <Typography variant='h6'>Place name</Typography>
+      <Typography variant='h6'>{places[day][index]['name']}</Typography>
       <Box >
         <Typography variant='subtitle1'>Address</Typography>
       </Box>
