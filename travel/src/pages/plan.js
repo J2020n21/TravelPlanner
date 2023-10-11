@@ -21,6 +21,8 @@ export default function Plan(prop){
     const [type, setType] = useState('restaurants');
     const [rating, setRating] = useState('');
     const [filteredPlaces, setFilteredPlaces] = useState([]);
+
+    const [userPlaces, setUserPlaces] = useState([]); //seleted position
   
     useEffect(()=>{
       const filteredPlaces = apiPlaces.filter((place)=>Number(place.rating) > rating);
@@ -44,10 +46,6 @@ export default function Plan(prop){
       setApiPlaces(null);
     }
 
-    const handleApiPlaces = ()=>{
-      if(filteredPlaces.length>0) return(filteredPlaces);
-      else return(apiPlaces);
-    }
 
     return(
       <>  
@@ -60,12 +58,19 @@ export default function Plan(prop){
               coordinates={coordinates}
               apiPlaces={filteredPlaces.length? filteredPlaces:apiPlaces}
               setChildClicked={setChildClicked}
+
+              userPlaces={userPlaces}
+              setUserPlaces={setUserPlaces}
             />
           </Grid>
           <Grid item xs={4}>
           <Button variant="contained" color="primary" className="btn-plan" onClick={()=>{changeStatus();}}>{status}</Button> 
             {
-              status === 'plan'? <Planning/> :
+              status === 'plan'? 
+                <Planning
+                  userPlaces={userPlaces}
+                  setUserPlaces={setUserPlaces}
+              /> :
               <>
                <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>
                 <Button variant="contained" color="default" onClick={clearRec}>Clear</Button>

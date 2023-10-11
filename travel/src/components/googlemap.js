@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 
 
 
-export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}) {
+export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -52,17 +52,19 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
       coordinates={coordinates}
       apiPlaces={apiPlaces}
       setChildClicked={setChildClicked}
+      
+      userPlaces={userPlaces}
+      setUserPlaces={setUserPlaces}
     />;
 };
 
 
-function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
+function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
   const center = useMemo(() => ({lat: 44, lng: -80}), []);
   const [selected, setSelected] = useState({lat: 44, lng: -80}); //get address from toStart question. 
-  const [userPlaces, setUserPlaces] = useState([]); //planning
 
   const [routeOn, setRouteOn] = useState('off');
   const [origin, setOrigin] = useState('');
@@ -72,6 +74,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
   const [duration, setDuration] = useState('');
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
+  const [placeId,setPlaceId] = useState(null);
   const [focused, setFocused] = useState([false,false,true]);
   
 
@@ -104,9 +107,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
 
   //Make marker to the clicked position
   const handleOnClick = (e)=>{
+    // const [zoom,setZoom] = useState(13);
     const clickPosition = {lat: e.latLng.lat(), lng:e.latLng.lng()};
-    //need to make moving smooth
     setSelected(clickPosition);
+    mapref.setZoom(mapref.zoom += 2);
   };
 
 
@@ -140,11 +144,52 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
       setDestination('');
   };
 
-  // const addPlace = () =>{
-  //   return(
-    
-  //   )
-  // }
+  async function addPlace (selected){
+    setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
+      
+    const latlng ={
+      lat: parseFloat(selected['lat']),
+      lng: parseFloat(selected['lng'])
+    };
+
+    // eslint-disable-next-line no-undef
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({location:latlng})
+    .then((res)=>{
+      if(res.results[0]){
+        mapref.setZoom(15);
+        setPlaceId(res.results[0]['place_id']);
+      }
+      // console.log(placeId); //ok
+      // console.log(res);
+    })
+
+    const placeDetailsRequest = {
+      placeId: "ChIJe4vX3_mVwkcRKcZ2Qq5e4pE",
+      fields: ['name'],
+    };
+
+    // eslint-disable-next-line no-undef
+    var placeService = new google.maps.places.PlacesService(mapref);
+    placeService.getDetails({placeId:placeId, fields:['name'],language:'en' },(res,status)=>{
+      if (status === 'OK') {
+        console.log(res);
+      } else {
+        console.error('Place details request failed:', status);
+      }
+    })
+
+    // geocoder.geocode({placeId:"ChIJp0XRMnNZwokRanNtsrs5ODs"})
+    // .then((res)=>{
+    //   // console.log("placeid: "+res);
+    //   console.log(res);
+    // })
+  
+//place id가 안먹음.???
+//place_id를 활용하여 장소명 가져오기
+  };
+
 
     return (
   <>
@@ -164,9 +209,11 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
       onClick={handleOnClick}
       >
 
-{
+{/* {<InfoWindowF position={selected}>
+  <div>Hi</div>
+  </InfoWindowF>} */
   <MarkerF position={selected}/>
-}
+  }
 
 {
   apiPlaces&& apiPlaces.map((place,i)=>{
@@ -203,7 +250,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
 <ButtonGroup color="primary" variant="contained">
 <Button onClick={()=>{setClick(click+1)}}>
   <DirectionsIcon/>ROUTE</Button>
-<Button onClick={()=>{}}><AddLocationIcon/>ADD</Button>
+<Button onClick={()=>{addPlace(selected)}}><AddLocationIcon/>ADD</Button>
 </ButtonGroup>
 
 {
@@ -223,19 +270,17 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
           <Button value="TRANSIT" onClick={()=>{setTransport("TRANSIT")}}><TrainIcon/></Button>
         </ButtonGroup>
       </ButtonGroup>
-      {
-        duration&& distance? 
-        <Box>distance:{distance}, duration:{duration}</Box>
-        :<Box>no result</Box>
-      }
       </Container>:null
 }
 {/* 시간 띄우기&버튼 selected */}
 {/* https://www.youtube.com/watch?v=VtsbYIMj9Xk */}
 {/* 마커위치 -infoWindow = 소요시간 */}
-  {directionsResponse && (<DirectionsRenderer directions={directionsResponse} />)}
-
-
+  {directionsResponse && <>
+    (<DirectionsRenderer directions={directionsResponse} />)
+      <InfoWindowF position={origin}>
+        <Box>{distance}<br/>{duration}</Box>
+      </InfoWindowF>
+    </>}
     </GoogleMap>
   </>
   );
@@ -272,7 +317,7 @@ const PlacesAutocomplete = ({setSelected}) => {
         placeholder="search an address" 
         className="combobox-input"
       />
-      {/* show results */}
+
         <ComboboxPopover>
           <ComboboxList className="combobox-list">
             

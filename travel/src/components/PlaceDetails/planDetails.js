@@ -19,16 +19,12 @@ export default function PlanDetails({places, day, index}) {
       </Box>
       <Typography variant='h6'>{places[day][index]['name']}</Typography>
       <Box >
-        <Typography variant='subtitle1'>Address</Typography>
-      </Box>
-      <Box >
-        <Typography variant='subtitle1'>★4.0</Typography>
+        <Typography variant='subtitle1'>{places[day][index]['address']}</Typography>
       </Box>
 
     </CardContent>
 
     <CardActions>
-        <Button size="small" color="primary">Memo</Button>
         <Button size="small" color="primary">Remove</Button>
     </CardActions>
 
