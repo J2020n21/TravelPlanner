@@ -129,6 +129,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
     setDirectionsResponse(results)
     setDistance(results.routes[0].legs[0].distance.text)
     setDuration(results.routes[0].legs[0].duration.text)
+    console.log({distance},{duration});
   };
 
   function clearRoute(origin, destination, directionsResponse){
@@ -216,9 +217,14 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked}){
           <Button value="TRANSIT" onClick={()=>{setTransport("TRANSIT")}}><TrainIcon/></Button>
         </ButtonGroup>
       </ButtonGroup>
+      {
+        duration&& distance? 
+        <Box>distance:{distance}, duration:{duration}</Box>
+        :<Box>no result</Box>
+      }
       </Container>:null
 }
-
+{/* 시간 띄우기&버튼 selected */}
 {/* https://www.youtube.com/watch?v=VtsbYIMj9Xk */}
 {/* 마커위치 -infoWindow = 소요시간 */}
   {directionsResponse && (<DirectionsRenderer directions={directionsResponse} />)}
