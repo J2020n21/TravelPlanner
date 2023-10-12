@@ -145,8 +145,13 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   };
 
   async function addPlace (selected){
+    //장소정보를 정제하여 setUserPlaces로 전달, 정보 저장. 
+    //[    [{'name':'에펠탑'},{}]      ,    [ {} ]         ]
     setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
-      
+      //마커의 장소 정보를 가져와 place id를 얻고 그걸로 장소의 이름을 얻는다
+      //형태에 맞게 정보들을 userPlaces에 저장한다->planDetail에서 보여준다 (spread)
+      //arr[0] = ('10월 22일'); setArr([...arr])l로 활용
+      //https://ella951230.tistory.com/entry/React-useState-%EB%B0%B0%EC%97%B4-%EB%B3%80%EA%B2%BD%EB%B0%A9%EB%B2%95-spread-%EB%AC%B8%EB%B2%95
     const latlng ={
       lat: parseFloat(selected['lat']),
       lng: parseFloat(selected['lng'])
@@ -165,16 +170,13 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       // console.log(res);
     })
 
-    const placeDetailsRequest = {
-      placeId: "ChIJe4vX3_mVwkcRKcZ2Qq5e4pE",
-      fields: ['name'],
-    };
-
     // eslint-disable-next-line no-undef
     var placeService = new google.maps.places.PlacesService(mapref);
     placeService.getDetails({placeId:placeId, fields:['name'],language:'en' },(res,status)=>{
       if (status === 'OK') {
-        console.log(res);
+        // console.log(res.name);
+        // setUserPlaces([0][0]['name']=res.name);
+        console.log({userPlaces});
       } else {
         console.error('Place details request failed:', status);
       }
@@ -186,7 +188,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     //   console.log(res);
     // })
   
-//place id가 안먹음.???
+//place id 가져왔는데 장소명이 달라
 //place_id를 활용하여 장소명 가져오기
   };
 
