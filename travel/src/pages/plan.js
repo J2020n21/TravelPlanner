@@ -10,7 +10,7 @@ import Planning from "../components/planning.js";
 // import { Button} from "react-bootstrap";
 import '../App.css';
 
-export default function Plan(prop){
+export default function Plan({answer}){
     const [status, setStatus] = useState('plan');
     const [clickCount, setClickCount] = useState(0);
     const [apiPlaces, setApiPlaces] = useState([]);
@@ -22,8 +22,16 @@ export default function Plan(prop){
     const [rating, setRating] = useState('');
     const [filteredPlaces, setFilteredPlaces] = useState([]);
 
-    const [userPlaces, setUserPlaces] = useState([]); //seleted position
-  
+    // userplace[][][] <day만큼 생성. day focus만들어서, [{},{}] 장소 추가.
+    //  const initialState = Array.from({ length: n }, () => []); 
+    const day = answer[1];
+    const dayArr = Array.from({ length: day }, () => []);  //[[]]
+    console.log({dayArr});
+    const [userPlaces, setUserPlaces] = useState(dayArr); //seleted position
+    const [placeIndex, setPlaceIndex] = useState(0);
+    
+    console.log({userPlaces});
+
     useEffect(()=>{
       const filteredPlaces = apiPlaces.filter((place)=>Number(place.rating) > rating);
       setFilteredPlaces(filteredPlaces);
@@ -61,6 +69,9 @@ export default function Plan(prop){
 
               userPlaces={userPlaces}
               setUserPlaces={setUserPlaces}
+
+              placeIndex={placeIndex}
+              setPlaceIndex={setPlaceIndex}
             />
           </Grid>
           <Grid item xs={4}>
@@ -70,6 +81,12 @@ export default function Plan(prop){
                 <Planning
                   userPlaces={userPlaces}
                   setUserPlaces={setUserPlaces}
+
+                  placeIndex={placeIndex}
+                  setPlaceIndex={setPlaceIndex}
+
+                  answer={answer}
+                  
               /> :
               <>
                <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>

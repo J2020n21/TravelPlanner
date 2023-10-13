@@ -23,6 +23,10 @@ import { CssBaseline, Grid } from "@material-ui/core";
 
 function App() {
   const navigate = useNavigate();
+  const [answer,setAnswer] = useState(["",1,"yes"]); //day-number변환
+
+  console.log("App");
+  console.log({answer});
 
   return (
     <>
@@ -31,22 +35,18 @@ function App() {
     <Routes>
       <Route path="/" element={<Landing/>}/>  
       <Route path="/test" element={<AnimationTest/>}/>
-      <Route path="/toStart" element={<ToStart/>}/>
+      <Route path="/toStart" element={<ToStart answer={answer} setAnswer={setAnswer}/>}/>
 
       <Route path="/testMap" element={<GMap/>}/>
 
       <Route path="/home" element={<Home/>}> {/* Home includes menu */}
           
           <Route path="" element={<>
-              {/* <Wrapper apiKey={googleMapKey}>
-                <GMapSet/>
-              </Wrapper>
-              <Outlet></Outlet> */}
             <Outlet></Outlet>
             </>}>
               
             <Route path="plan" element={<>
-              <Plan/>
+              <Plan answer={answer}/>
               </>
               }/>
             <Route path="map" element={<Map/>}/>

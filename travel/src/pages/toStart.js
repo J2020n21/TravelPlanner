@@ -2,7 +2,8 @@ import React, { Component, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {Box, Button,CssBaseline, Container,Grid,Typography, makeStyles, Input} from '@material-ui/core';
 
-const ToStart = ()=>{
+const ToStart = ({answer,setAnswer})=>{
+
     const navigate = useNavigate();
     let q = ['Where','When','Recommend'];
     let qDes = [
@@ -14,9 +15,13 @@ const ToStart = ()=>{
         'Where do you want to go?',
         'No selection will be provided as a day',
         'The basic setting is "Yes"'
-    ]
-    let [answer,setAnswer] = useState(['a','b','c']);
-    
+    ];
+
+    const handleInput = (e,i) =>{
+        let copy = [...answer];
+        copy[i] = e;
+        setAnswer(copy);
+    };
 
     return(
         <>
@@ -25,12 +30,12 @@ const ToStart = ()=>{
             return(
                 <>
                 <Grid container spacing={3}>
-                    <Grid item xs={4}>
+                    <Grid item xs={8}>
                         <Box>
                             <Typography variant="h3">{data}</Typography>
                             <Typography variant="h4">{qDes[i]}</Typography>
                             <Typography subtitle="h1">{qExplain[i]}</Typography>
-                            <Input></Input>
+                            <Input onChange={(e)=>{handleInput(e.target.value,i)}}></Input>
                         </Box>
                     </Grid>
                 </Grid>

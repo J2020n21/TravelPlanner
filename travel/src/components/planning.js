@@ -2,13 +2,15 @@ import React, {useState, useEffect} from 'react'
 import PlanDetails from './PlaceDetails/planDetails';
 import { Typography,Container,Box,Button } from '@material-ui/core';
 
-export default function Planning({userPlaces, setUserPlaces}) {
-  const [click,setClick] = useState([0,0]);
-  const [showPlaces,setShowPlaces] = useState([true,true]); //state of showing each day plan (travel places)
-  //장소추가 버튼=>해당 장소 form에 맞게 저장 => display
-  //장소별 : 장소 이름,주소,사진 + 순서부여, (개인 메모)
-  //버튼 -> api 전달 -> 저장 -> display
-  const [travelDay, setTravelDay] = useState([1,2]); 
+export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlaceIndex, answer}) {
+  const day = Number(answer[1]);
+  const clickArray = Array(day).fill(0);
+  const dayArray = Array.from({ length: day }, (_, index) => index);
+  const [travelDay, setTravelDay] = useState(dayArray); 
+  const [click,setClick] = useState(clickArray);
+
+  const showArray = Array(day).fill(true);
+  const [showPlaces,setShowPlaces] = useState(showArray); //state of showing each day plan (travel places)
   const [priority, setPriority] = useState(null);
   //여행 장소 더미 데이터
   const [travelPlaces, setTravelPlaces] = useState([
@@ -64,6 +66,7 @@ export default function Planning({userPlaces, setUserPlaces}) {
     // click[index]%2 === 1? setShowPlaces(false): setShowPlaces(true);
   };
 
+  // console.log(userPlaces[0][0]['name']); //ok
 
   // const addPlace = (index) =>{
   //   let copy = [...travelPlaces];
@@ -71,14 +74,17 @@ export default function Planning({userPlaces, setUserPlaces}) {
   //   setTravelPlaces()
   // };
 
+// travelDay; 길이가 answer[2]인 배열을 0에서 1씩 증가하며 배열을 끝까지 채우기 
+
+//console.log({userPlaces});
+
   return (
-    
     <>
     {
       travelDay&& travelDay.map((item,index)=>{
         return(
           <Box key={index}  style={{marginTop:'20px'}}>
-            <Typography variant='h5'>Day {item}</Typography>
+            <Typography variant='h5'>Day {item+1}</Typography>
             <Button
              variant='outlined' color='primary' size='small'
              onClick={(e)=>{showPlan(index)}}>
@@ -92,14 +98,32 @@ export default function Planning({userPlaces, setUserPlaces}) {
             <Button  variant='outlined' color='primary' size='small'
             onClick={()=>{
               // addPlace(index)
-            }}
+            }} 
+            //daily route
             >Route</Button>
 
             {
-              travelPlaces && showPlaces[index] === true? travelPlaces.map((item,i)=>{return(
-                // console.log({item})
-                <PlanDetails places={travelPlaces} day={index} index={i}/>
-              )}) :null
+              userPlaces[index].length !== null && showPlaces[index] === true? 
+                userPlaces.map((innerArr, outerIndex)=>{return(
+                  <>
+                {/* <div>outerIndex:{outerIndex}</div> */}
+                {
+                  innerArr.map((item,i)=>{
+                    return(
+                    // <div>inner item: {item}</div>
+                    console.log({item})
+                    )})
+                }
+                </>
+                //userPlace = [[여기{},{},{} ],[],[],[]]
+                //userPlace[index]안의 갯수를 세야함
+                //userPlace[index] = [[{},{}],[],[]]
+                // console.log(userPlaces[index].length)
+                // console.log({item},{i},{userPlaces})
+                // <PlanDetails places={userPlaces} day={index} index={i}/>
+              
+              // userPlaces.map((item,i)=>{return(
+                )}) :null
             }
           </Box>
           

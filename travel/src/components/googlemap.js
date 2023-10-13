@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 
 
 
-export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces}) {
+export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -55,11 +55,13 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
       
       userPlaces={userPlaces}
       setUserPlaces={setUserPlaces}
+      placeIndex={placeIndex}
+      setPlaceIndex={setPlaceIndex}
     />;
 };
 
 
-function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces}){
+function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
@@ -74,7 +76,11 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [duration, setDuration] = useState('');
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
+
   const [placeId,setPlaceId] = useState(null);
+  const [address, setAddress] = useState(null);
+
+   //focusedDay연결?
   const [focused, setFocused] = useState([false,false,true]);
   
 
@@ -145,13 +151,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   };
 
   async function addPlace (selected){
-    //장소정보를 정제하여 setUserPlaces로 전달, 정보 저장. 
-    //[    [{'name':'에펠탑'},{}]      ,    [ {} ]         ]
-    setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
-      //마커의 장소 정보를 가져와 place id를 얻고 그걸로 장소의 이름을 얻는다
-      //형태에 맞게 정보들을 userPlaces에 저장한다->planDetail에서 보여준다 (spread)
-      //arr[0] = ('10월 22일'); setArr([...arr])l로 활용
-      //https://ella951230.tistory.com/entry/React-useState-%EB%B0%B0%EC%97%B4-%EB%B3%80%EA%B2%BD%EB%B0%A9%EB%B2%95-spread-%EB%AC%B8%EB%B2%95
+    //setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
     const latlng ={
       lat: parseFloat(selected['lat']),
       lng: parseFloat(selected['lng'])
@@ -159,43 +159,64 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 
     // eslint-disable-next-line no-undef
     const geocoder = new google.maps.Geocoder();
-
     geocoder.geocode({location:latlng})
     .then((res)=>{
       if(res.results[0]){
         mapref.setZoom(15);
         setPlaceId(res.results[0]['place_id']);
+        setAddress(res.results[0]['formatted_address']);
       }
-      // console.log(placeId); //ok
-      // console.log(res);
     })
 
     // eslint-disable-next-line no-undef
     var placeService = new google.maps.places.PlacesService(mapref);
     placeService.getDetails({placeId:placeId, fields:['name'],language:'en' },(res,status)=>{
-      if (status === 'OK') {
-        // console.log(res.name);
-        // setUserPlaces([0][0]['name']=res.name);
-        console.log({userPlaces});
+      if (status === "OK") {
+// focused Day와 인덱스 연결해서 장소 계속 추가받기
+//데이터가 추가될 때 마다 값 바로 변경;useEffect
+
+  let copy=[...userPlaces];
+  copy.unshift(
+    {
+      'name':res.name,
+      'address':address,
+      'position':{selected},
+      'place_id':placeId
+    }
+  );
+  // copy[0][placeIndex] = 
+  
+  setUserPlaces(copy);
+  setPlaceIndex(placeIndex+1);
+
+
+        
+
+        // console.log({userPlaces});
+        //planning에 뿌리기
+
       } else {
         console.error('Place details request failed:', status);
       }
     })
-
-    // geocoder.geocode({placeId:"ChIJp0XRMnNZwokRanNtsrs5ODs"})
-    // .then((res)=>{
-    //   // console.log("placeid: "+res);
-    //   console.log(res);
-    // })
-  
-//place id 가져왔는데 장소명이 달라
-//place_id를 활용하여 장소명 가져오기
   };
+
+  // useEffect(()=>{
+  //   let copy=[...userPlaces];
+  //   copy[0][placeIndex] = {
+  //     'name':res.name,
+  //     'address':address,
+  //     'position':{selected},
+  //     'place_id':placeId
+  //   }
+    
+  //   setUserPlaces(copy);
+  //   setPlaceIndex(placeIndex+1);
+  // },[userPlaces]);
 
 
     return (
   <>
-  
     <Box className="places-container">
       <PlacesAutocomplete setSelected={setSelected}/> 
     </Box>

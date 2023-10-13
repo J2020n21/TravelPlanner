@@ -17,11 +17,10 @@ export default function PlanDetails({places, day, index}) {
       <Box >
         <div style={{width:'10vw', height:'8vw', background:'yellow', float:'right'}}>image</div>
       </Box>
-      <Typography variant='h6'>{places[day][index]['name']}</Typography>
+      <Typography variant='h6'>{places[day][index]['name']? "Y" :"Blank!"}</Typography>
       <Box >
-        <Typography variant='subtitle1'>{places[day][index]['address']}</Typography>
+        <Typography variant='subtitle1'>addr</Typography>
       </Box>
-
     </CardContent>
 
     <CardActions>
