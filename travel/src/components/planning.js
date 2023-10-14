@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import PlanDetails from './PlaceDetails/planDetails';
 import { Typography,Container,Box,Button } from '@material-ui/core';
 
-export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlaceIndex, answer}) {
+export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlaceIndex, answer, focusedDay, setFocusedDay}) {
   const day = Number(answer[1]);
   const clickArray = Array(day).fill(0);
   const dayArray = Array.from({ length: day }, (_, index) => index);
@@ -74,59 +74,66 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
   //   setTravelPlaces()
   // };
 
-// travelDay; 길이가 answer[2]인 배열을 0에서 1씩 증가하며 배열을 끝까지 채우기 
+// travelDay를 유저가 선택-> 장소추가
+//버튼(day만큼 (기본:0번째)). day중 하나만 선택가능 (focused)
 
 //console.log({userPlaces});
 
   return (
     <>
     {
-      travelDay&& travelDay.map((item,index)=>{
-        return(
-          <Box key={index}  style={{marginTop:'20px'}}>
+      travelDay&& travelDay.map((item,dayIndex)=>{
+        return( <>
+          <Box key={dayIndex}  style={{marginTop:'20px'}}>
             <Typography variant='h5'>Day {item+1}</Typography>
             <Button
              variant='outlined' color='primary' size='small'
-             onClick={(e)=>{showPlan(index)}}>
-              { click[index]%2 === 1? "show":"fold"}
+             onClick={(e)=>{showPlan(dayIndex)}}>
+              { click[dayIndex]%2 === 1? "show":"fold"}
             </Button>
             <Button  variant='outlined' color='primary' size='small'
             onClick={()=>{
-              // addPlace(index)
+              // daily memo
             }}
             >Memo</Button>
             <Button  variant='outlined' color='primary' size='small'
             onClick={()=>{
-              // addPlace(index)
+              // show daily route
             }} 
-            //daily route
             >Route</Button>
-
-            {
-              userPlaces[index].length !== null && showPlaces[index] === true? 
-                userPlaces.map((innerArr, outerIndex)=>{return(
-                  <>
-                {/* <div>outerIndex:{outerIndex}</div> */}
-                {
-                  innerArr.map((item,i)=>{
-                    return(
-                    // <div>inner item: {item}</div>
-                    console.log({item})
-                    )})
-                }
-                </>
-                //userPlace = [[여기{},{},{} ],[],[],[]]
-                //userPlace[index]안의 갯수를 세야함
-                //userPlace[index] = [[{},{}],[],[]]
-                // console.log(userPlaces[index].length)
-                // console.log({item},{i},{userPlaces})
-                // <PlanDetails places={userPlaces} day={index} index={i}/>
+            <Button value={dayIndex} color='primary' size='small'
+            variant={focusedDay == dayIndex?"contained":"outlined"}
+            onClick={(e)=>{
+              setFocusedDay(dayIndex);
               
-              // userPlaces.map((item,i)=>{return(
-                )}) :null
+            }} 
+            >Focus</Button>
+
+            {/* {
+              userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true? 
+                userPlaces.map((innerArr, day)=>{ return(
+                 innerArr&& innerArr.map((places,placeI)=>{return(
+                  <div>element!,{placeI}</div>
+                  //day가 안넘어감..
+                  // <PlanDetails places={places}/>
+                 )})
+                )})
+                 :null
+            } */}
+{/* item,dayIndex: 0,1,2 */}
+            {
+              <div>dayIndex:{dayIndex}</div>
             }
+
+            { userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true?
+              userPlaces[dayIndex].map((place,i)=>{return(
+                <div>{place['name']}</div>
+              )}) : null
+            }
+
+            
           </Box>
-          
+          </>          
         )
       })
     }

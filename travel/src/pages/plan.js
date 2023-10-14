@@ -26,9 +26,9 @@ export default function Plan({answer}){
     //  const initialState = Array.from({ length: n }, () => []); 
     const day = answer[1];
     const dayArr = Array.from({ length: day }, () => []);  //[[]]
-    console.log({dayArr});
     const [userPlaces, setUserPlaces] = useState(dayArr); //seleted position
     const [placeIndex, setPlaceIndex] = useState(0);
+    const [focusedDay, setFocusedDay] = useState(0);
     
     console.log({userPlaces});
 
@@ -72,6 +72,9 @@ export default function Plan({answer}){
 
               placeIndex={placeIndex}
               setPlaceIndex={setPlaceIndex}
+
+              focusedDay={focusedDay}
+              setFocusedDay={setFocusedDay}
             />
           </Grid>
           <Grid item xs={4}>
@@ -86,7 +89,9 @@ export default function Plan({answer}){
                   setPlaceIndex={setPlaceIndex}
 
                   answer={answer}
-                  
+
+                  focusedDay={focusedDay}
+                  setFocusedDay={setFocusedDay}
               /> :
               <>
                <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>

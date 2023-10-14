@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 
 
 
-export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex}) {
+export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -57,11 +57,13 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
       setUserPlaces={setUserPlaces}
       placeIndex={placeIndex}
       setPlaceIndex={setPlaceIndex}
+      focusedDay={focusedDay}
+      setFocusedDay={setFocusedDay}
     />;
 };
 
 
-function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex}){
+function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay}){
   const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
@@ -172,28 +174,20 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     var placeService = new google.maps.places.PlacesService(mapref);
     placeService.getDetails({placeId:placeId, fields:['name'],language:'en' },(res,status)=>{
       if (status === "OK") {
-// focused Day와 인덱스 연결해서 장소 계속 추가받기
-//데이터가 추가될 때 마다 값 바로 변경;useEffect
+        //state변경함수는 다른거보다 늦게 처리되어 그 밑의 코드를 먼저 실행함
+        //해결법: useEffect 사용하여 UI에 뿌리기 전에 바로 바꿔주기
+        //컴포넌트가 update되었을 때
+        let copy=[...userPlaces];
 
-  let copy=[...userPlaces];
-  copy.unshift(
-    {
-      'name':res.name,
-      'address':address,
-      'position':{selected},
-      'place_id':placeId
-    }
-  );
-  // copy[0][placeIndex] = 
-  
-  setUserPlaces(copy);
-  setPlaceIndex(placeIndex+1);
-
-
+        copy[focusedDay][placeIndex] = {
+            'name':res.name,
+            'address':address,
+            'position':{selected},
+            'place_id':placeId
+          }
         
-
-        // console.log({userPlaces});
-        //planning에 뿌리기
+        setUserPlaces(copy);
+        setPlaceIndex(placeIndex+1);
 
       } else {
         console.error('Place details request failed:', status);
@@ -201,18 +195,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     })
   };
 
-  // useEffect(()=>{
-  //   let copy=[...userPlaces];
-  //   copy[0][placeIndex] = {
-  //     'name':res.name,
-  //     'address':address,
-  //     'position':{selected},
-  //     'place_id':placeId
-  //   }
-    
-  //   setUserPlaces(copy);
-  //   setPlaceIndex(placeIndex+1);
-  // },[userPlaces]);
+
 
 
     return (

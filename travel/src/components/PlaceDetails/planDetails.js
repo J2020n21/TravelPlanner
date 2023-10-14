@@ -4,7 +4,7 @@ Box,Button,
 }
 from '@material-ui/core';
 
-export default function PlanDetails({places, day, index}) {
+export default function PlanDetails({places}) {
 
   return (
     <Card elevation={2} style={{ marginTop:'10px'}}>
@@ -17,9 +17,9 @@ export default function PlanDetails({places, day, index}) {
       <Box >
         <div style={{width:'10vw', height:'8vw', background:'yellow', float:'right'}}>image</div>
       </Box>
-      <Typography variant='h6'>{places[day][index]['name']? "Y" :"Blank!"}</Typography>
+      <Typography variant='h6'>{places&& places['name']? places['name'] :"Blank!"}</Typography>
       <Box >
-        <Typography variant='subtitle1'>addr</Typography>
+        <Typography variant='subtitle1'>{places&& places['address']? places['address'] :"Blank!"}</Typography>
       </Box>
     </CardContent>
 
