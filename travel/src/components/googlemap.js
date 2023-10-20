@@ -1,8 +1,7 @@
 import "./googlemap.css";
 import "../App.css";
-import RouteForm from "./routeForm.js";
 import {Wrapper, Status} from "@googlemaps/react-wrapper";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef, componentDidUpdate } from "react";
 import { Autocomplete ,withGoogleMap, GoogleMap, 
   LoadScript, MarkerF, useJsApiLoader,
   useLoadScript, InfoWindowF,
@@ -82,6 +81,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [placeId,setPlaceId] = useState(null);
   const [address, setAddress] = useState(null);
 
+  const [clickAdd,setClickAdd] =useState(0);
    //focusedDay연결?
   const [focused, setFocused] = useState([false,false,true]);
   
@@ -153,18 +153,21 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   };
 
   async function addPlace (selected){
+    setClickAdd(clickAdd+1)
     //setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
     const latlng ={
       lat: parseFloat(selected['lat']),
       lng: parseFloat(selected['lng'])
     };
 
+
     // eslint-disable-next-line no-undef
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({location:latlng})
+    await geocoder.geocode({location:latlng})
     .then((res)=>{
       if(res.results[0]){
         mapref.setZoom(15);
+        //res?clickAdd? 변경되었을 떄 아래 함수 실행
         setPlaceId(res.results[0]['place_id']);
         setAddress(res.results[0]['formatted_address']);
       }
@@ -172,29 +175,25 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 
     // eslint-disable-next-line no-undef
     var placeService = new google.maps.places.PlacesService(mapref);
-    placeService.getDetails({placeId:placeId, fields:['name'],language:'en' },(res,status)=>{
+    await placeService.getDetails({placeId:placeId, fields:['name'],language:'en' },(res,status)=>{
       if (status === "OK") {
-        //state변경함수는 다른거보다 늦게 처리되어 그 밑의 코드를 먼저 실행함
-        //해결법: useEffect 사용하여 UI에 뿌리기 전에 바로 바꿔주기
-        //컴포넌트가 update되었을 때
-        let copy=[...userPlaces];
-
+        const copy=[...userPlaces];
+        
         copy[focusedDay][placeIndex] = {
             'name':res.name,
             'address':address,
             'position':{selected},
             'place_id':placeId
           }
-        
+
         setUserPlaces(copy);
         setPlaceIndex(placeIndex+1);
-
+        localStorage.setItem(`plan${focusedDay},${placeIndex}`,JSON.stringify(userPlaces))
       } else {
         console.error('Place details request failed:', status);
       }
     })
   };
-
 
 
 

@@ -25,11 +25,11 @@ const ToStart = ({answer,setAnswer})=>{
 
     return(
         <>
-        <Box>
+        <Box style={{display:'flex', alignItems:'center', justifyContent:'center', height: '100%'}}>
         {q.map((data, i)=>{
             return(
                 <>
-                <Grid container spacing={3}>
+                <Grid container spacing={1}>
                     <Grid item xs={8}>
                         <Box>
                             <Typography variant="h3">{data}</Typography>
@@ -42,7 +42,9 @@ const ToStart = ({answer,setAnswer})=>{
                 </>
             )
         })}
-        <Button variant="contained" onClick={()=>{navigate('/home/plan')}}>Next</Button>
+        <Button variant="contained"
+         style={{position:'absolute', right:'0'}}
+         onClick={()=>{navigate('/home/plan')}}>Next</Button>
         </Box>
         </>
     )

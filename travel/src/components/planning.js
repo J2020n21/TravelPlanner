@@ -74,16 +74,12 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
   //   setTravelPlaces()
   // };
 
-// travelDay를 유저가 선택-> 장소추가
-//버튼(day만큼 (기본:0번째)). day중 하나만 선택가능 (focused)
-
-//console.log({userPlaces});
 
   return (
-    <>
+    <div style={{height:'100%', overflowY:'scroll'}}>
     {
       travelDay&& travelDay.map((item,dayIndex)=>{
-        return( <>
+        return( <div>
           <Box key={dayIndex}  style={{marginTop:'20px'}}>
             <Typography variant='h5'>Day {item+1}</Typography>
             <Button
@@ -105,7 +101,6 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
             variant={focusedDay == dayIndex?"contained":"outlined"}
             onClick={(e)=>{
               setFocusedDay(dayIndex);
-              
             }} 
             >Focus</Button>
 
@@ -115,29 +110,30 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
                  innerArr&& innerArr.map((places,placeI)=>{return(
                   <div>element!,{placeI}</div>
                   //day가 안넘어감..
-                  // <PlanDetails places={places}/>
+                  // 
                  )})
                 )})
                  :null
             } */}
 {/* item,dayIndex: 0,1,2 */}
-            {
+            {/* {
               <div>dayIndex:{dayIndex}</div>
-            }
+            } */}
 
             { userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true?
               userPlaces[dayIndex].map((place,i)=>{return(
-                <div>{place['name']}</div>
+                // <div>{place['name']}</div>
+                <PlanDetails places={place}/>
               )}) : null
             }
 
             
           </Box>
-          </>          
+          </div>          
         )
       })
     }
 
-    </>
+    </div>
   )
 }
