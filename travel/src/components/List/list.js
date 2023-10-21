@@ -41,7 +41,7 @@ export default function List({apiPlaces, childClicked, type, setType, rating, se
         </Select>
       </FormControl>
 
-      <Grid style={{overflowY:'scroll'}} container spacing={3}>
+      <Grid style={{overflowY:'scroll', height:'100vh', marginTop:'20px'}} container spacing={3}>
         {apiPlaces&& apiPlaces.map((place, index)=>(
           <Grid item key={index} xs={12}>
             <PlaceDetails place={place} index={index}/>

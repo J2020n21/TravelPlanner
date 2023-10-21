@@ -71,9 +71,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
 
-  // const [placeId,setPlaceId] = useState(null);
-  // const [address, setAddress] = useState(null);
-
   const [clickAdd,setClickAdd] =useState(0);
 
   const [resResult, setResResult] = useState(null);

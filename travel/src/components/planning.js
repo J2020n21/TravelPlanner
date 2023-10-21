@@ -12,39 +12,6 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
   const showArray = Array(day).fill(true);
   const [showPlaces,setShowPlaces] = useState(showArray); //state of showing each day plan (travel places)
   const [priority, setPriority] = useState(null);
-  //여행 장소 더미 데이터
-  const [travelPlaces, setTravelPlaces] = useState([
-
-  [
-    {
-      'name': 'Restaurant W1',
-      'address':'somewhere',
-      'picture':'url...',
-      },
-    {
-        'name': 'Restaurant W2',
-        'address':'somewhere',
-        'picture':'url...',
-        },
-  ],
-
-
- [
-    {
-    'name': 'Hotel A1',
-    'address':'somewhere lat, lng',
-    'picture':'url...',
-    },
-    {
-      'name': 'Hotel A2',
-      'address':'somewhere',
-      'picture':'url...',
-      },
-
-  ],
-
-  
-  ]);
 
 
   const showPlan = (index) =>{
@@ -76,10 +43,10 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
 
 
   return (
-    <div style={{height:'100%', overflowY:'scroll'}}>
+    <div style={{height:'100vh', overflowY:'scroll'}}>
     {
       travelDay&& travelDay.map((item,dayIndex)=>{
-        return( <div>
+        return( <div style={{marginBottom:'200px'}}>
           <Box key={dayIndex}  style={{marginTop:'20px'}}>
             <Typography variant='h5'>Day {item+1}</Typography>
             <Button
@@ -104,29 +71,11 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
             }} 
             >Focus</Button>
 
-            {/* {
-              userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true? 
-                userPlaces.map((innerArr, day)=>{ return(
-                 innerArr&& innerArr.map((places,placeI)=>{return(
-                  <div>element!,{placeI}</div>
-                  //day가 안넘어감..
-                  // 
-                 )})
-                )})
-                 :null
-            } */}
-{/* item,dayIndex: 0,1,2 */}
-            {/* {
-              <div>dayIndex:{dayIndex}</div>
-            } */}
-
             { userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true?
               userPlaces[dayIndex].map((place,i)=>{return(
-                // <div>{place['name']}</div>
                 <PlanDetails places={place}/>
               )}) : null
             }
-
             
           </Box>
           </div>          

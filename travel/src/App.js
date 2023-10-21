@@ -25,12 +25,9 @@ function App() {
   const navigate = useNavigate();
   const [answer,setAnswer] = useState(["",1,"yes"]); //day-number변환
 
-  console.log("App");
-  console.log({answer});
-
   return (
     <>
-    <div className="App"> 
+    <div className="App" style={{overflow:'hidden', height:'100vh'}}> 
     <CssBaseline/>
     <Routes>
       <Route path="/" element={<Landing/>}/>  
