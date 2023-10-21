@@ -13,6 +13,8 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
   const [showPlaces,setShowPlaces] = useState(showArray); //state of showing each day plan (travel places)
   const [priority, setPriority] = useState(null);
 
+  const [removeNum, setRemoveNum] = useState(null);
+
 
   const showPlan = (index) =>{
     let copy =[...click];
@@ -33,20 +35,21 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
     // click[index]%2 === 1? setShowPlaces(false): setShowPlaces(true);
   };
 
-  // console.log(userPlaces[0][0]['name']); //ok
-
-  // const addPlace = (index) =>{
-  //   let copy = [...travelPlaces];
-  //   copy[index]
-  //   setTravelPlaces()
+  // const removePlace = (id) =>{
+  //   if(userPlaces){
+  //   const newArr = delete userPlaces[focusedDay][id]
+  //   setUserPlaces(newArr);
+  //   console.log({userPlaces});
+  //   //1.요소의 key값 쓸것이냐? or placeIndex(id)값 쓸것이냐? !!
+  //   //id(=placeIndex)를 카드에서 넘겨받고, id와 일치하는 번호의 요소를 u.p에서 없얜다
+  //   }
   // };
 
-
   return (
-    <div style={{height:'100vh', overflowY:'scroll'}}>
+    <div style={{height:'90vh', overflowY:'scroll'}}>
     {
       travelDay&& travelDay.map((item,dayIndex)=>{
-        return( <div style={{marginBottom:'200px'}}>
+        return( <div style={{marginBottom:'50px'}}>
           <Box key={dayIndex}  style={{marginTop:'20px'}}>
             <Typography variant='h5'>Day {item+1}</Typography>
             <Button
@@ -72,8 +75,13 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
             >Focus</Button>
 
             { userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true?
-              userPlaces[dayIndex].map((place,i)=>{return(
-                <PlanDetails places={place}/>
+              userPlaces[dayIndex].map((place,i)=>{
+                return(
+                <PlanDetails 
+                setUserPlaces = {setUserPlaces}
+                userPlaces = {userPlaces}
+                key={place.id} id={place.id}
+                places={place}/>
               )}) : null
             }
             

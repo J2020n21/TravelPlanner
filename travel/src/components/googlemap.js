@@ -172,16 +172,21 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     await placeService.getDetails({placeId:geoPlaceId, fields:['name'],language:'en' },(res,status)=>{
       if (status === "OK") {
         const copy=[...userPlaces];
+        let order = copy[focusedDay].length; //to make no empty-array
         
-        copy[focusedDay][placeIndex] = {
+        copy[focusedDay][order] = {
             'name':res.name,
             'address':geoAddress,
             'position':{selected},
-            'place_id':geoPlaceId
+            'place_id':geoPlaceId,
+            'id':placeIndex
           }
 
+        order += 1;
         setUserPlaces(copy);
-        setPlaceIndex(placeIndex+1);
+        setPlaceIndex(placeIndex+1); //id
+        console.log({userPlaces})
+        
         //localStorage.setItem(`plan${focusedDay},${placeIndex}`,JSON.stringify(userPlaces))
       } else {
         console.error('Place details request failed:', status);

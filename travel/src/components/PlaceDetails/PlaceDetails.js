@@ -50,6 +50,9 @@ const PlaceDetails = ({place}) => {
         <Button size="small" color="primary" onClick={() => window.open(place.website, '_blank')}>
           Website
         </Button>
+        <Button size="small" color="primary" onClick={() => {console.log(place.name)}}>
+          Add to Plan
+        </Button>
       </CardActions>
 
     </Card>

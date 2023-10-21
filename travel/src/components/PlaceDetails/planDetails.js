@@ -4,7 +4,20 @@ Box,Button,
 }
 from '@material-ui/core';
 
-export default function PlanDetails({places}) {
+export default function PlanDetails({id,places,userPlaces,setUserPlaces}) {
+
+  const handleClick = (e)=>{
+    let element = places.id
+    // console.log(id);
+    let copy = [...userPlaces];
+    // console.log(places.id == id? "T":"F"); //T
+    let newArr = copy.filter(element=> element==id)
+    console.log({newArr});
+
+    // setUserPlaces(copy);
+    // console.log({userPlaces});
+    //day에 상관없이 id가 들어갔음. 해당 id를 가진 요소 배열에서 삭제
+  }
 
   return (
     <Card elevation={2} style={{ marginTop:'10px'}}>
@@ -24,7 +37,9 @@ export default function PlanDetails({places}) {
     </CardContent>
 
     <CardActions>
-        <Button size="small" color="primary">Remove</Button>
+        <Button size="small" color="primary"
+        onClick={(e)=>{handleClick(e)}}
+        >Remove</Button>
     </CardActions>
 
   </Card>
