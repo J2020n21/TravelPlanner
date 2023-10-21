@@ -28,15 +28,6 @@ import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import TrainIcon from '@mui/icons-material/Train';
 import Planning from "./planning";
 
-const useStyles = makeStyles({
-    title: {
-        color: 'white',
-    },
-
-})
-
-
-
 export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
@@ -63,7 +54,6 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
 
 
 function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay}){
-  const classes = useStyles();
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
   const center = useMemo(() => ({lat: 44, lng: -80}), []);
@@ -72,18 +62,22 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [routeOn, setRouteOn] = useState('off');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
+  const [isStopOver, setIsStopOver] = useState(0); //경유지 갯수
+  const [stopOver, setStopOver] = useState([]); //각 장소값
+
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
 
-  const [placeId,setPlaceId] = useState(null);
-  const [address, setAddress] = useState(null);
+  // const [placeId,setPlaceId] = useState(null);
+  // const [address, setAddress] = useState(null);
 
   const [clickAdd,setClickAdd] =useState(0);
-   //focusedDay연결?
-  const [focused, setFocused] = useState([false,false,true]);
+
+  const [resResult, setResResult] = useState(null);
+
   
 
   //Coordinates work
@@ -152,7 +146,11 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       setDestination('');
   };
 
+    
+  let geoPlaceId=null;
+  let geoAddress=null;
   async function addPlace (selected){
+
     setClickAdd(clickAdd+1)
     //setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
     const latlng ={
@@ -160,41 +158,39 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       lng: parseFloat(selected['lng'])
     };
 
-
     // eslint-disable-next-line no-undef
     const geocoder = new google.maps.Geocoder();
     await geocoder.geocode({location:latlng})
     .then((res)=>{
       if(res.results[0]){
         mapref.setZoom(15);
-        //res?clickAdd? 변경되었을 떄 아래 함수 실행
-        setPlaceId(res.results[0]['place_id']);
-        setAddress(res.results[0]['formatted_address']);
+        geoPlaceId = res.results[0]['place_id'];
+        geoAddress = res.results[0]['formatted_address'];
+        //console.log(geoPlaceId, geoAddress); //정상
       }
     })
 
     // eslint-disable-next-line no-undef
     var placeService = new google.maps.places.PlacesService(mapref);
-    await placeService.getDetails({placeId:placeId, fields:['name'],language:'en' },(res,status)=>{
+    await placeService.getDetails({placeId:geoPlaceId, fields:['name'],language:'en' },(res,status)=>{
       if (status === "OK") {
         const copy=[...userPlaces];
         
         copy[focusedDay][placeIndex] = {
             'name':res.name,
-            'address':address,
+            'address':geoAddress,
             'position':{selected},
-            'place_id':placeId
+            'place_id':geoPlaceId
           }
 
         setUserPlaces(copy);
         setPlaceIndex(placeIndex+1);
-        localStorage.setItem(`plan${focusedDay},${placeIndex}`,JSON.stringify(userPlaces))
+        //localStorage.setItem(`plan${focusedDay},${placeIndex}`,JSON.stringify(userPlaces))
       } else {
         console.error('Place details request failed:', status);
       }
     })
   };
-
 
 
     return (
@@ -255,19 +251,36 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 <ButtonGroup color="primary" variant="contained">
 <Button onClick={()=>{setClick(click+1)}}>
   <DirectionsIcon/>ROUTE</Button>
-<Button onClick={()=>{addPlace(selected)}}><AddLocationIcon/>ADD</Button>
+<Button onClick={()=>{
+  //SettingPlaces({selected,setPlaceId,setAddress,address})
+  //setClickAdd(clickAdd+1)
+  addPlace(selected)
+  }}><AddLocationIcon/>ADD</Button>
 </ButtonGroup>
 
 {
   click % 2 === 1?     
   <Container className='route-form-container'>
   <FormControl>
-    <PlacesAutocomplete setSelected={setOrigin}/>
-    <PlacesAutocomplete setSelected={setDestination}/>
+  <Button onClick={()=>{setIsStopOver(isStopOver+1)}} variant="outlined" size="small">+</Button>
+  <Button onClick={()=>{setIsStopOver(isStopOver-1)}} variant="outlined" size="small">-</Button>
+    <PlacesAutocomplete setSelected={setOrigin}/> 
+    
+    {
+      isStopOver>0 && isStopOver<3? 
+        <PlacesAutocomplete setSelected={setStopOver} />
+      :null
+    }
+    <PlacesAutocomplete placeholder="dest" setSelected={setDestination}/>
+  
     
   </FormControl>
       <ButtonGroup color="primary" variant="outlined">
-        <Button onClick={()=>{calculateRoute(origin,destination,transport)}}>calaulate</Button>
+        <Button onClick={()=>{
+          isStopOver>0?
+          calculateRoute(origin,destination,transport) :
+          calculateRoute(origin,destination,transport)
+          }}>calaulate</Button>
         <Button onClick={()=>{clearRoute(origin, destination, directionsResponse)}}>clear</Button>
         <ButtonGroup >
           <Button value="DRIVING" onClick={()=>{setTransport("DRIVING")}}><DirectionsCarIcon/></Button>
@@ -277,9 +290,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       </ButtonGroup>
       </Container>:null
 }
-{/* 시간 띄우기&버튼 selected */}
-{/* https://www.youtube.com/watch?v=VtsbYIMj9Xk */}
-{/* 마커위치 -infoWindow = 소요시간 */}
+
   {directionsResponse && <>
     (<DirectionsRenderer directions={directionsResponse} />)
       <InfoWindowF position={origin}>
@@ -340,3 +351,31 @@ const PlacesAutocomplete = ({setSelected}) => {
   );
 };
 
+/* 
+const SettingPlaces = ({selected, setPlaceId, setAddress, address}) =>{
+  const latlng ={
+    lat: parseFloat(selected['lat']),
+    lng: parseFloat(selected['lng'])
+  };
+
+
+  useEffect(()=>{
+      // eslint-disable-next-line no-undef
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({location:latlng})
+  .then((res)=>{
+    if(res.results[0]){
+      //mapref.setZoom(15);
+      setPlaceId(res.results[0]['place_id']);
+      setAddress(res.results[0]['formatted_address']);
+    }
+  })
+  console.log({address});
+
+  },[])
+
+  return(
+<></>
+  )
+};
+*/

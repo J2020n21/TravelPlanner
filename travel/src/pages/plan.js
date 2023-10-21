@@ -22,15 +22,12 @@ export default function Plan({answer}){
     const [rating, setRating] = useState('');
     const [filteredPlaces, setFilteredPlaces] = useState([]);
 
-    // userplace[][][] <day만큼 생성. day focus만들어서, [{},{}] 장소 추가.
-    //  const initialState = Array.from({ length: n }, () => []); 
     const day = answer[1];
     const dayArr = Array.from({ length: day }, () => []);  //[[]]
     const [userPlaces, setUserPlaces] = useState(dayArr); //seleted position
     const [placeIndex, setPlaceIndex] = useState(0);
     const [focusedDay, setFocusedDay] = useState(0);
     
-    console.log({userPlaces});
 
     useEffect(()=>{
       const filteredPlaces = apiPlaces.filter((place)=>Number(place.rating) > rating);
@@ -53,7 +50,6 @@ export default function Plan({answer}){
     const clearRec = () =>{
       setApiPlaces(null);
     }
-
 
     return(
       <>  

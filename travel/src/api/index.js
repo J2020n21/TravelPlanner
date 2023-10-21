@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+// for location based recommendation
 
 const getPlacesData = async(type, sw, ne) => {
     try{ //bounds.sw.lat
