@@ -7,14 +7,16 @@ import { CircularProgress, Grid, Typography, InputLabel,
 import PlaceDetails from '../PlaceDetails/PlaceDetails.js';
 
 const useStyles = makeStyles({
-    loading: {
-        color: 'white',
+    Fail: {
+        size: '50px',
+        color: 'grey',
     },
 
 })
 
 export default function List({apiPlaces, childClicked, type, setType, rating, setRating}) {
   const classes = useStyles();
+  const [loding, setLoading] = useState(false);
 
   // console.log({childClicked});
   // console.log(childClicked);
@@ -41,12 +43,13 @@ export default function List({apiPlaces, childClicked, type, setType, rating, se
         </Select>
       </FormControl>
 
+{/* 로딩f>요청=로딩t>onload되면 로딩f */}
       <Grid style={{overflowY:'scroll', height:'100vh', marginTop:'20px'}} container spacing={3}>
-        {apiPlaces&& apiPlaces.map((place, index)=>(
+        {apiPlaces.length? apiPlaces.map((place, index)=>(
           <Grid item key={index} xs={12}>
             <PlaceDetails place={place} index={index}/>
           </Grid>
-        ))}
+        )):<h3 style={{color:'grey', textAlign:'center'}}>No Results Exist!</h3>}
       </Grid>
 
     </Container>

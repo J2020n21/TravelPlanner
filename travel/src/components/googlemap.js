@@ -214,7 +214,8 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   }
 
 {
-  apiPlaces&& apiPlaces.map((place,i)=>{
+  //처음제외
+  apiPlaces.length && apiPlaces.map((place,i)=>{
 
     const lat= Number(place['latitude'])
     const lng= Number(place['longitude'])
@@ -232,7 +233,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
           {/* <Button style={{float:'left'}}>detail</Button>
           <Button style={{float:'left'}}>Add</Button> */}
           <img 
-            style={{clear:'both',width:'10vw',height:'10vh',cursor:'pointer'}}
+            style={{clear:'both',width:'10vw',height:'10vh',cursor:'pointer',textAlign:'center'}}
             src={place.photo? place.photo.images.large.url:'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
           />
           <div></div>
@@ -347,32 +348,3 @@ const PlacesAutocomplete = ({setSelected}) => {
     </Combobox>
   );
 };
-
-/* 
-const SettingPlaces = ({selected, setPlaceId, setAddress, address}) =>{
-  const latlng ={
-    lat: parseFloat(selected['lat']),
-    lng: parseFloat(selected['lng'])
-  };
-
-
-  useEffect(()=>{
-      // eslint-disable-next-line no-undef
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({location:latlng})
-  .then((res)=>{
-    if(res.results[0]){
-      //mapref.setZoom(15);
-      setPlaceId(res.results[0]['place_id']);
-      setAddress(res.results[0]['formatted_address']);
-    }
-  })
-  console.log({address});
-
-  },[])
-
-  return(
-<></>
-  )
-};
-*/
