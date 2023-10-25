@@ -7,6 +7,7 @@ import { Autocomplete ,withGoogleMap, GoogleMap,
   useLoadScript, InfoWindowF,
   DirectionsRenderer,
   DirectionsService,
+  
 } from "@react-google-maps/api";
   import usePlacesAutocomplete,{
  getGeocode, getLatLng
@@ -28,7 +29,7 @@ import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import TrainIcon from '@mui/icons-material/Train';
 import Planning from "./planning";
 
-export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay}) {
+export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -49,11 +50,12 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
       setPlaceIndex={setPlaceIndex}
       focusedDay={focusedDay}
       setFocusedDay={setFocusedDay}
+      dailyRoute={dailyRoute}
     />;
 };
 
 
-function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay}){
+function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute}){
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
   const center = useMemo(() => ({lat: 44, lng: -80}), []);
@@ -212,13 +214,14 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       onClick={handleOnClick}
       >
 
-{/* {<InfoWindowF position={selected}>
-  <div>Hi</div>
-  </InfoWindowF>} */
+
+  {
+  //marker for center (selected)
   <MarkerF position={selected}/>
   }
 
 {
+  //draw api recommend places
   //처음제외
   apiPlaces.length && apiPlaces.map((place,i)=>{
 
@@ -254,14 +257,11 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 <ButtonGroup color="primary" variant="contained">
 <Button onClick={()=>{setClick(click+1)}}>
   <DirectionsIcon/>ROUTE</Button>
-<Button onClick={()=>{
-  //SettingPlaces({selected,setPlaceId,setAddress,address})
-  //setClickAdd(clickAdd+1)
-  addPlace(selected)
-  }}><AddLocationIcon/>ADD</Button>
+<Button onClick={()=>{addPlace(selected)}}><AddLocationIcon/>ADD</Button>
 </ButtonGroup>
 
 {
+  //For calculating route - form
   click % 2 === 1?     
   <Container className='route-form-container'>
   <FormControl>
@@ -294,12 +294,39 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       </Container>:null
 }
 
-  {directionsResponse && <>
+  {//Draw calculated route (calculated by button)
+    directionsResponse && <>
     (<DirectionsRenderer directions={directionsResponse} />)
       <InfoWindowF position={origin}>
         <Box>{distance}<br/>{duration}</Box>
       </InfoWindowF>
-    </>}
+  </>}
+
+{
+  //Draw calculated route(calculated based on dailyRoute)
+
+  //draw marker
+  dailyRoute.length && dailyRoute.map((val,i)=>{
+
+    return (<>
+    <MarkerF title="title!!"
+    position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
+    
+      {/* <InfoWindowF position={val.selected}>
+        <p>Texts.</p>
+      </InfoWindowF> */}
+    
+    </MarkerF>
+    
+    </>)
+  })
+
+  //draw route
+
+}
+
+
+
     </GoogleMap>
   </>
   );

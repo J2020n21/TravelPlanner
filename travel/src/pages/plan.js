@@ -27,7 +27,8 @@ export default function Plan({answer}){
     const [userPlaces, setUserPlaces] = useState(dayArr); //seleted position
     const [placeIndex, setPlaceIndex] = useState(0);
     const [focusedDay, setFocusedDay] = useState(0);
-    
+    const [dailyRoute, setDailyRoute] = useState([]); //arr, position for route
+
 
     useEffect(()=>{
       const filteredPlaces = apiPlaces.filter((place)=>Number(place.rating) > rating);
@@ -71,6 +72,8 @@ export default function Plan({answer}){
 
               focusedDay={focusedDay}
               setFocusedDay={setFocusedDay}
+
+              dailyRoute = {dailyRoute}
             />
           </Grid>
           <Grid item xs={4}>
@@ -88,6 +91,8 @@ export default function Plan({answer}){
 
                   focusedDay={focusedDay}
                   setFocusedDay={setFocusedDay}
+                  dailyRoute={dailyRoute}
+                  setDailyRoute={setDailyRoute}
               /> :
               <>
                <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>

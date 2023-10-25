@@ -2,7 +2,10 @@ import React, {useState, useEffect} from 'react'
 import PlanDetails from './PlaceDetails/planDetails';
 import { Typography,Container,Box,Button } from '@material-ui/core';
 
-export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlaceIndex, answer, focusedDay, setFocusedDay}) {
+export default function Planning({userPlaces, setUserPlaces, placeIndex,
+   setPlaceIndex, answer, focusedDay, setFocusedDay,dailyRoute, setDailyRoute,
+  
+  }) {
   const day = Number(answer[1]);
   const clickArray = Array(day).fill(0);
   const dayArray = Array.from({ length: day }, (_, index) => index);
@@ -11,10 +14,22 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
 
   const showArray = Array(day).fill(true);
   const [showPlaces,setShowPlaces] = useState(showArray); //state of showing each day plan (travel places)
-  const [priority, setPriority] = useState(null);
+  
+  const [focusedRoute,setFocusedRoute] = useState(0);
+  
 
-  const [removeNum, setRemoveNum] = useState(null);
-
+  useEffect(()=>{
+    //return arr of the positions (in a day) to dailyRoute
+    if(userPlaces.length){
+    let copy = [...userPlaces]; //전체
+    let dayPlan = copy[focusedRoute]; //day []
+    
+    let copyRoute = [...dailyRoute];// 기존 루트
+    copyRoute = dayPlan.map(val=>val.position); //변환
+    setDailyRoute(dailyRoute = copyRoute);
+    console.log({dailyRoute});
+    }
+  },[userPlaces])
 
   const showPlan = (index) =>{
     let copy =[...click];
@@ -34,16 +49,20 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
     }
     // click[index]%2 === 1? setShowPlaces(false): setShowPlaces(true);
   };
+ 
 
-  // const removePlace = (id) =>{
-  //   if(userPlaces){
-  //   const newArr = delete userPlaces[focusedDay][id]
-  //   setUserPlaces(newArr);
-  //   console.log({userPlaces});
-  //   //1.요소의 key값 쓸것이냐? or placeIndex(id)값 쓸것이냐? !!
-  //   //id(=placeIndex)를 카드에서 넘겨받고, id와 일치하는 번호의 요소를 u.p에서 없얜다
-  //   }
-  // };
+  const showDailyRoute = (dayIndex) =>{
+    //return arr of the positions (in a day) to dailyRoute
+    let copy = [...userPlaces]; //전체
+    let dayPlan = copy[dayIndex]; //day []
+    
+    let copyRoute = [...dailyRoute];// 기존 루트
+    copyRoute = dayPlan.map(val=>val.position); //변환
+    setDailyRoute(dailyRoute = copyRoute);
+    console.log({dailyRoute});
+    //add/remove일어나면 route가 갱신이 안된다! 한박자 느리다
+    //useEffect
+  };
 
   return (
     <div style={{height:'90vh', overflowY:'scroll'}}>
@@ -62,14 +81,18 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
               // daily memo
             }}
             >Memo</Button>
-            <Button  variant='outlined' color='primary' size='small'
+            <Button value={dayIndex} color='primary' size='small'
+            variant={focusedRoute == dayIndex?"contained":"outlined"}//click on-off
             onClick={()=>{
-              // show daily route
+              setFocusedRoute(dayIndex) //for button
+
+              // setDailyRoute(dayIndex)
+              // showDailyRoute(dayIndex)
             }} 
             >Route</Button>
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedDay == dayIndex?"contained":"outlined"}
-            onClick={(e)=>{
+            onClick={()=>{
               setFocusedDay(dayIndex);
             }} 
             >Focus</Button>
@@ -94,4 +117,5 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
 
     </div>
   )
+  
 }

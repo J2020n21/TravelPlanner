@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Card, CardActions, CardContent, CardMedia, Typography, 
 Box,Button,
 }
 from '@material-ui/core';
 
-export default function PlanDetails({id,dayIndex,places,userPlaces,setUserPlaces}) {
-//id에 해당하는 obj를 제외한다
-  const handleClick = (e)=>{
+export default function PlanDetails({id,dayIndex,places,userPlaces,setUserPlaces,}) {
+
+  const handleRemove = (e)=>{
   let copy = [...userPlaces];
   let dayPlan = copy[dayIndex];
   let filtered = dayPlan.filter((ele)=> ele['id'] != places.id)
   copy[dayIndex] = filtered;
   setUserPlaces(copy);
+  
+  //또 한박자 늦음
   }
 
   return (
@@ -33,7 +35,7 @@ export default function PlanDetails({id,dayIndex,places,userPlaces,setUserPlaces
 
     <CardActions>
         <Button size="small" color="primary"
-        onClick={(e)=>{handleClick(e)}}
+        onClick={(e)=>{handleRemove(e)}}
         >Remove</Button>
     </CardActions>
 
