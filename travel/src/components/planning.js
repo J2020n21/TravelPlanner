@@ -78,6 +78,7 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex, setPlac
               userPlaces[dayIndex].map((place,i)=>{
                 return(
                 <PlanDetails 
+                dayIndex = {dayIndex}
                 setUserPlaces = {setUserPlaces}
                 userPlaces = {userPlaces}
                 key={place.id} id={place.id}

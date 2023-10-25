@@ -4,19 +4,14 @@ Box,Button,
 }
 from '@material-ui/core';
 
-export default function PlanDetails({id,places,userPlaces,setUserPlaces}) {
-
+export default function PlanDetails({id,dayIndex,places,userPlaces,setUserPlaces}) {
+//id에 해당하는 obj를 제외한다
   const handleClick = (e)=>{
-    let element = places.id
-    // console.log(id);
-    let copy = [...userPlaces];
-    // console.log(places.id == id? "T":"F"); //T
-    let newArr = copy.filter(element=> element==id)
-    console.log({newArr});
-
-    // setUserPlaces(copy);
-    // console.log({userPlaces});
-    //day에 상관없이 id가 들어갔음. 해당 id를 가진 요소 배열에서 삭제
+  let copy = [...userPlaces];
+  let dayPlan = copy[dayIndex];
+  let filtered = dayPlan.filter((ele)=> ele['id'] != places.id)
+  copy[dayIndex] = filtered;
+  setUserPlaces(copy);
   }
 
   return (
