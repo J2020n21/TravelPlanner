@@ -76,7 +76,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [clickAdd,setClickAdd] =useState(0);
 
   const [resResult, setResResult] = useState(null);
-
   
 
   //Coordinates work
@@ -114,27 +113,59 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     mapref.setZoom(mapref.zoom += 2);
   };
 
-
-  async function calculateRoute(origin, destination, transport){
-    console.log(transport);
+  // console.log({userPlaces},{dailyRoute})
+  // console.log({stopOver},{isStopOver},{origin},{destination})
   // eslint-disable-next-line no-undef
-    const directionSevice = new google.maps.DirectionsService();
-    const results = await directionSevice.route({
-      // eslint-disable-next-line no-undef
-      origin: origin,
-      // eslint-disable-next-line no-undef
-      destination: destination,
-       // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode[transport],
-    },(res,status)=>{
-      if(status !== 'OK'){
-        window.alert("Directions request failed due to " + status);
-      }
-    })
-    setDirectionsResponse(results)
-    setDistance(results.routes[0].legs[0].distance.text)
-    setDuration(results.routes[0].legs[0].duration.text)
-    console.log({distance},{duration});
+  const directionSevice = new google.maps.DirectionsService();
+  async function calculateRoute(origin, destination, transport, isStopOver){
+    if(isStopOver<= 0){ //no waypoint
+      const results = await directionSevice.route({
+        // eslint-disable-next-line no-undef
+        origin: origin,
+        // eslint-disable-next-line no-undef
+        destination: destination,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode[transport],
+      },(res,status)=>{
+        if(status !== 'OK'){
+          window.alert("Directions request failed due to " + status);
+        }
+      })
+      setDirectionsResponse(results)
+      setDistance(results.routes[0].legs[0].distance.text)
+      setDuration(results.routes[0].legs[0].duration.text)
+      // console.log({distance},{duration});
+    }
+
+    else{
+      console.log("stopOver exist");
+      console.log(stopOver[0]) //undefined
+      console.log({stopOver}) //이건 값이 들어가 있음. ??
+      stopOver[0] = [{lat: 52.52000659999999, lng: 13.404954}]
+      const results = await directionSevice.route({
+        // eslint-disable-next-line no-undef
+        origin: origin,
+        // eslint-disable-next-line no-undef
+        destination: destination,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode[transport],
+        // eslint-disable-next-line no-undef
+        waypoints: stopOver[0]
+        //stopOver[0]
+        //{lat: 52.52000659999999, lng: 13.404954}
+      },(res,status)=>{
+        if(status !== 'OK'){
+          window.alert("Directions request failed due to " + status);
+        }
+      })
+      setDirectionsResponse(results)
+      // setDistance(results.routes[0].legs[0].distance.text)
+      // setDuration(results.routes[0].legs[0].duration.text)
+      
+      // // console.log({distance},{duration});
+      console.log(results)
+    }
+
   };
 
   function clearRoute(origin, destination, directionsResponse){
@@ -267,14 +298,15 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   <FormControl>
   <Button onClick={()=>{setIsStopOver(isStopOver+1)}} variant="outlined" size="small">+</Button>
   <Button onClick={()=>{setIsStopOver(isStopOver-1)}} variant="outlined" size="small">-</Button>
-    <PlacesAutocomplete setSelected={setOrigin}/> 
     
+    <PlacesAutocomplete setSelected={setOrigin}/> 
     {
-      isStopOver>0 && isStopOver<3? 
+      // 일단 경유지 하나만으로 계산기능 구현
+      isStopOver>0 && isStopOver<6? 
         <PlacesAutocomplete setSelected={setStopOver} />
       :null
     }
-    <PlacesAutocomplete placeholder="dest" setSelected={setDestination}/>
+    <PlacesAutocomplete setSelected={setDestination}/>
   
     
   </FormControl>
@@ -282,7 +314,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
         <Button onClick={()=>{
           isStopOver>0?
           calculateRoute(origin,destination,transport) :
-          calculateRoute(origin,destination,transport)
+          calculateRoute(origin,destination,transport, stopOver)
           }}>calaulate</Button>
         <Button onClick={()=>{clearRoute(origin, destination, directionsResponse)}}>clear</Button>
         <ButtonGroup >
@@ -297,17 +329,17 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   {//Draw calculated route (calculated by button)
     directionsResponse && <>
     (<DirectionsRenderer directions={directionsResponse} />)
-      <InfoWindowF position={origin}>
+      <InfoWindowF position={destination}>
         <Box>{distance}<br/>{duration}</Box>
+        {/* center바뀔때 이것도 따라감. 없어지거나 고정되어야 하는데? */}
       </InfoWindowF>
   </>}
 
 {
-  //Draw calculated route(calculated based on dailyRoute)
+  //Draw calculated route
 
   //draw marker
   dailyRoute.length && dailyRoute.map((val,i)=>{
-
     return (<>
     <MarkerF title="title!!"
     position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
@@ -315,9 +347,9 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       {/* <InfoWindowF position={val.selected}>
         <p>Texts.</p>
       </InfoWindowF> */}
+      {/* 1. 장소제한을 둬서 시작-끝 반복표시화 Or 2. 경유지 설정받기 */}
     
     </MarkerF>
-    
     </>)
   })
 

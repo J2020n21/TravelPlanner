@@ -64,6 +64,7 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
     //useEffect
   };
 
+
   return (
     <div style={{height:'90vh', overflowY:'scroll'}}>
     {
@@ -79,15 +80,13 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
             <Button  variant='outlined' color='primary' size='small'
             onClick={()=>{
               // daily memo
+              // showMemo(dayIndex)
             }}
             >Memo</Button>
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedRoute == dayIndex?"contained":"outlined"}//click on-off
             onClick={()=>{
               setFocusedRoute(dayIndex) //for button
-
-              // setDailyRoute(dayIndex)
-              // showDailyRoute(dayIndex)
             }} 
             >Route</Button>
             <Button value={dayIndex} color='primary' size='small'
