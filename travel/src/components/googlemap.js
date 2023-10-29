@@ -54,7 +54,6 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
     />;
 };
 
-
 function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute}){
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
@@ -115,9 +114,13 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 
   // console.log({userPlaces},{dailyRoute})
   // console.log({stopOver},{isStopOver},{origin},{destination})
+  
+// console.log(stopOver) //ok
+// console.log({stopOver})
+
   // eslint-disable-next-line no-undef
   const directionSevice = new google.maps.DirectionsService();
-  async function calculateRoute(origin, destination, transport, isStopOver){
+  async function calculateRoute(origin, destination, transport,isStopOver,stopOver){
     if(isStopOver<= 0){ //no waypoint
       const results = await directionSevice.route({
         // eslint-disable-next-line no-undef
@@ -139,9 +142,12 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 
     else{
       console.log("stopOver exist");
-      console.log(stopOver[0]) //undefined
-      console.log({stopOver}) //이건 값이 들어가 있음. ??
-      stopOver[0] = [{lat: 52.52000659999999, lng: 13.404954}]
+
+let copy = stopOver;
+      // eslint-disable-next-line no-undef
+var firstStop =new google.maps.LatLng(copy.lat, copy.lng);
+setStopOver([{location:firstStop}])
+console.log(stopOver)
       const results = await directionSevice.route({
         // eslint-disable-next-line no-undef
         origin: origin,
@@ -150,7 +156,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode[transport],
         // eslint-disable-next-line no-undef
-        waypoints: stopOver[0]
+        waypoints: stopOver
         //stopOver[0]
         //{lat: 52.52000659999999, lng: 13.404954}
       },(res,status)=>{
@@ -312,9 +318,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   </FormControl>
       <ButtonGroup color="primary" variant="outlined">
         <Button onClick={()=>{
-          isStopOver>0?
-          calculateRoute(origin,destination,transport) :
-          calculateRoute(origin,destination,transport, stopOver)
+          calculateRoute(origin,destination,transport,isStopOver, stopOver)
           }}>calaulate</Button>
         <Button onClick={()=>{clearRoute(origin, destination, directionsResponse)}}>clear</Button>
         <ButtonGroup >
