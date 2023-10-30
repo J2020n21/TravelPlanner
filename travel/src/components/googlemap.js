@@ -162,6 +162,7 @@ console.log(stopOver)
       setDirectionsResponse(results)
       // setDistance(results.routes[0].legs[0].distance.text)
       // setDuration(results.routes[0].legs[0].duration.text)
+      //legs0,1에 a-b, b-c 시간 제시해줌
       
       // // console.log({distance},{duration});
       console.log(results)

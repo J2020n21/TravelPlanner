@@ -25,6 +25,9 @@ const Search = () =>{
         axios.get(`https://pixabay.com/api/?key=${searchStates.apiKey}&q=${searchStates.searchText}&image_type=photo&safesearch=true`)
         .then((res) => {
             console.log(res.data.hits);
+            let largeImage = res.data.hits[randomNumber_20].largeImageURL;
+            let image = res.data.hits[randomNumber_20].imageURL;
+            {largeImage? setImage(largeImage): setImage(image)}
             setImage(res.data.hits[randomNumber_20].largeImageURL);
         })
         .catch(err => console.log(err));
