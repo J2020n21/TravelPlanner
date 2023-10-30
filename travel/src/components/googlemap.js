@@ -1,5 +1,6 @@
 import "./googlemap.css";
 import "../App.css";
+import $ from 'jquery';
 import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import { useMemo, useState, useEffect, useRef, componentDidUpdate } from "react";
 import { Autocomplete ,withGoogleMap, GoogleMap, 
@@ -71,11 +72,11 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [duration, setDuration] = useState('');
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
+  const [focusedTp,setFocusedTp] = useState(transport);
 
   const [clickAdd,setClickAdd] =useState(0);
 
   const [resResult, setResResult] = useState(null);
-  
 
   //Coordinates work
   const [mapref, setMapRef] = useState(null);
@@ -227,7 +228,6 @@ console.log(stopOver)
     })
   };
 
-
     return (
   <>
     <Box className="places-container">
@@ -316,10 +316,11 @@ console.log(stopOver)
           }}>calaulate</Button>
         <Button onClick={()=>{clearRoute(origin, destination, directionsResponse)}}>clear</Button>
         <ButtonGroup >
-          <Button value="DRIVING" onClick={()=>{setTransport("DRIVING")}}><DirectionsCarIcon/></Button>
-          <Button value="WALKING" onClick={()=>{setTransport("WALKING")}}><DirectionsWalkIcon/></Button>
-          <Button value="TRANSIT" onClick={()=>{setTransport("TRANSIT")}}><TrainIcon/></Button>
-        </ButtonGroup>
+          
+          <Button id="DRIVING" value="DRIVING" onClick={()=>{setTransport("DRIVING")}}><DirectionsCarIcon/></Button>
+          <Button id="WALKING"value="WALKING" onClick={()=>{setTransport("WALKING")}}><DirectionsWalkIcon/></Button>
+          <Button id="TRANSIT" value="TRANSIT" onClick={()=>{setTransport("TRANSIT")}}><TrainIcon/></Button>
+        </ButtonGroup>  
       </ButtonGroup>
       </Container>:null
 }

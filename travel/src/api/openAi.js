@@ -51,6 +51,7 @@ export default function OpenAi() {
             setAiAnswer(answer);
             console.log(answer); //"Goodbye! Have a great day!"
             console.log( typeof(answer))//string
+            
         });
 
 
