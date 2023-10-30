@@ -33,7 +33,7 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-        libraries:["places"],
+        libraries:["places"]
     });
  
     if (!isLoaded) return <Skeleton variant="rounded" animation="wave" style={{height:'100vh'}}></Skeleton>;
@@ -112,11 +112,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     mapref.setZoom(mapref.zoom += 2);
   };
 
-  // console.log({userPlaces},{dailyRoute})
-  // console.log({stopOver},{isStopOver},{origin},{destination})
-  
-// console.log(stopOver) //ok
-// console.log({stopOver})
 
   // eslint-disable-next-line no-undef
   const directionSevice = new google.maps.DirectionsService();
@@ -157,8 +152,7 @@ console.log(stopOver)
         travelMode: google.maps.TravelMode[transport],
         // eslint-disable-next-line no-undef
         waypoints: stopOver
-        //stopOver[0]
-        //{lat: 52.52000659999999, lng: 13.404954}
+
       },(res,status)=>{
         if(status !== 'OK'){
           window.alert("Directions request failed due to " + status);

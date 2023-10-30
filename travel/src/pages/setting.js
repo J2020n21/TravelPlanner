@@ -5,9 +5,9 @@ import {CssBaseline, Typography, Grid, Box, Container,
  } from '@material-ui/core';
 
 
- const sets = ['AI recommend','Reset the plan','Auto-save','Night mode'];
+ const sets = ['AI recommend','Reset the plan','Night mode'];
  const setsDes = ['Use AI recommendation','All the plan will be removed',
-     'Your plan will be saved automatically','Change UI'];
+     'Change UI'];
 
 export default function Setting (){
     const navigate = useNavigate();

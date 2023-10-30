@@ -7,7 +7,7 @@ import GMap from "../components/googlemap.js";
 import List from "../components/List/list.js";
 import {getPlacesData} from '../api/index.js'
 import Planning from "../components/planning.js";
-// import { Button} from "react-bootstrap";
+import OpenAi from "../api/openAi.js";
 import '../App.css';
 
 export default function Plan({answer}){
@@ -37,7 +37,15 @@ export default function Plan({answer}){
 
     const changeStatus = () =>{
       setClickCount(clickCount + 1);
-      clickCount % 2 === 0? setStatus('recommend'): setStatus('plan');
+      var remainder = clickCount % 3; //0 plan 1 recommend 2 ai
+      if(remainder === 0){
+        return(setStatus('AI'))
+      } else if (remainder == 1){
+        return(setStatus('recommend'))
+      } else if ( remainder ==2){
+        return(setStatus('plan'))
+      }
+      // clickCount % 2 === 0? setStatus('recommend'): setStatus('plan');
     }
 
     const requestRec = ()=>{
@@ -78,7 +86,7 @@ export default function Plan({answer}){
           </Grid>
           <Grid item xs={4}>
           <Button variant="contained" color="primary" className="btn-plan" onClick={()=>{changeStatus();}}>{status}</Button> 
-            {
+            { 
               status === 'plan'? 
                 <Planning
                   userPlaces={userPlaces}
@@ -94,19 +102,28 @@ export default function Plan({answer}){
                   dailyRoute={dailyRoute}
                   setDailyRoute={setDailyRoute}
               /> :
-              <>
-               <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>
-                <Button variant="contained" color="default" onClick={clearRec}>Clear</Button>
-                <List apiPlaces={filteredPlaces.length? filteredPlaces:apiPlaces}
-                      chlidCliked={chlidCliked}
-                      type={type}
-                      setType={setType}
-                      rating={rating}
-                      setRating={setRating}            
-                />
+                
+                status === 'recommend'?
+                  <>
+                    <Button variant="contained" color="secondary" onClick={requestRec}>Recommendation Request</Button>
+                    <Button variant="contained" color="default" onClick={clearRec}>Clear</Button>
+                    <List apiPlaces={filteredPlaces.length? filteredPlaces:apiPlaces}
+                          chlidCliked={chlidCliked}
+                          type={type}
+                          setType={setType}
+                          rating={rating}
+                          setRating={setRating}            
+                  /></>
+                :
+
+                  //status ==='AI'
+                <div>
+                  <OpenAi/>
+                </div>
+                
                
-              </>
             }
+
           </Grid>
         </Grid>
       </>
