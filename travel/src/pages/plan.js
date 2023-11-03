@@ -118,7 +118,9 @@ export default function Plan({answer}){
 
                   //status ==='AI'
                 <div>
-                  <OpenAi/>
+                  <OpenAi 
+                    
+                  />
                 </div>
                 
                

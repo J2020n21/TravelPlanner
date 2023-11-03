@@ -4,20 +4,38 @@ import {Button, Box, Typography,FormControl, InputLabel, Select
 ,MenuItem
 } from '@material-ui/core';
 import CountryDropDown from '../components/countryDropdown.js';
+import PlaceDetails from '../components/PlaceDetails/PlaceDetails.js';
 
+const text="1. Gyeongbokgung Palace, Seoul: {lat: 37.5796, lng: 126.9770}\n2. Bukchon Hanok Village, Seoul: {lat: 37.5823, lng: 126.9858}\n3. Jeonju Hanok Village, Jeonju: {lat: 35.8159, lng: 127.1530}"
 
 const apiKey = process.env.REACT_APP_AI_API_KEY;
 const apiUrl = `https://api.openai.com/v1/chat/completions`
 
 export default function OpenAi() {
+//parsing the text
+const textSentence = text.split('\n');
+let regexName = "([A-Za-z]+( [A-Za-z]+)+)";
+let regexCoord = "{[^}]*\}";
+
     const [mode, setMode] = useState('text') //place,route,text
     let [userPlaceChoice, setUserPlaceChoice] = useState({country:'', category:'', atmosphere:''})//for place
     let [userRouteChoice, setUserRouteChoice] = useState({country:'',theme:'',long:''})//for route: 
     const [userInput,setUserInput] = useState('');//for text
     const [aiAnswerText,setAiAnswerText] = useState(null); 
-    const [aiAnswerPlace,setAiAnswerPlace] = useState(null);
+    const [aiAnswerPlace,setAiAnswerPlace] = useState([]);
     const [aiAnswerRoute,setAiAnswerRoute] = useState(null);
     const [click, setClick] = useState(0);
+
+    textSentence.map((sentence)=>{
+
+        let Name=sentence.match(regexName)[0]
+        let Latlng=sentence.match(regexCoord)[0]
+
+//        const newArr = [...aiAnswerPlace, {name:Name,Latlng:Latlng}]
+  //      setAiAnswerPlace(newArr);
+        aiAnswerPlace.push({ name: Name, Latlng: Latlng });
+    })
+    console.log(aiAnswerPlace)
 
     let placePrompt=''; 
     let routePrompt='';
@@ -26,10 +44,10 @@ useEffect(()=>{
     if(userPlaceChoice.category != '' && userPlaceChoice.country !='' && userPlaceChoice.atmosphere !=''){
     placePrompt=`
     Recommend me 3 place of ${userPlaceChoice.category} in ${userPlaceChoice.country} atmosphere of ${userPlaceChoice.atmosphere}.
-    Your answer should be clear and simple, within 100 words. 
-    Give me keywords of description and lat, lng of each places.
+    Your answer must only inclue: place name and location. 
+    location must be provied with this form: {lat:value,lng:value}
     `;
-    // console.log(placePrompt);
+    console.log(placePrompt);
 }
 
 },[userPlaceChoice])
@@ -152,6 +170,7 @@ function handleChange (e, setValue,attribute=null){
                 onChange={e => {handleChange(e,setUserPlaceChoice,'atmosphere')}}
             >
                 <MenuItem value={"Comfortable"}>Comfortable</MenuItem>
+                <MenuItem value={"Traditional"}>Traditional</MenuItem>
                 <MenuItem value={"Luxary"}>Luxary</MenuItem>
                 <MenuItem value={"Reasonable"}>Reasonable</MenuItem>
             </Select>
@@ -159,7 +178,9 @@ function handleChange (e, setValue,attribute=null){
             </FormControl>
 
         {
-            aiAnswerPlace!= null? aiAnswerPlace:"there's no recommended places"
+            aiAnswerPlace!= null? {aiAnswerPlace}
+                //<PlaceDetails place={aiAnswerPlace}/>
+                :"there's no recommended places"
         }
     
         </>

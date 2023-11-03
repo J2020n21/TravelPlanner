@@ -68,8 +68,8 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [stopOver, setStopOver] = useState([]); //각 장소값
 
   const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [distance, setDistance] = useState([]);
+  const [duration, setDuration] = useState([]);
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
   const [focusedTp,setFocusedTp] = useState(transport);
@@ -139,11 +139,11 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     else{
       console.log("stopOver exist");
 
-let copy = stopOver;
-      // eslint-disable-next-line no-undef
-var firstStop =new google.maps.LatLng(copy.lat, copy.lng);
-setStopOver([{location:firstStop}])
-console.log(stopOver)
+    let copy = stopOver;
+          // eslint-disable-next-line no-undef
+    var firstStop =new google.maps.LatLng(copy.lat, copy.lng);
+    setStopOver([{location:firstStop}])
+    console.log(stopOver)
       const results = await directionSevice.route({
         // eslint-disable-next-line no-undef
         origin: origin,
@@ -160,11 +160,13 @@ console.log(stopOver)
         }
       })
       setDirectionsResponse(results)
-      // setDistance(results.routes[0].legs[0].distance.text)
-      // setDuration(results.routes[0].legs[0].duration.text)
-      //legs0,1에 a-b, b-c 시간 제시해줌
+      let resultInfo = results.routes[0].legs
+      resultInfo.map((ele,i)=>{
+        setDistance(ele.distance.text)
+        setDuration(ele.duration.text)
+      })
       
-      // // console.log({distance},{duration});
+      console.log({distance},{duration});
       console.log(results)
     }
 
@@ -327,18 +329,20 @@ console.log(stopOver)
 }
 
   {//Draw calculated route (calculated by button)
-    directionsResponse && <>
-    (<DirectionsRenderer directions={directionsResponse} />)
-      <InfoWindowF position={destination}>
-        <Box>{distance}<br/>{duration}</Box>
-        {/* center바뀔때 이것도 따라감. 없어지거나 고정되어야 하는데? */}
-      </InfoWindowF>
-  </>}
+    directionsResponse && 
+    <>
+      (<DirectionsRenderer directions={directionsResponse} />)
+                
+        <InfoWindowF position={destination}>
+          <Box>{distance}<br/>{duration}</Box>
+        </InfoWindowF>
+    </>
+  }
 
 {
   //Draw calculated route
 
-  //draw marker
+  //draw marker for daily plan
   dailyRoute.length && dailyRoute.map((val,i)=>{
     return (<>
     <MarkerF title="title!!"
