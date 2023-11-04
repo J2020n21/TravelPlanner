@@ -30,7 +30,7 @@ import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import TrainIcon from '@mui/icons-material/Train';
 import Planning from "./planning";
 
-export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute}) {
+export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute,aiPlaces}) {
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
         // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -52,10 +52,11 @@ export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,set
       focusedDay={focusedDay}
       setFocusedDay={setFocusedDay}
       dailyRoute={dailyRoute}
+      aiPlaces={aiPlaces}
     />;
 };
 
-function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute}){
+function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,setUserPlaces,userPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute,aiPlaces}){
   const isMobile = useMediaQuery('(min-width:600px)');
   const [click, setClick] = useState(0);
   const center = useMemo(() => ({lat: 44, lng: -80}), []);
@@ -285,6 +286,17 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 </>
       )
   })
+}
+
+
+{
+  //marker from AI recommendation
+  //Latlng: "{lat: 35.8159, lng: 127.1530}"
+  //latlng받아서 큰따옴표 지우고 map 돌려서 표시해주기. 마커 아이콘? marker title달아주기
+  aiPlaces.length > 0 && aiPlaces != null?
+   <MarkerF title="ai place" position={{lat: 44, lng: -80}}/>
+   :null
+
 }
 
 

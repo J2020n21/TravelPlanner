@@ -13,7 +13,7 @@ const PlaceDetails = ({place}) => {
   return (
     <Card elevation={7}>
       <CardMedia
-        style={{height:300}}
+        style={{height:200}}
         image={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
         title={place.name}
       />

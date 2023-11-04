@@ -5,13 +5,13 @@ import {Button, Box, Typography,FormControl, InputLabel, Select
 } from '@material-ui/core';
 import CountryDropDown from '../components/countryDropdown.js';
 import PlaceDetails from '../components/PlaceDetails/PlaceDetails.js';
-
-const text="1. Gyeongbokgung Palace, Seoul: {lat: 37.5796, lng: 126.9770}\n2. Bukchon Hanok Village, Seoul: {lat: 37.5823, lng: 126.9858}\n3. Jeonju Hanok Village, Jeonju: {lat: 35.8159, lng: 127.1530}"
+import { Visibility } from '@material-ui/icons';
 
 const apiKey = process.env.REACT_APP_AI_API_KEY;
 const apiUrl = `https://api.openai.com/v1/chat/completions`
 
-export default function OpenAi() {
+export default function OpenAi({aiPlaces, setAiPlaces}) {
+    const text="1. Gyeongbokgung Palace, Seoul: {lat: 37.5796, lng: 126.9770}\n2. Bukchon Hanok Village, Seoul: {lat: 37.5823, lng: 126.9858}\n3. Jeonju Hanok Village, Jeonju: {lat: 35.8159, lng: 127.1530}"
 //parsing the text
 const textSentence = text.split('\n');
 let regexName = "([A-Za-z]+( [A-Za-z]+)+)";
@@ -22,20 +22,30 @@ let regexCoord = "{[^}]*\}";
     let [userRouteChoice, setUserRouteChoice] = useState({country:'',theme:'',long:''})//for route: 
     const [userInput,setUserInput] = useState('');//for text
     const [aiAnswerText,setAiAnswerText] = useState(null); 
-    const [aiAnswerPlace,setAiAnswerPlace] = useState([]);
+    const [aiAnswerPlace,setAiAnswerPlace] = useState([]);//ai답변 받아옴->장소담김?
     const [aiAnswerRoute,setAiAnswerRoute] = useState(null);
     const [click, setClick] = useState(0);
+    const [show,setShow] = useState([1,1,1]);
 
-    textSentence.map((sentence)=>{
-
+let copy=[]
+useEffect(()=>{
+    //1.텍스트 정제하여 목록 띄워주기
+    textSentence.map((sentence)=>{ 
         let Name=sentence.match(regexName)[0]
         let Latlng=sentence.match(regexCoord)[0]
 
-//        const newArr = [...aiAnswerPlace, {name:Name,Latlng:Latlng}]
-  //      setAiAnswerPlace(newArr);
-        aiAnswerPlace.push({ name: Name, Latlng: Latlng });
+        let newEle = { name: Name, Latlng: Latlng };
+        copy.push(newEle)
+        setAiAnswerPlace(copy)
+        setAiPlaces(copy)
     })
-    console.log(aiAnswerPlace)
+
+    //2.위치정보 저장해서 (state) 구글맵에 찍기
+    // console.log(aiPlaces)
+
+    //실제logic에서는 변경필요
+},[aiAnswerText])
+// console.log(aiAnswerPlace)
 
     let placePrompt=''; 
     let routePrompt='';
@@ -117,35 +127,40 @@ function handleChange (e, setValue,attribute=null){
 }
 
 
+
   return (<>
   {/* 안내문구 */}
     <div>openAi page, mode:{mode}</div>
     <Button onClick={changeMode} variant='outlined'>Change modes</Button>
+    <Button onClick={()=>{show===1?setShow(0):setShow(1)}} variant='outlined'>Fold</Button>
 {
     mode === 'text'?
     <>
+    {/* variant={focusedRoute == dayIndex?"contained":"outlined"} */}
     <Typography variant="h4">Ai for Anything</Typography>
     <Box>
-        <Box>
-        <textarea style={{width:'100%', height:'50px'}} placeholder="ask anything to ai" onChange={e => handleChange(e,setUserInput)}/>
-        <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(userInput,setAiAnswerText)}}>Submit</Button>
+        <Box style={show===0? {display:'none'}:{display:'block'}}>
+            <textarea style={{width:'100%', height:'50px'}} placeholder="ask anything to ai" onChange={e => handleChange(e,setUserInput)}/>
+            <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(userInput,setAiAnswerText)}}>Submit</Button>
         </Box>
+
         <Box bgcolor={"#E6E6E6"} style={{width:'100%',height:'200px', padding:'20px', marginTop:'10px'}}>
-        {
-            aiAnswerText!= null? aiAnswerText:"there's no answer"
-        }
+            {
+                aiAnswerText!= null? aiAnswerText:"there's no answer"
+            }
         </Box>
+
     </Box>
     </>
     : 
         mode === 'place'? 
         <>
         <Typography variant="h4">Ai for Places</Typography>
-
+    <Box style={show===0? {display:'none'}:{display:'block'}}>
         <Typography variant="h6">Location?</Typography>
             <CountryDropDown setValue={setUserPlaceChoice} attribute="country"/>
                       
-    <div style={{height:'20px'}}></div>
+         <div style={{height:'20px'}}></div>
         <Typography variant="h6">What kind of place?</Typography>
             <FormControl fullWidth>
             <InputLabel id="place-category">Place</InputLabel>
@@ -176,10 +191,17 @@ function handleChange (e, setValue,attribute=null){
             </Select>
             <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(placePrompt,setAiAnswerPlace)}}>Submit</Button>
             </FormControl>
-
+    </Box>
         {
-            aiAnswerPlace!= null? {aiAnswerPlace}
-                //<PlaceDetails place={aiAnswerPlace}/>
+            aiAnswerPlace.length > 0? 
+            <div style={{height:'80vh',overflowY:'scroll'}}>
+                {
+                    aiAnswerPlace.map((item)=>{return(
+                        <PlaceDetails place = {item}/>
+                        // <p>{item.name}</p>
+                    )})
+                }
+            </div>
                 :"there's no recommended places"
         }
     
@@ -188,7 +210,7 @@ function handleChange (e, setValue,attribute=null){
         :
         <>
             <Typography variant="h4">Ai for Plan</Typography> 
-
+        <Box style={show===0? {display:'none'}:{display:'block'}}>
             <Typography variant="h6">Where do you travel?</Typography>
                 <CountryDropDown setValue={setUserRouteChoice} attribute="country"/>
 
@@ -229,7 +251,7 @@ function handleChange (e, setValue,attribute=null){
                     </Select>
                     <Button style={{width:'100%', marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(routePrompt,setAiAnswerRoute)}}>Submit</Button>
                 </FormControl> 
-
+        </Box>
         {
             aiAnswerRoute!= null? aiAnswerRoute:"there's no recommended plan"
         }

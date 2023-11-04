@@ -22,6 +22,8 @@ export default function Plan({answer}){
     const [rating, setRating] = useState('');
     const [filteredPlaces, setFilteredPlaces] = useState([]);
 
+    const [aiPlaces, setAiPlaces] = useState([])
+
     const day = answer[1];
     const dayArr = Array.from({ length: day }, () => []);  //[[]]
     const [userPlaces, setUserPlaces] = useState(dayArr); //seleted position
@@ -82,6 +84,8 @@ export default function Plan({answer}){
               setFocusedDay={setFocusedDay}
 
               dailyRoute = {dailyRoute}
+
+              aiPlaces={aiPlaces}
             />
           </Grid>
           <Grid item xs={4}>
@@ -119,7 +123,8 @@ export default function Plan({answer}){
                   //status ==='AI'
                 <div>
                   <OpenAi 
-                    
+                    aiPlaces = {aiPlaces}
+                    setAiPlaces = {setAiPlaces}
                   />
                 </div>
                 
