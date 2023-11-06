@@ -6,7 +6,7 @@ import styled from 'styled-components';
 //'sky','ocean','airplane',
 
 const Search = () =>{
-    const apiKey='36162160-9ad290b2b95fe84e106ba7a08';
+    const apiKey= process.env.REACT_APP_PIXABAY_API_KEY;
     let randomNumber_20 = Math.floor(Math.random()*21);
     // let searchTextKeywords = Math.random(['sky','ocean','airplane']);
     let searchText = 'sky';
@@ -14,7 +14,7 @@ const Search = () =>{
     let searchStates = {
         searchText: searchText,
         apiUrl: 'https://pixabay.com/api',
-        apiKey: '36162160-9ad290b2b95fe84e106ba7a08',
+        apiKey: apiKey,
         images: []
     };
 

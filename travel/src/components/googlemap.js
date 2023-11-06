@@ -29,11 +29,12 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import TrainIcon from '@mui/icons-material/Train';
 import Planning from "./planning";
+import { create } from "@mui/material/styles/createTransitions";
+import axios from "axios";
 
 export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute,aiPlaces}) {
     const {isLoaded} = useLoadScript({
-        googleMapsApiKey: "AIzaSyAY6AUO3bJvykH8YxldX-yppdDiNjJBYrI",
-        // process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+        googleMapsApiKey: process.env.REACT_APP_GOOGLEMAP_API_KEY,
         libraries:["places"]
     });
  
@@ -114,7 +115,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     mapref.setZoom(mapref.zoom += 2);
   };
 
-
   // eslint-disable-next-line no-undef
   const directionSevice = new google.maps.DirectionsService();
   async function calculateRoute(origin, destination, transport,isStopOver,stopOver){
@@ -180,12 +180,11 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       setOrigin('');
       setDestination('');
   };
-
     
   let geoPlaceId=null;
   let geoAddress=null;
+  let photoUrl = null;
   async function addPlace (selected){
-
     setClickAdd(clickAdd+1)
     //setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
     const latlng ={
@@ -201,29 +200,34 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
         mapref.setZoom(15);
         geoPlaceId = res.results[0]['place_id'];
         geoAddress = res.results[0]['formatted_address'];
-        //console.log(geoPlaceId, geoAddress); //정상
       }
     })
 
     // eslint-disable-next-line no-undef
     var placeService = new google.maps.places.PlacesService(mapref);
-    await placeService.getDetails({placeId:geoPlaceId, fields:['name'],language:'en' },(res,status)=>{
+    await placeService.getDetails({placeId:geoPlaceId, fields:['name', 'photos','formatted_address'],language:'en' },(res,status)=>{
       if (status === "OK") {
+        console.log({res})
         const copy=[...userPlaces];
         let order = copy[focusedDay].length; //to make no empty-array
-        
+        console.log(res.photos)
+        if(res.photos){photoUrl=res.photos[0].getUrl()}
+        else{photoUrl=null}
+
         copy[focusedDay][order] = {
             'name':res.name,
             'address':geoAddress,
             'position':{selected},
             'place_id':geoPlaceId,
-            'id':placeIndex
+            'id':placeIndex,
+            'photo':photoUrl
           }
 
         order += 1;
         setUserPlaces(copy);
         setPlaceIndex(placeIndex+1); //id
-        console.log({userPlaces})
+        if(photoUrl? console.log(photoUrl):console.log("No photo"));
+
         
         //localStorage.setItem(`plan${focusedDay},${placeIndex}`,JSON.stringify(userPlaces))
       } else {
@@ -231,6 +235,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       }
     })
   };
+
 
     return (
   <>
@@ -248,6 +253,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
       onBoundsChanged={handleBoundChanged}
       onClick={handleOnClick}
       >
+
 
 
   {
@@ -291,12 +297,13 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 
 {
   //marker from AI recommendation
-  //Latlng: "{lat: 35.8159, lng: 127.1530}"
-  //latlng받아서 큰따옴표 지우고 map 돌려서 표시해주기. 마커 아이콘? marker title달아주기
-  aiPlaces.length > 0 && aiPlaces != null?
-   <MarkerF title="ai place" position={{lat: 44, lng: -80}}/>
+  aiPlaces.length > 0 && aiPlaces != null? 
+    aiPlaces.map((item)=>{
+     const pos = JSON.parse(item.Latlng)
+      return(
+      <MarkerF title={item.name} position={pos}/>
+    )})
    :null
-
 }
 
 

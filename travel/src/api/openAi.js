@@ -11,7 +11,7 @@ const apiKey = process.env.REACT_APP_AI_API_KEY;
 const apiUrl = `https://api.openai.com/v1/chat/completions`
 
 export default function OpenAi({aiPlaces, setAiPlaces}) {
-    const text="1. Gyeongbokgung Palace, Seoul: {lat: 37.5796, lng: 126.9770}\n2. Bukchon Hanok Village, Seoul: {lat: 37.5823, lng: 126.9858}\n3. Jeonju Hanok Village, Jeonju: {lat: 35.8159, lng: 127.1530}"
+    const text=`1. Gyeongbokgung Palace, Seoul: {"lat": 37.5796, "lng": 126.9770}\n2. Bukchon Hanok Village, Seoul: {"lat": 37.5823, "lng": 126.9858}\n3. Jeonju Hanok Village, Jeonju: {"lat": 35.8159, "lng": 127.1530}`
 //parsing the text
 const textSentence = text.split('\n');
 let regexName = "([A-Za-z]+( [A-Za-z]+)+)";
@@ -39,11 +39,7 @@ useEffect(()=>{
         setAiAnswerPlace(copy)
         setAiPlaces(copy)
     })
-
-    //2.위치정보 저장해서 (state) 구글맵에 찍기
-    // console.log(aiPlaces)
-
-    //실제logic에서는 변경필요
+    
 },[aiAnswerText])
 // console.log(aiAnswerPlace)
 
@@ -55,23 +51,21 @@ useEffect(()=>{
     placePrompt=`
     Recommend me 3 place of ${userPlaceChoice.category} in ${userPlaceChoice.country} atmosphere of ${userPlaceChoice.atmosphere}.
     Your answer must only inclue: place name and location. 
-    location must be provied with this form: {lat:value,lng:value}
+    location must be provied with this form: {"lat":value,"lng":value}
     `;
     console.log(placePrompt);
 }
-
 },[userPlaceChoice])
 
 useEffect(()=>{
     if(userRouteChoice.long!=''&&userRouteChoice.country!=''&&userRouteChoice.theme!=''){
-    let routePrompt=`
+    routePrompt=`
     Recommend me a ${userRouteChoice.long}days travel plan of ${userRouteChoice.country}, foused on the theme:${userRouteChoice.theme}.
-    Your answer should be clear and simple, within 100 words. 
-    Give me the reason why you recommend and lat, lng of each places.
-        `;
+    Your answer must only inclue: place name and location.
+    location must be provied with this form: {"lat":value,"lng":value}
+    `;
     }
-    // console.log(routePrompt);
-
+    console.log(routePrompt);
 },[userRouteChoice])
 
 
@@ -133,6 +127,7 @@ function handleChange (e, setValue,attribute=null){
     <div>openAi page, mode:{mode}</div>
     <Button onClick={changeMode} variant='outlined'>Change modes</Button>
     <Button onClick={()=>{show===1?setShow(0):setShow(1)}} variant='outlined'>Fold</Button>
+    <Button onClick={()=>{setAiPlaces('')}} variant='outlined'>Clear</Button>
 {
     mode === 'text'?
     <>
@@ -252,9 +247,11 @@ function handleChange (e, setValue,attribute=null){
                     <Button style={{width:'100%', marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(routePrompt,setAiAnswerRoute)}}>Submit</Button>
                 </FormControl> 
         </Box>
-        {
-            aiAnswerRoute!= null? aiAnswerRoute:"there's no recommended plan"
-        }
+        <div style={{height:'80vh',overflowY:'scroll'}}>
+            {
+                aiAnswerRoute!= null? aiAnswerRoute:"there's no recommended plan"
+            }
+        </div>
         </>
 }
     </>

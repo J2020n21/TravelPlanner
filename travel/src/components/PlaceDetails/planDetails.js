@@ -25,7 +25,8 @@ export default function PlanDetails({id,dayIndex,places,userPlaces,setUserPlaces
     />
     <CardContent>
       <Box >
-        <div style={{width:'10vw', height:'8vw', background:'yellow', float:'right'}}>image</div>
+        <img style={{width:'14vw', height:'15vh', float:'right'}}
+         src={places['photo'] ? places['photo'] : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}/>
       </Box>
       <Typography variant='h6'>{places&& places['name']? places['name'] :"Blank!"}</Typography>
       <Box >
