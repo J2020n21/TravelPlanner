@@ -3,7 +3,7 @@ import "../App.css";
 import $ from 'jquery';
 import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import { useMemo, useState, useEffect, useRef, componentDidUpdate } from "react";
-import { Autocomplete ,withGoogleMap, GoogleMap, 
+import { Autocomplete ,withGoogleMap, GoogleMap, PolylineF,
   LoadScript, MarkerF, useJsApiLoader,
   useLoadScript, InfoWindowF,
   DirectionsRenderer,
@@ -363,22 +363,22 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 
   //draw marker for daily plan
   dailyRoute.length && dailyRoute.map((val,i)=>{
+    const Arr = dailyRoute.map(item=>item.selected)
     return (<>
-    <MarkerF title="title!!"
-    position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
-    
-      {/* <InfoWindowF position={val.selected}>
-        <p>Texts.</p>
-      </InfoWindowF> */}
-      {/* 1. 장소제한을 둬서 시작-끝 반복표시화 Or 2. 경유지 설정받기 */}
-    
+    <MarkerF 
+      position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
     </MarkerF>
+
+    <PolylineF
+      path={Arr}
+      strokeColor="#FFFFFF"
+      strokeOpacity={0.8}
+      strokeWeight={2}
+    />
     </>)
   })
-
-  //draw route
-
 }
+
 
 
 
