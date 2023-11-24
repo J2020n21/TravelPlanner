@@ -75,10 +75,9 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   const [placeMarker,setPlaceMarker] = useState('');
   const [transport,setTransport] = useState('TRANSIT');
   const [focusedTp,setFocusedTp] = useState(transport);
-
   const [clickAdd,setClickAdd] =useState(0);
 
-  const [resResult, setResResult] = useState(null);
+  const lineColor = ["#dc143c","#ff4500","#ffd700","#228b22","#1e90ff","#000080","#483d8b"]
 
   //Coordinates work
   const [mapref, setMapRef] = useState(null);
@@ -368,10 +367,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     <MarkerF 
       position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
     </MarkerF>
-
+{/* day일자=i%7의 나머지가 있으냐? 선 색깔 바꿔주기 */}
     <PolylineF
       path={Arr}
-      strokeColor="#FFFFFF"
+      strokeColor={"000000"}
       strokeOpacity={0.8}
       strokeWeight={2}
     />

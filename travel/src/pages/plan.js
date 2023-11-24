@@ -37,6 +37,10 @@ export default function Plan({answer}){
       setFilteredPlaces(filteredPlaces);
     },[rating]);
 
+    useEffect(()=>{
+      // dailyRoute가 바뀔때마다 마커 위치 날짜에 따라 바뀜
+    },[dailyRoute])
+
     const changeStatus = () =>{
       setClickCount(clickCount + 1);
       var remainder = clickCount % 3; //0 plan 1 recommend 2 ai

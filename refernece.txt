@@ -15,3 +15,28 @@ https://developers.google.com/maps/documentation/javascript/reference?hl=ko#Mark
 https://developers.google.com/maps/documentation/javascript/reference/marker?hl=ko#Marker.getPosition
 https://chat.openai.com/
 
+
+TODO:
+★:무조건 구현해야하는 기능
+※:고치기 (덜 힘듬)
+＠:하면 좋음
+
+★전체계획 보여주기
+api문제해결( 구매/ 메일보내기?)
+경유지 보여주는 문제해결
+경유지.. 추가?
+    完★메모기능(브라우저 캐시사용) //https://hianna.tistory.com/697
+    ＠memo가 있으면...로컬 스토리지 초기화(리프레쉬하면 초기화)
+※메모 textarea css로 조정
+계획저장(브라우저 캐시사용)
+※시작질문영역 나라설정
+★장소추천 - ai실제 답변에서 잘 돌아가는지 확인 (장소 마커 잘 찍어주는지?)
+★계획추천 - 장소 마커찍기 + 가능하면 선으로 연결
+※api추천 장소 사진?
+※랜딩페이지 사진 오류
+데일리 루트 day여러개 이상에서 잘 작동하는지 확인
+
+＠메모랑 fold 함수 하나로 합치기
+
+ppt 5장 제작 (보완점,제작배경,주요기능,)
+

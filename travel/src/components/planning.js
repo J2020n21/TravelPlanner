@@ -4,7 +4,6 @@ import { Typography,Container,Box,Button } from '@material-ui/core';
 
 export default function Planning({userPlaces, setUserPlaces, placeIndex,
    setPlaceIndex, answer, focusedDay, setFocusedDay,dailyRoute, setDailyRoute,
-  
   }) {
   const day = Number(answer[1]);
   const clickArray = Array(day).fill(0);
@@ -14,9 +13,11 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
 
   const showArray = Array(day).fill(true);
   const [showPlaces,setShowPlaces] = useState(showArray); //state of showing each day plan (travel places)
-  
   const [focusedRoute,setFocusedRoute] = useState(0);
   
+  const [memo,setMemo] = useState(Array(day).fill(0));
+  const [sMemo, setSMemo] = useState(Array(day).fill(false));
+  const [memoClick, setMemoClick] = useState(clickArray);
 
   useEffect(()=>{
     //return arr of the positions (in a day) to dailyRoute
@@ -64,6 +65,32 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
     //useEffect
   };
 
+  const showMemo = (index) =>{
+    let copy =[...memoClick];
+    copy[index] = copy[index] + 1; //index의 클릭에 +1
+    setMemoClick(copy)
+    console.log("use: "+copy)
+
+    if(memoClick[index]%2 === 1){
+      let copyplace =[...sMemo]; //보여줄 위치
+      copyplace[index] = false;
+      setSMemo(copyplace);
+      console.log({sMemo})
+    }
+    else{      
+      let copyplace =[...sMemo];
+      copyplace[index] = true;
+      setSMemo(copyplace);
+      console.log({sMemo})
+    }
+  }
+
+  const saveMemo = (dayIndex, written) =>{
+    window.localStorage.setItem(dayIndex,written)
+    let copy = [...memo];
+    copy[dayIndex] = written;
+    setMemo(copy);
+  }
 
   return (
     <div style={{height:'90vh', overflowY:'scroll'}}>
@@ -77,11 +104,9 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
              onClick={(e)=>{showPlan(dayIndex)}}>
               { click[dayIndex]%2 === 1? "show":"fold"}
             </Button>
-            <Button  variant='outlined' color='primary' size='small'
+            <Button value={dayIndex} variant='outlined' color='primary' size='small'
             onClick={()=>{
-              // daily memo
-              // showMemo(dayIndex)
-            }}
+              showMemo(dayIndex)}}
             >Memo</Button>
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedRoute == dayIndex?"contained":"outlined"}//click on-off
@@ -95,6 +120,15 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
               setFocusedDay(dayIndex);
             }} 
             >Focus</Button>
+
+    
+            {sMemo[dayIndex]==true? 
+              <Box>
+                <textarea onChange={(e)=>{saveMemo(dayIndex, e.target.value)}}>
+                {memo!=null? window.localStorage.getItem(dayIndex):"wrong"}</textarea>
+              </Box>
+              :null
+            }
 
             { userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true?
               userPlaces[dayIndex].map((place,i)=>{
