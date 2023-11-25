@@ -2,7 +2,9 @@ import React, {useState, useEffect} from 'react'
 import PlanDetails from './PlaceDetails/planDetails';
 import { Typography,Container,Box,Button } from '@material-ui/core';
 
-export default function Planning({userPlaces, setUserPlaces, placeIndex,
+export default function Planning({
+  showAllPlan,
+  userPlaces, setUserPlaces, placeIndex,
    setPlaceIndex, answer, focusedDay, setFocusedDay,dailyRoute, setDailyRoute,
   }) {
   const day = Number(answer[1]);
@@ -28,7 +30,7 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
     let copyRoute = [...dailyRoute];// 기존 루트
     copyRoute = dayPlan.map(val=>val.position); //변환
     setDailyRoute(dailyRoute = copyRoute);
-    console.log({dailyRoute});
+    // console.log({dailyRoute});
     }
   },[userPlaces])
 
@@ -93,7 +95,11 @@ export default function Planning({userPlaces, setUserPlaces, placeIndex,
   }
 
   return (
-    <div style={{height:'90vh', overflowY:'scroll'}}>
+    <div style={{
+      height:'90vh',
+      overflowY:'scroll',
+      display: showAllPlan? 'flex':'block',
+      }}>
     {
       travelDay&& travelDay.map((item,dayIndex)=>{
         return( <div style={{marginBottom:'50px'}}>

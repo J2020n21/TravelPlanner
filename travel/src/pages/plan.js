@@ -1,8 +1,8 @@
-import React, { Component, useState, useEffect } from "react";
+import React, {useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import {Button, Navbar, Container, Nav} from 'react-bootstrap'
 import { CssBaseline, Grid, Typography, Container,Box,Button} from "@material-ui/core";
-import PlanCard from '../components/List/planCard.js';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'; //<
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';// >
 import GMap from "../components/googlemap.js";
 import List from "../components/List/list.js";
 import {getPlacesData} from '../api/index.js'
@@ -31,6 +31,8 @@ export default function Plan({answer}){
     const [focusedDay, setFocusedDay] = useState(0);
     const [dailyRoute, setDailyRoute] = useState([]); //arr, position for route
 
+    const [showAllPlan, setShowAllPlan] = useState(false);
+    const [allPlanClick, setAllPlanClick] = useState(0);
 
     useEffect(()=>{
       const filteredPlaces = apiPlaces.filter((place)=>Number(place.rating) > rating);
@@ -40,6 +42,12 @@ export default function Plan({answer}){
     useEffect(()=>{
       // dailyRoute가 바뀔때마다 마커 위치 날짜에 따라 바뀜
     },[dailyRoute])
+
+    // useEffect(()=>{
+    //   if(allPlanClick%2 == 1) setShowAllPlan(true)
+    //   else setShowAllPlan(false)
+    //   console.log(showAllPlan)
+    // },[allPlanClick])
 
     const changeStatus = () =>{
       setClickCount(clickCount + 1);
@@ -65,13 +73,21 @@ export default function Plan({answer}){
     const clearRec = () =>{
       setApiPlaces(null);
     }
-    
+
+
+    const showAllPlanf = () =>{
+      let copy = allPlanClick
+      setAllPlanClick(copy + 1)
+      if(allPlanClick%2 == 1) setShowAllPlan(false)
+      else setShowAllPlan(true)
+      console.log(showAllPlan)
+    }
 
     return(
       <>  
         <CssBaseline/>
         <Grid container spacing={3} style={{width: '100%'}}>
-          <Grid item xs={8}>
+          <Grid item xs={showAllPlan===true?4:8}>
             <GMap
               setCoordinates={setCoordinates}
               setBounds={setBounds}
@@ -93,11 +109,13 @@ export default function Plan({answer}){
               aiPlaces={aiPlaces}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={showAllPlan===true?8:4}>
           <Button variant="contained" color="primary" className="btn-plan" onClick={()=>{changeStatus();}}>{status}</Button> 
             { 
               status === 'plan'? 
+              <> <Button onClick={showAllPlanf}>{showAllPlan===true?<ArrowForwardIosIcon/>:<ArrowBackIosIcon/>}</Button>
                 <Planning
+                  showAllPlan={showAllPlan}
                   userPlaces={userPlaces}
                   setUserPlaces={setUserPlaces}
 
@@ -110,7 +128,8 @@ export default function Plan({answer}){
                   setFocusedDay={setFocusedDay}
                   dailyRoute={dailyRoute}
                   setDailyRoute={setDailyRoute}
-              /> :
+              />
+              </> :
                 
                 status === 'recommend'?
                   <>
