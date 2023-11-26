@@ -34,6 +34,21 @@ export default function Planning({
     }
   },[userPlaces])
 
+  useEffect(()=>{
+    //userPlaces[[{position:{selected:{lat,lng}}},{}], []],
+    //!dailyRoute: [{selected:{lat,lng}},{}]
+    if(userPlaces){
+      let copy = [...userPlaces]
+      let newArr = copy[focusedRoute]
+      let changeArr = newArr.map(ele => ({
+        selected: ele.position.selected
+      }))
+      // console.log(changeArr)
+      // console.log(dailyRoute)
+      setDailyRoute(changeArr)
+    }
+  },[focusedRoute])
+
   const showPlan = (index) =>{
     let copy =[...click];
     copy[index] = copy[index] + 1;
@@ -103,7 +118,7 @@ export default function Planning({
     {
       travelDay&& travelDay.map((item,dayIndex)=>{
         return( <div style={{marginBottom:'50px'}}>
-          <Box key={dayIndex}  style={{marginTop:'20px'}}>
+          <Box key={dayIndex}  style={{marginTop:'20px', marginRight: showAllPlan? '20px':null}}>
             <Typography variant='h5'>Day {item+1}</Typography>
             <Button
              variant='outlined' color='primary' size='small'
@@ -117,8 +132,11 @@ export default function Planning({
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedRoute == dayIndex?"contained":"outlined"}//click on-off
             onClick={()=>{
-              setFocusedRoute(dayIndex) //for button
+              setFocusedRoute(dayIndex) //n번째 날의 route버튼 표시
             }} 
+            // 변경이 있을 경우에만 re-render되는데 버튼 클릭만으로는 어떠한 변경이 없음
+            //버튼을 누르면 > 해당 dayIndex의 dR을 바로 보여줄 수 있도록 해야함
+            //1.plan으로 f.r을 넘겨준다.(일자) >plan에서 useEffect로 바로 day변동을 캐치>맵에서 해당day의 루트를 보여준다
             >Route</Button>
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedDay == dayIndex?"contained":"outlined"}

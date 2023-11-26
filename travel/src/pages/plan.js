@@ -40,14 +40,9 @@ export default function Plan({answer}){
     },[rating]);
 
     useEffect(()=>{
-      // dailyRoute가 바뀔때마다 마커 위치 날짜에 따라 바뀜
+      // 유저가 누른 day의 route가 바뀔때마다 해당 날의 그걸 보여준다
     },[dailyRoute])
 
-    // useEffect(()=>{
-    //   if(allPlanClick%2 == 1) setShowAllPlan(true)
-    //   else setShowAllPlan(false)
-    //   console.log(showAllPlan)
-    // },[allPlanClick])
 
     const changeStatus = () =>{
       setClickCount(clickCount + 1);

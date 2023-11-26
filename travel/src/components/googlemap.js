@@ -358,8 +358,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   }
 
 {
-  //Draw calculated route
-
   //draw marker for daily plan
   dailyRoute.length && dailyRoute.map((val,i)=>{
     const Arr = dailyRoute.map(item=>item.selected)
@@ -367,7 +365,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     <MarkerF 
       position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
     </MarkerF>
-{/* day일자=i%7의 나머지가 있으냐? 선 색깔 바꿔주기 */}
+      {/* dailyRoute에
+      어느 한 부분에서 삭제나 추가같은 변경사항이 있는 경우에만
+      다른 일자의 루트가 보임.(그냥 버튼 누르기로는 바뀌지 않음)
+      */}
     <PolylineF
       path={Arr}
       strokeColor={"000000"}
