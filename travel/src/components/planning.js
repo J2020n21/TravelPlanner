@@ -22,32 +22,35 @@ export default function Planning({
   const [memoClick, setMemoClick] = useState(clickArray);
 
   useEffect(()=>{
-    //return arr of the positions (in a day) to dailyRoute
+    //conver format
     if(userPlaces.length){
-    let copy = [...userPlaces]; //전체
-    let dayPlan = copy[focusedRoute]; //day []
-    
-    let copyRoute = [...dailyRoute];// 기존 루트
-    copyRoute = dayPlan.map(val=>val.position); //변환
+    let copy = [...userPlaces]; 
+    let dayPlan = copy[focusedRoute]; 
+    let copyRoute = [...dailyRoute];
+    copyRoute = dayPlan.map(val=>val.position); 
     setDailyRoute(dailyRoute = copyRoute);
-    // console.log({dailyRoute});
     }
   },[userPlaces])
 
   useEffect(()=>{
-    //userPlaces[[{position:{selected:{lat,lng}}},{}], []],
-    //!dailyRoute: [{selected:{lat,lng}},{}]
+    //convert format (to show dailyRoute)
     if(userPlaces){
       let copy = [...userPlaces]
       let newArr = copy[focusedRoute]
       let changeArr = newArr.map(ele => ({
         selected: ele.position.selected
       }))
-      // console.log(changeArr)
-      // console.log(dailyRoute)
       setDailyRoute(changeArr)
     }
   },[focusedRoute])
+
+  useEffect(()=>{
+  // 계획이 바뀔때마다 브라우저에 저장. 키-읽어온 후 그걸 사용한다.
+  //사용?
+    const obj = JSON.stringify(userPlaces)
+    window.localStorage.setItem('userPlaces',obj)
+  },[userPlaces])
+
 
   const showPlan = (index) =>{
     let copy =[...click];
@@ -66,20 +69,6 @@ export default function Planning({
       setShowPlaces(copyplace);
     }
     // click[index]%2 === 1? setShowPlaces(false): setShowPlaces(true);
-  };
- 
-
-  const showDailyRoute = (dayIndex) =>{
-    //return arr of the positions (in a day) to dailyRoute
-    let copy = [...userPlaces]; //전체
-    let dayPlan = copy[dayIndex]; //day []
-    
-    let copyRoute = [...dailyRoute];// 기존 루트
-    copyRoute = dayPlan.map(val=>val.position); //변환
-    setDailyRoute(dailyRoute = copyRoute);
-    console.log({dailyRoute});
-    //add/remove일어나면 route가 갱신이 안된다! 한박자 느리다
-    //useEffect
   };
 
   const showMemo = (index) =>{
@@ -109,6 +98,7 @@ export default function Planning({
     setMemo(copy);
   }
 
+
   return (
     <div style={{
       height:'90vh',
@@ -132,11 +122,8 @@ export default function Planning({
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedRoute == dayIndex?"contained":"outlined"}//click on-off
             onClick={()=>{
-              setFocusedRoute(dayIndex) //n번째 날의 route버튼 표시
+              setFocusedRoute(dayIndex)
             }} 
-            // 변경이 있을 경우에만 re-render되는데 버튼 클릭만으로는 어떠한 변경이 없음
-            //버튼을 누르면 > 해당 dayIndex의 dR을 바로 보여줄 수 있도록 해야함
-            //1.plan으로 f.r을 넘겨준다.(일자) >plan에서 useEffect로 바로 day변동을 캐치>맵에서 해당day의 루트를 보여준다
             >Route</Button>
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedDay == dayIndex?"contained":"outlined"}
@@ -149,10 +136,12 @@ export default function Planning({
             {sMemo[dayIndex]==true? 
               <Box>
                 <textarea onChange={(e)=>{saveMemo(dayIndex, e.target.value)}}>
-                {memo!=null? window.localStorage.getItem(dayIndex):"wrong"}</textarea>
+                {memo!=null? window.localStorage.getItem(dayIndex):null}</textarea>
               </Box>
               :null
             }
+
+{/* 여기서 읽어온 브라우저에 저장된 userPlaces를 넣어준다 */}
 
             { userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true?
               userPlaces[dayIndex].map((place,i)=>{

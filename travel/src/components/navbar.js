@@ -6,9 +6,8 @@ import {AppBar, Box, Toolbar, Typography,Tooltip,
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 
-const pages = ['Plan', 'Map', 'Setting'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const pagesURL = ['/home/plan','/home/map','/home/setting']
+const pages = ['Plan', 'Setting'];
+const pagesURL = ['/home/plan','/home/setting'];
 
 export default function MyNavBar() {
   const navigate = useNavigate();
@@ -18,10 +17,7 @@ export default function MyNavBar() {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
+  
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };

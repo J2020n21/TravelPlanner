@@ -26,7 +26,8 @@ export default function Plan({answer}){
 
     const day = answer[1];
     const dayArr = Array.from({ length: day }, () => []);  //[[]]
-    const [userPlaces, setUserPlaces] = useState(dayArr); //seleted position
+    const storedPlaces = JSON.parse(localStorage.getItem('userPlaces'));
+    const [userPlaces, setUserPlaces] = useState(storedPlaces||dayArr); //seleted position
     const [placeIndex, setPlaceIndex] = useState(0);
     const [focusedDay, setFocusedDay] = useState(0);
     const [dailyRoute, setDailyRoute] = useState([]); //arr, position for route
@@ -34,14 +35,12 @@ export default function Plan({answer}){
     const [showAllPlan, setShowAllPlan] = useState(false);
     const [allPlanClick, setAllPlanClick] = useState(0);
 
+
     useEffect(()=>{
       const filteredPlaces = apiPlaces.filter((place)=>Number(place.rating) > rating);
       setFilteredPlaces(filteredPlaces);
     },[rating]);
 
-    useEffect(()=>{
-      // 유저가 누른 day의 route가 바뀔때마다 해당 날의 그걸 보여준다
-    },[dailyRoute])
 
 
     const changeStatus = () =>{

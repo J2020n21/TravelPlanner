@@ -13,6 +13,16 @@ export default function Setting (){
     const navigate = useNavigate();
     let [setsValue,changeSetsValue] = useState([0,0,0,0]);
 
+    const aiRecommend = () =>{
+        console.log("airecommend")
+    }
+
+    const resetPlan = ()=>{
+        window.localStorage.clear()
+        alert('Reset complete')
+    }
+
+    let functions = [aiRecommend,resetPlan];
     return(
         
         <>     
@@ -26,23 +36,16 @@ export default function Setting (){
                 return(
                     <div className="Set">
                     <h2>{data}</h2>
+                    <button onClick={functions[i]}>변경하기</button>
                     <p>{setsDes[i]}</p>
                     </div>
                 )
             })
         }
-    </div>
+        </div>
+
         <h5>Any problem?</h5>
         <p onClick={()=>{navigate('/home/complain')}}>click</p>
-        {/* <FormControlLabel
-          value="start"
-          control={<Switch color="primary" />}
-          label="Start"
-          labelPlacement="start"
-        /> */}
-        
         </>
     )
-
 }
-// https://mui.com/material-ui/react-switch/
