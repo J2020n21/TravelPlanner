@@ -4,8 +4,11 @@ import $ from 'jquery';
 import {Wrapper, Status} from "@googlemaps/react-wrapper";
 import { useMemo, useState, useEffect, useRef, componentDidUpdate } from "react";
 import { Autocomplete ,withGoogleMap, GoogleMap, PolylineF,
-  LoadScript, MarkerF, useJsApiLoader, useLoadScript, InfoWindowF,
-  DirectionsRenderer, DirectionsService,
+  LoadScript, MarkerF, useJsApiLoader,
+  useLoadScript, InfoWindowF,
+  DirectionsRenderer,
+  DirectionsService,
+  
 } from "@react-google-maps/api";
   import usePlacesAutocomplete,{
  getGeocode, getLatLng
@@ -25,7 +28,9 @@ import DirectionsIcon from '@mui/icons-material/Directions';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import TrainIcon from '@mui/icons-material/Train';
-
+import Planning from "./planning";
+import { create } from "@mui/material/styles/createTransitions";
+import axios from "axios";
 
 export default function GMap({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,userPlaces,setUserPlaces, placeIndex, setPlaceIndex,focusedDay, setFocusedDay, dailyRoute,aiPlaces}) {
     const {isLoaded} = useLoadScript({
@@ -180,6 +185,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
   let photoUrl = null;
   async function addPlace (selected){
     setClickAdd(clickAdd+1)
+    //setUserPlaces(userPlaces=>[...userPlaces, {selected}]);
     const latlng ={
       lat: parseFloat(selected['lat']),
       lng: parseFloat(selected['lng'])
@@ -200,11 +206,12 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     var placeService = new google.maps.places.PlacesService(mapref);
     await placeService.getDetails({placeId:geoPlaceId, fields:['name', 'photos','formatted_address'],language:'en' },(res,status)=>{
       if (status === "OK") {
+        console.log({res})
         const copy=[...userPlaces];
         let order = copy[focusedDay].length; //to make no empty-array
-        let noImgUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+        console.log(res.photos)
         if(res.photos){photoUrl=res.photos[0].getUrl()}
-        else{photoUrl=noImgUrl}
+        else{photoUrl=null}
 
         copy[focusedDay][order] = {
             'name':res.name,
@@ -219,7 +226,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
         setUserPlaces(copy);
         setPlaceIndex(placeIndex+1); //id
         if(photoUrl? console.log(photoUrl):console.log("No photo"));
-        } else {
+
+        
+        //localStorage.setItem(`plan${focusedDay},${placeIndex}`,JSON.stringify(userPlaces))
+      } else {
         console.error('Place details request failed:', status);
       }
     })
@@ -340,6 +350,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     directionsResponse && 
     <>
       (<DirectionsRenderer directions={directionsResponse} />)
+                
         <InfoWindowF position={destination}>
           <Box>{distance}<br/>{duration}</Box>
         </InfoWindowF>
@@ -355,6 +366,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     <MarkerF 
       position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
     </MarkerF>
+      {/* dailyRoute에
+      어느 한 부분에서 삭제나 추가같은 변경사항이 있는 경우에만
+      다른 일자의 루트가 보임.(그냥 버튼 누르기로는 바뀌지 않음)
+      */}
     <PolylineF
       path={Arr}
       strokeColor={"000000"}
