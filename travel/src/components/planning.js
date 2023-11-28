@@ -5,12 +5,11 @@ import { Typography,Container,Box,Button } from '@material-ui/core';
 export default function Planning({
   showAllPlan,
   userPlaces, setUserPlaces, placeIndex,
-   setPlaceIndex, answer, focusedDay, setFocusedDay,dailyRoute, setDailyRoute,
+   setPlaceIndex, day, dayArr,focusedDay, setFocusedDay,dailyRoute, setDailyRoute,
   }) {
-  const day = Number(answer[1]);
   const clickArray = Array(day).fill(0);
   const dayArray = Array.from({ length: day }, (_, index) => index);
-  const [travelDay, setTravelDay] = useState(dayArray); 
+  const [travelDay, setTravelDay] = useState(dayArray); //[]
   const [click,setClick] = useState(clickArray);
 
   const showArray = Array(day).fill(true);
@@ -21,6 +20,8 @@ export default function Planning({
   const [sMemo, setSMemo] = useState(Array(day).fill(false));
   const [memoClick, setMemoClick] = useState(clickArray);
 
+  const storedPlaces = JSON.parse(localStorage.getItem('userPlaces'));
+//문제. userPlaces가 만들어질때 day갯수만큼 만들어지지 않음
   useEffect(()=>{
     //conver format
     if(userPlaces.length){
@@ -45,10 +46,9 @@ export default function Planning({
   },[focusedRoute])
 
   useEffect(()=>{
-  // 계획이 바뀔때마다 브라우저에 저장. 키-읽어온 후 그걸 사용한다.
-  //사용?
     const obj = JSON.stringify(userPlaces)
     window.localStorage.setItem('userPlaces',obj)
+    console.log({userPlaces})
   },[userPlaces])
 
 
@@ -98,6 +98,7 @@ export default function Planning({
     setMemo(copy);
   }
 
+  console.log({userPlaces})
 
   return (
     <div style={{
@@ -106,6 +107,7 @@ export default function Planning({
       display: showAllPlan? 'flex':'block',
       }}>
     {
+      // 아마 여기
       travelDay&& travelDay.map((item,dayIndex)=>{
         return( <div style={{marginBottom:'50px'}}>
           <Box key={dayIndex}  style={{marginTop:'20px', marginRight: showAllPlan? '20px':null}}>
@@ -141,9 +143,8 @@ export default function Planning({
               :null
             }
 
-{/* 여기서 읽어온 브라우저에 저장된 userPlaces를 넣어준다 */}
-
-            { userPlaces[dayIndex].length !== null && showPlaces[dayIndex] === true?
+{/* userPlaces[dayIndex].length !== null && */}
+            { userPlaces[dayIndex].length !== null &&showPlaces[dayIndex] === true?
               userPlaces[dayIndex].map((place,i)=>{
                 return(
                 <PlanDetails 

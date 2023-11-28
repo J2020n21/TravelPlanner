@@ -349,6 +349,7 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
 {
   //draw marker for daily plan
   dailyRoute.length && dailyRoute.map((val,i)=>{
+    console.log(val,i)
     const Arr = dailyRoute.map(item=>item.selected)
     return (<>
     <MarkerF 

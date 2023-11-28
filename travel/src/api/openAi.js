@@ -11,36 +11,41 @@ const apiKey = process.env.REACT_APP_AI_API_KEY;
 const apiUrl = `https://api.openai.com/v1/chat/completions`
 
 export default function OpenAi({aiPlaces, setAiPlaces}) {
-    const text=`1. Gyeongbokgung Palace, Seoul: {"lat": 37.5796, "lng": 126.9770}\n2. Bukchon Hanok Village, Seoul: {"lat": 37.5823, "lng": 126.9858}\n3. Jeonju Hanok Village, Jeonju: {"lat": 35.8159, "lng": 127.1530}`
-//parsing the text
-const textSentence = text.split('\n');
-let regexName = "([A-Za-z]+( [A-Za-z]+)+)";
-let regexCoord = "{[^}]*\}";
+    // const text=`1. Gyeongbokgung Palace, Seoul: {"lat": 37.5796, "lng": 126.9770}\n2. Bukchon Hanok Village, Seoul: {"lat": 37.5823, "lng": 126.9858}\n3. Jeonju Hanok Village, Jeonju: {"lat": 35.8159, "lng": 127.1530}`
+// const [text,setText] = useState('');
 
     const [mode, setMode] = useState('text') //place,route,text
     let [userPlaceChoice, setUserPlaceChoice] = useState({country:'', category:'', atmosphere:''})//for place
     let [userRouteChoice, setUserRouteChoice] = useState({country:'',theme:'',long:''})//for route: 
     const [userInput,setUserInput] = useState('');//for text
     const [aiAnswerText,setAiAnswerText] = useState(null); 
-    const [aiAnswerPlace,setAiAnswerPlace] = useState([]);//ai답변 받아옴->장소담김?
+    const [aiAnswerPlace,setAiAnswerPlace] = useState([]);
     const [aiAnswerRoute,setAiAnswerRoute] = useState(null);
+
+    const [aiAnswerTextP, setAiAnswerTextP] = useState(null) //답변 텍스트 처리
     const [click, setClick] = useState(0);
     const [show,setShow] = useState([1,1,1]);
 
+
 let copy=[]
 useEffect(()=>{
-    //1.텍스트 정제하여 목록 띄워주기
-    textSentence.map((sentence)=>{ 
-        let Name=sentence.match(regexName)[0]
-        let Latlng=sentence.match(regexCoord)[0]
+    //parsing the text
+    if(aiAnswerTextP!==null){
+        const textSentence = aiAnswerTextP.split('\n');
+        let regexName = "([A-Za-z]+( [A-Za-z]+)+)";
+        let regexCoord = "{[^}]*\}";
+        //1.텍스트 정제하여 장소 목록 띄워주기
+        textSentence.map((sentence)=>{ 
+            let Name=sentence.match(regexName)[0]
+            let Latlng=sentence.match(regexCoord)[0]
 
-        let newEle = { name: Name, Latlng: Latlng };
-        copy.push(newEle)
-        setAiAnswerPlace(copy)
-        setAiPlaces(copy)
-    })
-    
-},[aiAnswerText])
+            let newEle = { name: Name, Latlng: Latlng };
+            copy.push(newEle)
+            setAiAnswerPlace(copy)
+            setAiPlaces(copy)
+        })
+    }
+},[aiAnswerTextP])
 // console.log(aiAnswerPlace)
 
     let placePrompt=''; 
@@ -51,7 +56,7 @@ useEffect(()=>{
     placePrompt=`
     Recommend me 3 place of ${userPlaceChoice.category} in ${userPlaceChoice.country} atmosphere of ${userPlaceChoice.atmosphere}.
     Your answer must only inclue: place name and location. 
-    location must be provied with this form: {"lat":value,"lng":value}
+    location must be provied with this form:num.placename {"lat":value,"lng":value} \n
     `;
     console.log(placePrompt);
 }
@@ -96,7 +101,7 @@ useEffect(()=>{
             console.log(data);
 
             let answer = JSON.stringify(data.choices[0].message.content);
-            setAnswer(answer);
+            setAnswer(answer)
             console.log(answer);
             console.log( typeof(answer))//string
             
@@ -184,7 +189,7 @@ function handleChange (e, setValue,attribute=null){
                 <MenuItem value={"Luxary"}>Luxary</MenuItem>
                 <MenuItem value={"Reasonable"}>Reasonable</MenuItem>
             </Select>
-            <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(placePrompt,setAiAnswerPlace)}}>Submit</Button>
+            <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(placePrompt,setAiAnswerTextP)}}>Submit</Button>
             </FormControl>
     </Box>
         {

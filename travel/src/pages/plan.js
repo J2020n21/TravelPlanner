@@ -27,7 +27,7 @@ export default function Plan({answer}){
     const day = answer[1];
     const dayArr = Array.from({ length: day }, () => []);  //[[]]
     const storedPlaces = JSON.parse(localStorage.getItem('userPlaces'));
-    const [userPlaces, setUserPlaces] = useState(storedPlaces||dayArr); //seleted position
+    const [userPlaces, setUserPlaces] = useState(storedPlaces||dayArr); //문제부분
     const [placeIndex, setPlaceIndex] = useState(0);
     const [focusedDay, setFocusedDay] = useState(0);
     const [dailyRoute, setDailyRoute] = useState([]); //arr, position for route
@@ -116,7 +116,8 @@ export default function Plan({answer}){
                   placeIndex={placeIndex}
                   setPlaceIndex={setPlaceIndex}
 
-                  answer={answer}
+                  day={day}
+                  dayArr={dayArr}
 
                   focusedDay={focusedDay}
                   setFocusedDay={setFocusedDay}
