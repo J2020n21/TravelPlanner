@@ -4,10 +4,12 @@ import { Typography,Container,Box,Button } from '@material-ui/core';
 
 export default function Planning({
   showAllPlan,
-  userPlaces, setUserPlaces, placeIndex,
-   setPlaceIndex, day, dayArr,focusedDay, setFocusedDay,dailyRoute, setDailyRoute,
+  userPlaces, setUserPlaces, placeIndex, day,
+   setPlaceIndex,answer,focusedDay, setFocusedDay,dailyRoute, setDailyRoute,
   }) {
-  const clickArray = Array(day).fill(0);
+
+  const clickArray = Array(parseInt(day)).fill(0);
+  console.log(clickArray)
   const dayArray = Array.from({ length: day }, (_, index) => index);
   const [travelDay, setTravelDay] = useState(dayArray); //[]
   const [click,setClick] = useState(clickArray);
@@ -20,8 +22,9 @@ export default function Planning({
   const [sMemo, setSMemo] = useState(Array(day).fill(false));
   const [memoClick, setMemoClick] = useState(clickArray);
 
+
   const storedPlaces = JSON.parse(localStorage.getItem('userPlaces'));
-//문제. userPlaces가 만들어질때 day갯수만큼 만들어지지 않음
+
   useEffect(()=>{
     //conver format
     if(userPlaces.length){
@@ -75,7 +78,7 @@ export default function Planning({
     let copy =[...memoClick];
     copy[index] = copy[index] + 1; //index의 클릭에 +1
     setMemoClick(copy)
-    console.log("use: "+copy)
+    console.log(memoClick)//n, NaN
 
     if(memoClick[index]%2 === 1){
       let copyplace =[...sMemo]; //보여줄 위치
@@ -114,23 +117,25 @@ export default function Planning({
             <Typography variant='h5'>Day {item+1}</Typography>
             <Button
              variant='outlined' color='primary' size='small'
-             onClick={(e)=>{showPlan(dayIndex)}}>
-              { click[dayIndex]%2 === 1? "show":"fold"}
+             onClick={(e)=>{showPlan(dayIndex)}}> 
+              { click[dayIndex]%2 === 1? "show":"fold" //no
+              }
             </Button>
             <Button value={dayIndex} variant='outlined' color='primary' size='small'
             onClick={()=>{
-              showMemo(dayIndex)}}
+              // console.log(dayIndex)
+              showMemo(dayIndex)}} //no
             >Memo</Button>
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedRoute == dayIndex?"contained":"outlined"}//click on-off
             onClick={()=>{
-              setFocusedRoute(dayIndex)
+              setFocusedRoute(dayIndex) //ok
             }} 
             >Route</Button>
             <Button value={dayIndex} color='primary' size='small'
             variant={focusedDay == dayIndex?"contained":"outlined"}
             onClick={()=>{
-              setFocusedDay(dayIndex);
+              setFocusedDay(dayIndex); //ok
             }} 
             >Focus</Button>
 
@@ -144,6 +149,7 @@ export default function Planning({
             }
 
 {/* userPlaces[dayIndex].length !== null && */}
+
             { userPlaces[dayIndex].length !== null &&showPlaces[dayIndex] === true?
               userPlaces[dayIndex].map((place,i)=>{
                 return(

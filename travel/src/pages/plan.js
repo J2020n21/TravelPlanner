@@ -25,8 +25,10 @@ export default function Plan({answer}){
     const [aiPlaces, setAiPlaces] = useState([])
 
     const day = answer[1];
+    // JSON.stringify(localStorage.setItem)
     const dayArr = Array.from({ length: day }, () => []);  //[[]]
-    const storedPlaces = JSON.parse(localStorage.getItem('userPlaces'));
+    const storedPlaces = JSON.parse(window.localStorage.getItem('userPlaces'));
+    // console.log({storedPlaces})//ok
     const [userPlaces, setUserPlaces] = useState(storedPlaces||dayArr); //문제부분
     const [placeIndex, setPlaceIndex] = useState(0);
     const [focusedDay, setFocusedDay] = useState(0);
@@ -116,6 +118,7 @@ export default function Plan({answer}){
                   placeIndex={placeIndex}
                   setPlaceIndex={setPlaceIndex}
 
+                  answer={answer}
                   day={day}
                   dayArr={dayArr}
 

@@ -13,7 +13,6 @@ export default function PlanDetails({id,dayIndex,places,userPlaces,setUserPlaces
   copy[dayIndex] = filtered;
   setUserPlaces(copy);
   
-  //또 한박자 늦음
   }
 
   return (
