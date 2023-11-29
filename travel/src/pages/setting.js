@@ -5,7 +5,7 @@ import {CssBaseline, Typography, Grid, Box, Container,
  } from '@material-ui/core';
 
 
- const sets = ['AI recommend','Reset the plan','Night mode'];
+ const sets = ['AI recommend','Reset the plan'];
  const setsDes = ['Use AI recommendation','All the plan will be removed',
      'Change UI'];
 
@@ -36,7 +36,7 @@ export default function Setting (){
                 return(
                     <div className="Set">
                     <h2>{data}</h2>
-                    <button onClick={functions[i]}>변경하기</button>
+                    <button onClick={functions[i]}>Change</button>
                     <p>{setsDes[i]}</p>
                     </div>
                 )

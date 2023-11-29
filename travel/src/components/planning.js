@@ -9,7 +9,6 @@ export default function Planning({
   }) {
 
   const clickArray = Array(parseInt(day)).fill(0);
-  console.log(clickArray)
   const dayArray = Array.from({ length: day }, (_, index) => index);
   const [travelDay, setTravelDay] = useState(dayArray); //[]
   const [click,setClick] = useState(clickArray);
@@ -101,7 +100,6 @@ export default function Planning({
     setMemo(copy);
   }
 
-  console.log({userPlaces})
 
   return (
     <div style={{
@@ -110,7 +108,6 @@ export default function Planning({
       display: showAllPlan? 'flex':'block',
       }}>
     {
-      // 아마 여기
       travelDay&& travelDay.map((item,dayIndex)=>{
         return( <div style={{marginBottom:'50px'}}>
           <Box key={dayIndex}  style={{marginTop:'20px', marginRight: showAllPlan? '20px':null}}>

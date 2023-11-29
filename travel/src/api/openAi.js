@@ -29,10 +29,12 @@ export default function OpenAi({aiPlaces, setAiPlaces}) {
 
 let copy=[]
 useEffect(()=>{
+    console.log("parsing text")
     //parsing the text
     if(aiAnswerTextP!==null){
         const textSentence = aiAnswerTextP.split('\n');
-        let regexName = "([A-Za-z]+( [A-Za-z]+)+)";
+        // //"([A-Za-z]+( [A-Za-z]+)+)"; 기존
+        let regexName = "([A-Za-z0-9]+( [A-Za-z0-9]+)+)";
         let regexCoord = "{[^}]*\}";
         //1.텍스트 정제하여 장소 목록 띄워주기
         textSentence.map((sentence)=>{ 
@@ -55,8 +57,8 @@ useEffect(()=>{
     if(userPlaceChoice.category != '' && userPlaceChoice.country !='' && userPlaceChoice.atmosphere !=''){
     placePrompt=`
     Recommend me 3 place of ${userPlaceChoice.category} in ${userPlaceChoice.country} atmosphere of ${userPlaceChoice.atmosphere}.
-    Your answer must only inclue: place name and location. 
-    location must be provied with this form:num.placename {"lat":value,"lng":value} \n
+    Your answer must include: place name and location. 
+    location must be provied with this form: placename {"lat":value,"lng":value} \n
     `;
     console.log(placePrompt);
 }
@@ -66,9 +68,9 @@ useEffect(()=>{
     if(userRouteChoice.long!=''&&userRouteChoice.country!=''&&userRouteChoice.theme!=''){
     routePrompt=`
     Recommend me a ${userRouteChoice.long}days travel plan of ${userRouteChoice.country}, foused on the theme:${userRouteChoice.theme}.
-    Your answer must only inclue: place name and location.
-    location must be provied with this form: {"lat":value,"lng":value}
+    Your answer must include: place name and description.
     `;
+    // location must be provied with this form: {"lat":value,"lng":value}
     }
     console.log(routePrompt);
 },[userRouteChoice])

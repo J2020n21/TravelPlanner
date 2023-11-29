@@ -67,7 +67,7 @@ export default function Plan({answer}){
         })
   }
     const clearRec = () =>{
-      setApiPlaces(null);
+      setApiPlaces('');
     }
 
 

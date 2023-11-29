@@ -366,13 +366,10 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     <MarkerF 
       position={val.selected} icon={"http://maps.google.com/mapfiles/ms/icons/blue.png"}> 
     </MarkerF>
-      {/* dailyRoute에
-      어느 한 부분에서 삭제나 추가같은 변경사항이 있는 경우에만
-      다른 일자의 루트가 보임.(그냥 버튼 누르기로는 바뀌지 않음)
-      */}
+
     <PolylineF
       path={Arr}
-      strokeColor={"000000"}
+      strokeColor={"FFFFFF"}
       strokeOpacity={0.8}
       strokeWeight={2}
     />
