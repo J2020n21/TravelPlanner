@@ -322,7 +322,6 @@ function Map({setCoordinates,setBounds,coordinates,apiPlaces,setChildClicked,set
     
     <PlacesAutocomplete setSelected={setOrigin}/> 
     {
-      // 일단 경유지 하나만으로 계산기능 구현
       isStopOver>0 && isStopOver<6? 
         <PlacesAutocomplete setSelected={setStopOver} />
       :null

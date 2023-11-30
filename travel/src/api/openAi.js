@@ -13,6 +13,7 @@ const apiUrl = `https://api.openai.com/v1/chat/completions`
 export default function OpenAi({aiPlaces, setAiPlaces}) {
     // const text=`1. Gyeongbokgung Palace, Seoul: {"lat": 37.5796, "lng": 126.9770}\n2. Bukchon Hanok Village, Seoul: {"lat": 37.5823, "lng": 126.9858}\n3. Jeonju Hanok Village, Jeonju: {"lat": 35.8159, "lng": 127.1530}`
 // const [text,setText] = useState('');
+const text = "1. K-Guesthouse Insadong, Seoul: {\"lat\": 37.5724, \"lng\": 126.9865}\n2. Toyoko Inn Busan Station 1, Busan: {\"lat\": 35.1004, \"lng\": 129.0320}\n3. Jeju Hiking Inn, Jeju: {\"lat\": 33.4996, \"lng\": 126.5317}"
 
     const [mode, setMode] = useState('text') //place,route,text
     let [userPlaceChoice, setUserPlaceChoice] = useState({country:'', category:'', atmosphere:''})//for place
@@ -20,35 +21,15 @@ export default function OpenAi({aiPlaces, setAiPlaces}) {
     const [userInput,setUserInput] = useState('');//for text
     const [aiAnswerText,setAiAnswerText] = useState(null); 
     const [aiAnswerPlace,setAiAnswerPlace] = useState([]);
-    const [aiAnswerRoute,setAiAnswerRoute] = useState(null);
+    const [aiAnswerRoute,setAiAnswerRoute] = useState([]);
+    //"Day 1: Start your sightseeing adventure in **Seoul**, the capital of South Korea, by visiting the **Gyeongbokgung Palace**, a majestic royal palace showcasing traditional Korean architecture, and then head to the **Bukchon Hanok Village**, where you can wander through narrow alleyways lined with beautifully preserved traditional Korean houses.\n\nDay 2: Explore the vibrant city of **Busan** by first visiting the **Gamcheon Culture Village**, known for its colorful houses and stunning views of the city, and then make your way to **Haeundae Beach**, one of Korea's most famous beaches, where you can relax, soak up the sun, and enjoy the bustling atmosphere."
 
     const [aiAnswerTextP, setAiAnswerTextP] = useState(null) //답변 텍스트 처리
+    const [aiAnswerTextR,setAiAnswerTextR] = useState(null)
     const [click, setClick] = useState(0);
     const [show,setShow] = useState([1,1,1]);
 
 
-let copy=[]
-useEffect(()=>{
-    console.log("parsing text")
-    //parsing the text
-    if(aiAnswerTextP!==null){
-        const textSentence = aiAnswerTextP.split('\n');
-        // //"([A-Za-z]+( [A-Za-z]+)+)"; 기존
-        let regexName = "([A-Za-z0-9]+( [A-Za-z0-9]+)+)";
-        let regexCoord = "{[^}]*\}";
-        //1.텍스트 정제하여 장소 목록 띄워주기
-        textSentence.map((sentence)=>{ 
-            let Name=sentence.match(regexName)[0]
-            let Latlng=sentence.match(regexCoord)[0]
-
-            let newEle = { name: Name, Latlng: Latlng };
-            copy.push(newEle)
-            setAiAnswerPlace(copy)
-            setAiPlaces(copy)
-        })
-    }
-},[aiAnswerTextP])
-// console.log(aiAnswerPlace)
 
     let placePrompt=''; 
     let routePrompt='';
@@ -56,9 +37,13 @@ useEffect(()=>{
 useEffect(()=>{
     if(userPlaceChoice.category != '' && userPlaceChoice.country !='' && userPlaceChoice.atmosphere !=''){
     placePrompt=`
-    Recommend me 3 place of ${userPlaceChoice.category} in ${userPlaceChoice.country} atmosphere of ${userPlaceChoice.atmosphere}.
-    Your answer must include: place name and location. 
-    location must be provied with this form: placename {"lat":value,"lng":value} \n
+    -Recommend me 3 place of ${userPlaceChoice.category} in ${userPlaceChoice.country} atmosphere of ${userPlaceChoice.atmosphere}.
+    -Your answer must include: place name and location. 
+    -location must be provied with this form: placename {"lat":value,"lng":value}
+    -Divide each place with '\n', not '\n\n'.
+    -The results looks like this: 1. Bukchon Hanok Village, Seoul: {"lat": 37.5823, "lng": 126.9858}\n
+    -The total answer should be less than 100 words.
+    -Your answer must be simple and clear. no description.
     `;
     console.log(placePrompt);
 }
@@ -67,16 +52,21 @@ useEffect(()=>{
 useEffect(()=>{
     if(userRouteChoice.long!=''&&userRouteChoice.country!=''&&userRouteChoice.theme!=''){
     routePrompt=`
-    Recommend me a ${userRouteChoice.long}days travel plan of ${userRouteChoice.country}, foused on the theme:${userRouteChoice.theme}.
-    Your answer must include: place name and description.
+    -Recommend me a ${userRouteChoice.long}days travel plan of ${userRouteChoice.country}, foused on the theme:${userRouteChoice.theme}.
+    -Your answer foramt must like: Day1: first place name and description & second place name and description.
+    -Your answer must include: place name, one sentence description, and maximum two places for a day.
+    -The total answer should be less than 100 words.
+    -place description should be clear and simple.
+    -Emphasize the place name with bold. 
+    -place should be given as the form of list, no '\n'.
     `;
     // location must be provied with this form: {"lat":value,"lng":value}
     }
     console.log(routePrompt);
 },[userRouteChoice])
 
-
-    async function callApi(prompt,setAnswer){
+let copy=[]
+    async function callApi(prompt,setAnswer,q){
 
         const apiBody = {
             "model": "gpt-3.5-turbo",
@@ -100,15 +90,29 @@ useEffect(()=>{
         }).then((data) => {
             return data.json();
         }).then((data) => {
-            console.log(data);
-
             let answer = JSON.stringify(data.choices[0].message.content);
-            setAnswer(answer)
-            console.log(answer);
-            console.log( typeof(answer))//string
-            
+            const parsedAnswer = JSON.parse(answer)
+            const textSentence = parsedAnswer.split('\n');
+
+            if(q=='place'){
+                let regexName = /([A-Za-z0-9]+( [A-Za-z0-9]+)+)/
+                let regexCoord = /{[^}]*\}/
+                textSentence.map((sentence)=>{ 
+                    // console.log(sentence)
+                    let Name=sentence.match(regexName)[0]
+                    let Latlng=sentence.match(regexCoord)[0]
+                
+                    let newEle = { name: Name, Latlng: Latlng };
+                    copy.push(newEle)
+                    console.log(copy)
+                    setAiAnswerPlace(copy) //for display card
+                    setAiPlaces(copy) //for map marker
+            })
+            }
+            else{setAnswer(textSentence)}
         });
     }
+
 
 const changeMode = () =>{
     setClick(click+1)
@@ -131,7 +135,7 @@ function handleChange (e, setValue,attribute=null){
 
   return (<>
   {/* 안내문구 */}
-    <div>openAi page, mode:{mode}</div>
+    {/* <div>openAi page, mode:{mode}</div> */}
     <Button onClick={changeMode} variant='outlined'>Change modes</Button>
     <Button onClick={()=>{show===1?setShow(0):setShow(1)}} variant='outlined'>Fold</Button>
     <Button onClick={()=>{setAiPlaces('')}} variant='outlined'>Clear</Button>
@@ -143,7 +147,7 @@ function handleChange (e, setValue,attribute=null){
     <Box>
         <Box style={show===0? {display:'none'}:{display:'block'}}>
             <textarea style={{width:'100%', height:'50px'}} placeholder="ask anything to ai" onChange={e => handleChange(e,setUserInput)}/>
-            <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(userInput,setAiAnswerText)}}>Submit</Button>
+            <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(userInput,setAiAnswerText,'plain')}}>Submit</Button>
         </Box>
 
         <Box bgcolor={"#E6E6E6"} style={{width:'100%',height:'200px', padding:'20px', marginTop:'10px'}}>
@@ -191,7 +195,7 @@ function handleChange (e, setValue,attribute=null){
                 <MenuItem value={"Luxary"}>Luxary</MenuItem>
                 <MenuItem value={"Reasonable"}>Reasonable</MenuItem>
             </Select>
-            <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(placePrompt,setAiAnswerTextP)}}>Submit</Button>
+            <Button style={{width:'100%',marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(placePrompt,setAiAnswerTextP,'place')}}>Submit</Button>
             </FormControl>
     </Box>
         {
@@ -252,12 +256,14 @@ function handleChange (e, setValue,attribute=null){
                         <MenuItem value={`6`}>6</MenuItem>
                         <MenuItem value={`7`}>7</MenuItem>
                     </Select>
-                    <Button style={{width:'100%', marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(routePrompt,setAiAnswerRoute)}}>Submit</Button>
+                    <Button style={{width:'100%', marginTop:'20px'}} variant='outlined' size='small' onClick={()=>{callApi(routePrompt,setAiAnswerRoute,'plan')}}>Submit</Button>
                 </FormControl> 
         </Box>
         <div style={{height:'80vh',overflowY:'scroll'}}>
             {
-                aiAnswerRoute!= null? aiAnswerRoute:"there's no recommended plan"
+                aiAnswerRoute!= null?
+                aiAnswerRoute
+                :"there's no recommended plan"
             }
         </div>
         </>

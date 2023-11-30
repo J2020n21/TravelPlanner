@@ -18,7 +18,9 @@ const useStyles = makeStyles({
         height: '500px',
         border:'3px solid white',
         marginTop:'10%', 
-        paddingTop:'5vw'
+        paddingTop:'5vw',
+        boxShadow:'10px 10px'
+        
     },
     border: {
         width: '500px',
@@ -42,7 +44,7 @@ const Landing = () =>{
 
                 <Typography variant="h3">Design your travel</Typography>
                 <Typography variant="h1">Traveling</Typography>
-                <Typography variant="h6" style={{marginTop:'10%'}}>To where?</Typography>
+                <Typography variant="h6" style={{marginTop:'10%'}}></Typography>
                 
                 <Button variant="contained" color="primary"
                 onClick={()=>{navigate('/toStart')}}>

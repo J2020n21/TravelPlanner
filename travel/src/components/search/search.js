@@ -3,13 +3,13 @@ import { TextField, SelectField } from "@material-ui/core";
 import axios from 'axios';
 import styled from 'styled-components';
 
-//'sky','ocean','airplane',
+//new York
 
 const Search = () =>{
-    const apiKey= process.env.REACT_APP_PIXABAY_API_KEY;
+    const apiKey= '36162160-9ad290b2b95fe84e106ba7a08'
     let randomNumber_20 = Math.floor(Math.random()*21);
     // let searchTextKeywords = Math.random(['sky','ocean','airplane']);
-    let searchText = 'sky';
+    let searchText = 'New York';
     let [imageURL, setImage] = useState([]);
     let searchStates = {
         searchText: searchText,
@@ -24,6 +24,7 @@ const Search = () =>{
         //get req
         axios.get(`https://pixabay.com/api/?key=${searchStates.apiKey}&q=${searchStates.searchText}&image_type=photo&safesearch=true`)
         .then((res) => {
+            console.log(res)
             console.log(res.data.hits);
             let largeImage = res.data.hits[randomNumber_20].largeImageURL;
             let image = res.data.hits[randomNumber_20].imageURL;
